@@ -1,0 +1,56 @@
+Package: tlverseworkshops
+Title: Targeted Learning Workshops
+Version: 1.0.0
+Depends: R (>= 4.0.0)
+Imports:
+  bookdown,
+  bslib,
+  downlit,
+  rmarkdown,
+  ggplot2,
+  tibble,
+  tidyr,
+  dplyr,
+  readr,
+  knitr,
+  stringr,
+  tidyverse,
+  kableExtra,
+  devtools,
+  data.table,
+  here,
+  mvtnorm,
+  skimr,
+  delayed,
+  origami (>= 1.0.3),
+  sl3 (>= 1.4.4),
+  tmle3 (>= 0.2.0),
+  tmle3mopttx (>= 1.0.0),
+  tmle3shift (>= 0.2.0),
+  tmle3mediate (>= 0.0.3)
+Suggests:
+  nnls,
+  Rsolnp,
+  xgboost,
+  ranger,
+  glmnet,
+  arm,
+  gam,
+  speedglm,
+  polspline,
+  randomForest,
+  SuperLearner,
+  hal9001 (>= 0.4.3),
+  haldensify (>= 0.2.3)
+Remotes:
+  rstudio/bslib,
+  rstudio/bookdown,
+  tlverse/sl3@devel,
+  tlverse/tmle3@master,
+  tlverse/tmle3mopttx@master,
+  tlverse/tmle3shift@master,
+  tlverse/tmle3mediate@master
+URL:
+  https://github.com/tlverse/tlverse-workshops,
+  https://tlverse.org/tlverse-workshops
+BugReports: https://github.com/tlverse/tlverse-workshops/issues

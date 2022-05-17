@@ -1,0 +1,27 @@
+new_session: yes
+delete_merged_file: true
+output_dir: "_book"
+book_filename: "tlverse-workshops"
+before_chapter_script: "_common.R"
+clean: [packages.bib]
+
+language:
+  label:
+    fig: "FIGURE "
+    tab: "TABLE "
+  ui:
+    chapter_name: "Chapter "
+
+rmd_files: [
+  "index.Rmd",
+  "01-motivation.Rmd",
+  "02-intro-tlverse.Rmd",
+  "03-intro-roadmap.Rmd",
+  "04-sl3.Rmd",
+  "05-tmle3.Rmd",
+  "06-tmle3mopttx.Rmd",
+  "07-tmle3shift.Rmd",
+  "08-tmle3mediate.Rmd",
+  "99-primer_R6.Rmd",
+  "references.Rmd"
+]
