@@ -1,0 +1,3484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 3 Super (Machine) Learning | [ACIC 2022] Targeted Learning in the tlverse</title>
+<meta name="author" content="Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips">
+<meta name="description" content="Ivana Malenica and Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-05-17 Learning Objectives By the end...">
+<meta name="generator" content="bookdown 0.24.1 with bs4_book()">
+<meta property="og:title" content="Chapter 3 Super (Machine) Learning | [ACIC 2022] Targeted Learning in the tlverse">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://tlverse.org/tlverse-workshops/sl3.html">
+<meta property="og:description" content="Ivana Malenica and Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-05-17 Learning Objectives By the end...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 3 Super (Machine) Learning | [ACIC 2022] Targeted Learning in the tlverse">
+<meta name="twitter:description" content="Ivana Malenica and Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-05-17 Learning Objectives By the end...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="libs/vis-9.1.0/vis-network.min.js"></script><script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+</head>
+<body>
+<span class="math inline">
+  \(\DeclareMathOperator{\expit}{expit}\)
+  \(\DeclareMathOperator{\logit}{logit}\)
+  \(\DeclareMathOperator*{\argmin}{\arg\!\min}\)
+  \(\newcommand{\indep}{\perp\!\!\!\perp}\)
+  \(\newcommand{\coloneqq}{\mathrel{=}}\)
+  \(\newcommand{\R}{\mathbb{R}}\)
+  \(\newcommand{\E}{\mathbb{E}}\)
+  \(\newcommand{\M}{\mathcal{M}}\)
+  \(\renewcommand{\P}{\mathbb{P}}\)
+  \(\newcommand{\I}{\mathbb{I}}\)
+  \(\newcommand{\1}{\mathbbm{1}}\)
+  </span>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="Causal Inference Meets Machine Learning">[ACIC 2022] Targeted Learning in the <code>tlverse</code></a>:
+        <small class="text-muted">Causal Inference Meets Machine Learning</small>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Welcome!</a></li>
+<li><a class="" href="motivation.html">Motivation</a></li>
+<li><a class="" href="tlverse.html"><span class="header-section-number">1</span> Welcome to the tlverse</a></li>
+<li><a class="" href="intro.html"><span class="header-section-number">2</span> The Roadmap for Targeted Learning</a></li>
+<li><a class="active" href="sl3.html"><span class="header-section-number">3</span> Super (Machine) Learning</a></li>
+<li><a class="" href="tmle3.html"><span class="header-section-number">4</span> The TMLE Framework</a></li>
+<li><a class="" href="optimal-individualized-treatment-regimes.html"><span class="header-section-number">5</span> Optimal Individualized Treatment Regimes</a></li>
+<li><a class="" href="stochastic-treatment-regimes-optional.html"><span class="header-section-number">6</span> Stochastic Treatment Regimes (optional)</a></li>
+<li><a class="" href="causal-mediation-analysis.html"><span class="header-section-number">7</span> Causal Mediation Analysis</a></li>
+<li><a class="" href="r6.html"><span class="header-section-number">8</span> A Primer on the R6 Class System</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/tlverse/tlverse-workshops">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="sl3" class="section level1">
+<h1>
+<span class="header-section-number">3</span> Super (Machine) Learning<a class="anchor" aria-label="anchor" href="#sl3"><i class="fas fa-link"></i></a>
+</h1>
+<p><em>Ivana Malenica</em> and <em>Rachael Phillips</em></p>
+<p>Based on the <a href="https://github.com/tlverse/sl3"><code>sl3</code> <code>R</code> package</a> by <em>Jeremy
+Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin</em>.</p>
+<p>Updated: 2022-05-17</p>
+<div id="learning-objectives-2" class="section level2 unnumbered">
+<h2>Learning Objectives<a class="anchor" aria-label="anchor" href="#learning-objectives-2"><i class="fas fa-link"></i></a>
+</h2>
+<p>By the end of this chapter you will be able to:</p>
+<ol style="list-style-type: decimal">
+<li><p>Select an objective function that (i) aligns with the intention of the
+analysis and (ii) is optimized by the target parameter.</p></li>
+<li>
+<p>Assemble a diverse library of learners to be considered in the Super Learner
+ensemble. In particular, you should be able to:</p>
+<ol style="list-style-type: lower-alpha">
+<li>Customize a learner by modifying it’s tuning parameters.</li>
+<li>Create several different versions of the same learner at once by
+specifying a grid of tuning parameters.</li>
+<li>Curate covariate screening pipelines in order to pass a screener’s
+output, a subset of covariates, as input for another learner that will
+use the subset of covariates selected by the screener to model the data.</li>
+</ol>
+</li>
+<li><p>Specify the learner for ensembling (the metalearner) such that it corresponds
+to your objective function.</p></li>
+<li><p>Fit the Super Learner ensemble with nested cross-validation to obtain an
+estimate of the performance of the ensemble itself on out-of-sample data.</p></li>
+<li><p>Obtain <code>sl3</code> variable importance metrics.</p></li>
+<li><p>Interpret the fit for discrete and continuous Super Learners’ from the
+cross-validated risk table and the coefficients.</p></li>
+<li><p>Justify the base library of machine learning algorithms and the ensembling
+learner in terms of the prediction problem, statistical model <span class="math inline">\(\M\)</span>, data
+sparsity, and the dimensionality of the covariates.</p></li>
+</ol>
+</div>
+<div id="motivation-1" class="section level2 unnumbered">
+<h2>Motivation<a class="anchor" aria-label="anchor" href="#motivation-1"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>A common task in data analysis is prediction – using the observed data (input
+variables and outcomes) to learn a function that can map new input variables
+into a predicted outcome.
+<!--
+  Oftentimes, the scientific question of interest translates to a statistical
+  question that requires (causal) effect estimation. Even in these scenarios,
+  where prediction is not in the forefront, there are often prediction steps
+  embedded in the procedure.
+  --->
+</li>
+<li>For some data, algorithms that learn complex relationships between variables
+are necessary to adequately model the data. For other data, main terms
+regression models might fit the data quite well.</li>
+<li>It is generally impossible to know a priori which algorithm will be the best
+for a given data set and prediction problem.</li>
+<li>The Super Learner solves this issue of algorithm selection by creating an
+ensemble of many algorithms, from the simplest (intercept-only) to most
+complex (neural nets, tree-based methods, support vector machines, etc.).</li>
+<li>Super Learner works by using cross-validation in a manner that theoretically
+(in large samples) guarantees the resulting fit will be as good as possible,
+given the algorithms provided.</li>
+</ul>
+</div>
+<div id="introduction-1" class="section level2 unnumbered">
+<h2>Introduction<a class="anchor" aria-label="anchor" href="#introduction-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>In <a href="intro.html#intro">Chapter 1</a>, we introduced the <a href="#roadmap"><em>Roadmap for Targeted
+Learning</em></a> as a general template to translate real-world data
+applications into formal statistical estimation problems. The first steps of
+this roadmap define the <em>statistical estimation problem</em>, which establish</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>The data $O$ as a random variable, or equivalently, a realization of a</strong>
+<strong>particular experiment/study, which has probability distribution <span class="math inline">\(P_0\)</span>.</strong>
+This is written <span class="math inline">\(O \sim P_0\)</span>, and <span class="math inline">\(P_0\)</span> is also commonly referred to as the
+data-generating process (DGP) and also the data-generating distribution
+(DGD). The data structure <span class="math inline">\(O\)</span> is comprised of variables, such as a
+vector of covariates <span class="math inline">\(W\)</span>, a treatment or exposure <span class="math inline">\(A\)</span>, and an outcome <span class="math inline">\(Y\)</span>,
+<span class="math inline">\(O=(W,A,Y) \sim P_0\)</span>. We often observe the random variable <span class="math inline">\(O\)</span> <span class="math inline">\(n\)</span> times, by
+repeating the common experiment <span class="math inline">\(n\)</span> times. For example, <span class="math inline">\(O_1,\ldots, O_n\)</span>
+random variables could be the result of a random sample of <span class="math inline">\(n\)</span> subjects from
+a population, collecting baseline characteristics <span class="math inline">\(W\)</span>, randomly assigning
+treatment <span class="math inline">\(A\)</span>, and then later measuring an outcome <span class="math inline">\(Y\)</span>.</li>
+<li>
+<strong>A statistical model <span class="math inline">\(\M\)</span> as a set of possible probability distributions</strong>
+<strong>that could have given rise to the data.</strong> It’s essential for <span class="math inline">\(\M\)</span> to only
+constrained by factual subject-matter knowledge in order to guarantee <span class="math inline">\(P_0\)</span>
+resides in the statistical model, written <span class="math inline">\(P_0 \in \M\)</span>. Continuing
+the example from step 1, the following restrictions could be placed on the
+statistical model: the <span class="math inline">\(O_1, \ldots, O_n\)</span> observations in the data are
+independent and identically distributed (i.i.d.), the assignment of
+treatment <span class="math inline">\(A\)</span> was random and not based on covariates <span class="math inline">\(W\)</span>.</li>
+<li>
+<strong>A translation of the scientific question of interest into a function of</strong>
+<strong><span class="math inline">\(P_0\)</span>, the target statistical estimand <span class="math inline">\(\Psi(P_0)\)</span>.</strong> For example, we might
+be interested in the average difference in mean outcomes under treatment
+<span class="math inline">\(A=1\)</span> versus placebo <span class="math inline">\(A=0\)</span>:
+<span class="math inline">\(\Psi(P_0)=E_{P_0}\Big[E_{P_0}(Y|A=1,W)−E_{P_0}(Y|A=0,W)\Big]\)</span>. Note
+that, if the scientific question is causal, then it’s translation will
+produce a target <em>causal</em> estimand; another layer of translation,
+identifiability, is required to express the target causal estimand as a
+function of the observed data distribution <span class="math inline">\(P_0\)</span>. See <a href="intro.html#causal">causal target
+parameters</a> for more information on causal quantities, causal models
+and identifiability.
+Note that if the target estimand is causal, step 3 also requires establishing
+so-called “identifiability” of this estimand from the observed data. See <a href="intro.html#causal">causal
+target parameters</a> for more detail on causal models and identifiability.</li>
+</ol>
+<p>After finalizing steps 1–3 above, the estimation procedure can be specified.
+We advocate for the use of the Super Learner (SL) algorithm in the estimation
+procedure it is flexible and grounded in optimality theory <span class="citation">(van der Laan, Polley, and Hubbard <a href="references.html#ref-vdl2007super" role="doc-biblioref">2007</a>)</span>.</p>
+<div id="why-use-the-super-learner" class="section level3 unnumbered">
+<h3>Why use the Super Learner?<a class="anchor" aria-label="anchor" href="#why-use-the-super-learner"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>It offers a system for combining/ensembling many machine learning (ML)
+algorithms into an improved ML algorithm.</li>
+<li>In large samples, SL is proven to perform at least as well as the unknown
+best candidate ML algorithm <span class="citation">(van der Laan and Dudoit <a href="references.html#ref-vdl2003unified" role="doc-biblioref">2003</a>; Van der Vaart, Dudoit, and Laan <a href="references.html#ref-vaart2006oracle" role="doc-biblioref">2006</a>)</span>.</li>
+<li>When we have tested different ML algorithms on actual data and looked at the
+performance, never does one algorithm always win (see below).</li>
+</ul>
+<p><img src="img/png/ericSL.png" width="80%" style="display: block; margin: auto;">
+The figure above shows the performance of several different ML algorithms,
+including the SL, across many datasets. Here, the performance was assessed with
+the relative mean squared error and the target estimand that was being estimated
+for all datasets was the conditional mean outcome, given covariates
+<span class="citation">(Polley and van der Laan <a href="references.html#ref-polley2010super" role="doc-biblioref">2010</a>)</span>.</p>
+</div>
+<div id="general-overview-of-the-algorithm" class="section level3">
+<h3>
+<span class="header-section-number">3.0.1</span> General Overview of the Algorithm<a class="anchor" aria-label="anchor" href="#general-overview-of-the-algorithm"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>SL uses cross-validation and an objective function (e.g., loss function) to
+optimize the fit of the target parameter, based on a weighted combination of a
+so-called “library” of candidate ML algorithms.</li>
+<li>The library of ML algorithms consists of functions (“learners” in the SL
+nomenclature). These functions should align with the statistical model, both
+in terms of it’s vastness and any potential constraints, where the
+statistical model’s constraints are restrictions based on subject-matter
+knowledge regarding the process that generated the data.</li>
+<li>The so-called “metalearning”, or ensembling of the library of ML algorithms
+has been shown to be adaptive and robust, even in small
+samples <span class="citation">(Polley and van der Laan <a href="references.html#ref-polley2010super" role="doc-biblioref">2010</a>)</span>.</li>
+</ul>
+<div id="cross-validation" class="section level4">
+<h4>
+<span class="header-section-number">3.0.1.1</span> Cross-validation<a class="anchor" aria-label="anchor" href="#cross-validation"><i class="fas fa-link"></i></a>
+</h4>
+<ul>
+<li>There are many different cross-validation schemes, which are designed to
+accommodate different study designs, data structures, and prediction
+problems. See <a href="#origami">cross-validation</a> for more detail.</li>
+</ul>
+<p><img src="img/png/vs.png" width="80%" style="display: block; margin: auto;">
+The figure above shows an example of <span class="math inline">\(V\)</span>-fold cross-validation with <span class="math inline">\(V=10\)</span>
+folds, and this is the default cross-validation structure in the <code>sl3</code> <code>R</code>
+package. The darker boxes represent the so-called “validation data” and the
+lighter boxes represent the so-called “training data”. The following details
+are important to notice:</p>
+<ul>
+<li>Across all folds, there are <span class="math inline">\(V\)</span> (10) copies of the dataset. The only
+difference between each copy is the coloring, which distinguishes the subset
+of the data that’s considered as the training data from the subset that’s
+considered as the validation data.</li>
+<li>Within each fold 1/<span class="math inline">\(V\)</span> (1/10) of the data is the validation data.</li>
+<li>Across all folds, all of the data will be considered as validation data and
+no observation will be included twice as validation data. Therefore, the
+total number of validation data observations across all of the folds is
+equal to the total number of observations in the data.</li>
+</ul>
+</div>
+<div id="step-by-step-procedure-with-v-fold-cross-validation" class="section level4">
+<h4>
+<span class="header-section-number">3.0.1.2</span> Step-by-step procedure with V-fold cross-validation<a class="anchor" aria-label="anchor" href="#step-by-step-procedure-with-v-fold-cross-validation"><i class="fas fa-link"></i></a>
+</h4>
+<ol style="list-style-type: decimal">
+<li>Fit each learner (say there are <span class="math inline">\(K\)</span> learners) on the whole dataset. We refer
+to these learners that are trained on the whole dataset as “full-fit”
+learners.</li>
+<li>Break up the data evenly into <span class="math inline">\(V\)</span> disjoint subsets. Separately, create
+<span class="math inline">\(V\)</span> copies of the data. For each copy <span class="math inline">\(v\)</span>, where <span class="math inline">\(v=1,\ldots,V\)</span>, create the
+<span class="math inline">\(V\)</span> folds by labelling the portion of the data that was included in subset
+<span class="math inline">\(v\)</span> as the validation sample, and the labelling what’s remaining of the data
+as the training sample.</li>
+<li>For each fold <span class="math inline">\(v\)</span>, <span class="math inline">\(v=1,\ldots,V\)</span>, fit each learner (say there are <span class="math inline">\(K\)</span>
+learners) on the training sample and predict the validation sample outcomes
+by providing each fitted learner with the validation sample covariates as
+input. Notice that each learner will be fit <span class="math inline">\(V\)</span> times. We refer to these
+learners that are trained across the <span class="math inline">\(V\)</span> cross-validation folds as
+“cross-validated fit” learners.</li>
+<li>Combine the validation sample predictions from all folds and all learners to
+create the so-called <span class="math inline">\(K\)</span> column matrix of “cross-validated predictions”.
+This matrix is also commonly referred to as the <span class="math inline">\(Z\)</span> matrix. Notice that it
+contains, for each learner, out-of-sample predictions for all of the
+observations in the data.</li>
+<li>Train the metalearner (e.g., a non-negative least squares regression) on
+data with predictors and outcomes being the <span class="math inline">\(Z\)</span> matrix and the observed data
+outcomes, respectively. The metalearner — just like any ordinary ML
+algorithm — estimates the parameters of it’s model using the training data
+and afterwards, the fitted model can be used to obtain predicted outcomes
+from new input data. What’s special about the metalearner is that it’s
+estimated model parameters (e.g., regression coefficients) correspond to
+it’s predictors, which are the variables in the <span class="math inline">\(Z\)</span> matrix, the <span class="math inline">\(K\)</span> learners’
+predictions. Once the metalearner is fit, it can be used to obtain predicted
+outcomes from new input data; that is, new <span class="math inline">\(K\)</span> learners predictions’ can be
+supplied to the fitted metalearner in order to obtain predicted outcomes.</li>
+<li>The fitted metalearner and the full-fit learners define the weighted
+combination of the <span class="math inline">\(K\)</span> learners, finalizing the Super Learner (SL) fit. To
+obtain SL predictions the full-fit learners’ predictions are first obtained
+and then fed as input to the fitted metalearner; the metalearner’s output
+is the SL predictions.</li>
+</ol>
+<div class="inline-figure"><img src="img/png/SLKaiserNew.png" width="80%" style="display: block; margin: auto;"></div>
+</div>
+<div id="how-to-pick-the-library-of-candidate-ml-algorithms" class="section level4">
+<h4>
+<span class="header-section-number">3.0.1.3</span> How to pick the library of candidate ML algorithms?<a class="anchor" aria-label="anchor" href="#how-to-pick-the-library-of-candidate-ml-algorithms"><i class="fas fa-link"></i></a>
+</h4>
+<ul>
+<li>The library of candidate ML algorithms should be chosen based on contextual
+knowledge regarding the study/experiment that generated the data, and on the
+information available in the data.<br>
+</li>
+<li>Having a “go-to” library to use as a “default” when the sample size is
+relatively large can be useful in practice.</li>
+<li>The algorithms may range from a simple linear regression model to multi-step
+algorithms involving screening covariates, penalizations, optimizing tuning
+parameters, etc.</li>
+</ul>
+</div>
+<div id="theoretical-foundations" class="section level4">
+<h4>
+<span class="header-section-number">3.0.1.4</span> Theoretical Foundations<a class="anchor" aria-label="anchor" href="#theoretical-foundations"><i class="fas fa-link"></i></a>
+</h4>
+<p>For more detail on Super Learner algorithm we refer the reader to
+<span class="citation">Polley and van der Laan (<a href="references.html#ref-polley2010super" role="doc-biblioref">2010</a>)</span> and <span class="citation">van der Laan, Polley, and Hubbard (<a href="references.html#ref-vdl2007super" role="doc-biblioref">2007</a>)</span>. The optimality results for the
+cross-validation selector among a family of algorithms were established in
+<span class="citation">van der Laan and Dudoit (<a href="references.html#ref-vdl2003unified" role="doc-biblioref">2003</a>)</span> and extended in <span class="citation">Van der Vaart, Dudoit, and Laan (<a href="references.html#ref-vaart2006oracle" role="doc-biblioref">2006</a>)</span>.</p>
+<!--
+### Summary of Super Learner's Foundations {-}
+
+- We use the terms "learner", "algorithm", and "estimator" interchangeably.
+- We introduce the following notation:
+    + Let $O_1,\ldots, O_n$ be $n$ independent and identically distributed 
+      (i.i.d.) observations of $O \sim P_0$, where $P_0$ is known to be an 
+      element of a statistical model $\M$, $P_0 \in \M$.
+    + Let $\psi_0$ denote the unknown and true prediction function, which is 
+      defined with respect to unknown and true $P_0$ that generated the data.
+    + Let $\psi$ denote a candidate prediction function in $\Psi$, the space of 
+      candidate prediction functions $\Psi = {\psi(P): P \in \M}$.
+    + Let $\hat{\psi}_k=\psi_k(P_n)\in \Psi, k=1,\ldots,K(n)$ denote a 
+      a collection of estimators (where the number of estimators considered 
+      $K(n)$ is defined with respect to the number of i.i.d. observations 
+      $n$) of the prediction function of interest that can be learned from the 
+      data, and thus are defined with respect to $P_n$, the empirical 
+      distribution of $O_1,\ldots, O_n$. Recall from [step 1 in the Roadmap 
+      chapter](#intro-roadmap) that $P_n$ is an approximation of $P_0$.  
+
+- A *loss function* $L$ is a mapping of (i.e., takes as input) a candidate 
+  prediction function $\psi$ and observation $O$ into (i.e., and outputs) a real 
+  number $\mathbb{R}$, $(O,\psi) \mapsto $L(O,\psi) \in \mathbb{R}$. 
+- A *valid loss function* will have expectation (risk) that is minimized at 
+  $\psi_0$; that is, $\psi_0=\argmin_{\psi\in\Psi}E_0L(O,\psi)$. Oftentimes, 
+  this criteria defines a class of valid loss functions.
+- We use the *loss-based dissimilarity* as a means to measure the difference
+  in the performance of a candidate prediction function relative to the true 
+  prediction function, $d_L(\psi,\psi_0)=E_0L(O,\psi)-E_0L(O,\psi_0)$. Notice 
+  that $d_L(\psi,\psi_0) = 0$ if an only if $\psi = \psi_0$, and that the 
+  loss-based dissimilarity is the risk difference between $\psi$ and $\psi_0$
+  with respect to the loss. 
+- The so-called *"oracle selector"* is an optimal benchmark selector that 
+  selects the estimator $\hat{\psi}_k$ that minimizes the dissimilarity to 
+  $\psi_0$, 
+  $\psi_0=\argmin_{k}d_n(\hat{\psi}_k,\psi_0)=\argmin_{k}E_0L(O,\hat{\psi}_k)$.
+  Notice that the oracle selector also minimizes the true risk. Also, since 
+  the oracle selector depends on the unknown $P_0$ it cannot be known in 
+  practice. 
+- The super learner optimizes it's estimation of $\psi_0$ with respect to  
+  the loss-based dissimilarity. For example, the squared error loss implies the
+  following dissimilarity that a SL would aim to minimize: 
+  $d_L(\psi,\psi_0) = E_0(\psi(X)-\psi_0(X))^2$, for some input covariate data 
+  $X$. 
+- Among the class of valid loss functions available for each $\psi_0$, the loss 
+  function that should be chosen is the one that implies a dissimilarity 
+  measure that identifies the desired measure of performance. 
+- We often use an expected loss function as our objective function to assign a 
+  measure of performance to each fitted learner $\hat{\psi}_k$ when applied to 
+  the data $O$, and subsequently compare performance across the learners. 
+- The *cross-validated empirical risk* with respect to the loss-based 
+  dissimilarity of an algorithm is defined as the empirical mean over a 
+  validation sample of the loss of the algorithm fitted on the training sample, 
+  averaged across the splits of the data.
+
+For example, say we observe a learning data set $O_i=(Y_i,X_i)$, of
+$i=1, \ldots, n$ independent and identically distributed observations,
+      where $Y_i$ is a continuous outcome of interest, $X_i$ is a set of
+      covariates. Also, let our goal be to estimate the function
+      $\psi_0: X \mapsto \psi_0(X) = \mathbb{E}_0(Y \mid X)$, which is the
+      conditional mean outcome, given covariates. This function can be expressed
+      as the minimizer of the expected squared error loss:
+      $\psi_0 = \text{argmin}_{\psi} \mathbb{E}[L(O,\psi(X))]$, where
+      $L(O,\psi(X)) = (Y − \psi(X))^2$.
+    + We can estimate the loss by substituting the empirical distribution of
+      the data $P_n$ for the true and unknown distribution of the observed data
+      $P_0$.
+    + Also, we can use the cross-validated risk to empirically determine the
+      relative performance of an estimator (i.e., a candidate learner), and
+      perhaps how it's performance compares to other estimators.
+    + Once we have tested different estimators on actual data and looked at the
+      performance (e.g., MSE of predictions across all learners), we can see
+      which algorithm (or weighted combination) has the lowest risk, and thus
+      is closest to the true $\psi_0$.
+      - Occasionally, loss functions are indexed by unknown nuisance parameters 
+        $\nu_0$, $L(O,\psi \mid \nu_0)$, which are defined with respect to $P_0$ and 
+        thus will need to be estimated from the data. An example of such a loss is 
+        the augmented inverse probability of treatment-weighted loss, where the 
+        nuisance parameter is $\nu_0=P_0(A|W)$, the conditional probability 
+        distribution of treatment $A$, given covariates $W$.
+- The *cross-validated empirical risk* of an algorithm is defined as the
+  empirical mean over a validation sample of the loss of the algorithm fitted
+  on the training sample, averaged across the splits of the data.
+- The *discrete Super Learner*, or *cross-validation selector*, is the algorithm
+  in the library that minimizes the cross-validated empirical risk.
+- The *continuous/ensemble Super Learner*, often referred to as *Super Learner*
+  is a weighted average of the library of algorithms, where the weights are
+  chosen to minimize the cross-validated empirical risk of the library.
+  Restricting the weights to be positive and sum to one (i.e., a convex
+  combination) has been shown to improve upon the discrete Super Learner
+  [@polley2010super; @vdl2007super]. This notion of weighted combinations was
+  introduced in @wolpert1992stacked for neural networks and adapted for
+  regressions in @breiman1996stacked. 
+- Cross-validation is proven to be optimal for selection among estimators. This
+  result was established through the oracle inequality for the cross-validation
+  selector among a collection of candidate estimators [@vdl2003unified;
+  @vaart2006oracle]. The only condition is that loss function is uniformly
+  bounded, which is guaranteed in `sl3`.
+
+
+The *oracle results* prove that, if the number of algorithms in the library are
+polynomial in sample size, then the cross-validation selector (i.e., discrete
+Super Learner) (1) is equivalent with the oracle selector asymptotically (based
+on sample of size of training samples), or (2) achieves the parametric rate
+(log $n/n$) for convergence with respect to the loss-based dissimilarity (risk)
+between a candidate estimate $\psi$ and the true parameter value $\psi_0$.
+
+
+### Super Learner for Prediction {-}
+
+Below, we show the results of
+such a study, comparing the fits of several different learners, including the SL
+algorithms.
+
+r cv_fig3, results="asis", echo = FALSE
+knitr::include_graphics("img/png/ericSL.png")
+
+
+For more detail on Super Learner we refer the reader to @vdl2007super and
+@polley2010super. The optimality results for the cross-validation selector
+among a family of algorithms were established in @vdl2003unified and extended
+in @vaart2006oracle.
+-->
+</div>
+</div>
+</div>
+<div id="sl3-microwave-dinner-implementation" class="section level2 unnumbered">
+<h2>
+<code>sl3</code> “Microwave Dinner” Implementation<a class="anchor" aria-label="anchor" href="#sl3-microwave-dinner-implementation"><i class="fas fa-link"></i></a>
+</h2>
+<p>We begin by illustrating the core functionality of the SL algorithm as
+implemented in <code>sl3</code>.</p>
+<p>The <code>sl3</code> implementation consists of the following steps:</p>
+<ol start="0" style="list-style-type: decimal">
+<li>Load the necessary libraries and data</li>
+<li>Define the machine learning task</li>
+<li>Make an SL by creating library of base learners and a metalearner</li>
+<li>Train the SL on the machine learning task</li>
+<li>Obtain predicted values</li>
+</ol>
+<div id="wash-benefits-study-example" class="section level3 unnumbered">
+<h3>WASH Benefits Study Example<a class="anchor" aria-label="anchor" href="#wash-benefits-study-example"><i class="fas fa-link"></i></a>
+</h3>
+<p>Using the WASH Benefits Bangladesh data, we are interested in predicting
+weight-for-height z-score <code>whz</code> using the available covariate data. More
+information on this dataset, and all other data that we will work with, are
+described in <a href="ihttps://tlverse.org/tlverse-handbook/data.html">this chapter of the <code>tlverse</code>
+handbook</a>. Let’s begin!</p>
+</div>
+<div id="load-the-necessary-libraries-and-data" class="section level3 unnumbered">
+<h3>0. Load the necessary libraries and data<a class="anchor" aria-label="anchor" href="#load-the-necessary-libraries-and-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>First, we will load the relevant <code>R</code> packages, set a seed, and load the data.</p>
+<!--
+If you would like to use newer `sl3` functionality that is available in the
+devel branch of the `sl3` GitHub repository, you need to install that version
+of the package (i.e., `usethis::install_github(tlverse/sl3@devel)`), re-start
+your `R` session, and then re-load the `sl3` package.
+-->
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ecpolley/SuperLearner">SuperLearner</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/origami/">origami</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/sl3">sl3</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
+
+<span class="co"># load data set and take a peek</span>
+<span class="va">washb_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span>
+    <span class="st">"https://raw.githubusercontent.com/tlverse/tlverse-data/master/"</span>,
+    <span class="st">"wash-benefits/washb_data.csv"</span>
+  <span class="op">)</span>,
+  stringsAsFactors <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>
+<span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/output_type.html">is_latex_output</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"latex"</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/output_type.html">is_html_output</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">)</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>fixed_thead <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/scroll_box.html">scroll_box</a></span><span class="op">(</span>width <span class="op">=</span> <span class="st">"100%"</span>, height <span class="op">=</span> <span class="st">"300px"</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+whz
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+tr
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+fracode
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+month
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+aged
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+sex
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+momage
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+momedu
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+momheight
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+hfiacat
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+Nlt18
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+Ncomp
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+watmin
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+elec
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+floor
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+walls
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+roof
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_wardrobe
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_table
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_chair
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_khat
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_chouki
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_tv
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_refrig
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_bike
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_moto
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_sewmach
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+asset_mobile
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+N05265
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+268
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+Primary (1-5y)
+</td>
+<td style="text-align:right;">
+146.40
+</td>
+<td style="text-align:left;">
+Food Secure
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-1.16
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+N05265
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+286
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+Primary (1-5y)
+</td>
+<td style="text-align:right;">
+148.75
+</td>
+<td style="text-align:left;">
+Moderately Food Insecure
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-1.05
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+N08002
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+264
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+Primary (1-5y)
+</td>
+<td style="text-align:right;">
+152.15
+</td>
+<td style="text-align:left;">
+Food Secure
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-1.26
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+N08002
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+252
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:left;">
+Primary (1-5y)
+</td>
+<td style="text-align:right;">
+140.25
+</td>
+<td style="text-align:left;">
+Food Secure
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-0.59
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+N06531
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+336
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:left;">
+Secondary (&gt;5y)
+</td>
+<td style="text-align:right;">
+150.95
+</td>
+<td style="text-align:left;">
+Food Secure
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-0.51
+</td>
+<td style="text-align:left;">
+Control
+</td>
+<td style="text-align:left;">
+N06531
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+304
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+Secondary (&gt;5y)
+</td>
+<td style="text-align:right;">
+154.20
+</td>
+<td style="text-align:left;">
+Severely Food Insecure
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div id="define-the-machine-learning-task" class="section level3 unnumbered">
+<h3>1. Define the machine learning task<a class="anchor" aria-label="anchor" href="#define-the-machine-learning-task"><i class="fas fa-link"></i></a>
+</h3>
+<p>To define the machine learning <code>task</code> (predict weight-for-height Z-score
+<code>whz</code> using the available covariate data), we need to create an <code>sl3_Task</code>
+object.</p>
+<p>The <code>sl3_Task</code> keeps track of the roles the variables play in the machine
+learning problem, the data, and any metadata (e.g., observational-level
+weights, IDs, offset).</p>
+<p>Also, if we had missing outcomes, we would need to set <code>drop_missing_outcome = TRUE</code> when we create the task. In the next analysis, with the <a href="#ist">IST stroke trial
+data</a>, we do have a missing outcome. In the following chapter, we need to
+estimate this missingness mechanism; which is the conditional probably that
+the outcome is observed, given the history (i.e., variables that were measured
+before the missingness). Estimating the missingness mechanism requires learning
+a prediction function that outputs the predicted probability that a unit
+is missing, given their history.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="sl3.html#cb5-1"></a><span class="co"># specify the outcome and covariates</span></span>
+<span id="cb5-2"><a href="sl3.html#cb5-2"></a>outcome &lt;-<span class="st"> "whz"</span></span>
+<span id="cb5-3"><a href="sl3.html#cb5-3"></a>covars &lt;-<span class="st"> </span><span class="kw">colnames</span>(washb_data)[<span class="op">-</span><span class="kw">which</span>(<span class="kw">names</span>(washb_data) <span class="op">==</span><span class="st"> </span>outcome)]</span>
+<span id="cb5-4"><a href="sl3.html#cb5-4"></a></span>
+<span id="cb5-5"><a href="sl3.html#cb5-5"></a><span class="co"># create the sl3 task</span></span>
+<span id="cb5-6"><a href="sl3.html#cb5-6"></a>washb_task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(</span>
+<span id="cb5-7"><a href="sl3.html#cb5-7"></a>  <span class="dt">data =</span> washb_data,</span>
+<span id="cb5-8"><a href="sl3.html#cb5-8"></a>  <span class="dt">covariates =</span> covars,</span>
+<span id="cb5-9"><a href="sl3.html#cb5-9"></a>  <span class="dt">outcome =</span> outcome</span>
+<span id="cb5-10"><a href="sl3.html#cb5-10"></a>)</span>
+<span id="cb5-11"><a href="sl3.html#cb5-11"></a>Warning <span class="cf">in</span> <span class="kw">process_data</span>(data, nodes, <span class="dt">column_names =</span> column_names, <span class="dt">flag =</span> flag, <span class="op">:</span></span>
+<span id="cb5-12"><a href="sl3.html#cb5-12"></a>Missing covariate data detected<span class="op">:</span><span class="st"> </span>imputing covariates.</span></code></pre></div>
+<p><em>This warning is important.</em> The task just imputed missing covariates for us.
+Specifically, for each covariate column with missing values, <code>sl3</code> uses the
+median to impute missing continuous covariates, and the mode to impute binary
+and categorical covariates.</p>
+<p>Also, for each covariate column with missing values, <code>sl3</code> adds an additional
+column indicating whether or not the value was imputed, which is particularly
+handy when the missingness in the data might be informative.</p>
+<p>Also, notice that we did not specify the number of folds, or the loss function
+in the task. The default cross-validation scheme is V-fold, with <span class="math inline">\(V=10\)</span> number
+of folds.</p>
+<p>Let’s visualize our <code>washb_task</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="sl3.html#cb6-1"></a>washb_task</span>
+<span id="cb6-2"><a href="sl3.html#cb6-2"></a>An sl3 Task with <span class="dv">4695</span> obs and these nodes<span class="op">:</span></span>
+<span id="cb6-3"><a href="sl3.html#cb6-3"></a><span class="er">$</span>covariates</span>
+<span id="cb6-4"><a href="sl3.html#cb6-4"></a> [<span class="dv">1</span>] <span class="st">"tr"</span>              <span class="st">"fracode"</span>         <span class="st">"month"</span>           <span class="st">"aged"</span>           </span>
+<span id="cb6-5"><a href="sl3.html#cb6-5"></a> [<span class="dv">5</span>] <span class="st">"sex"</span>             <span class="st">"momage"</span>          <span class="st">"momedu"</span>          <span class="st">"momheight"</span>      </span>
+<span id="cb6-6"><a href="sl3.html#cb6-6"></a> [<span class="dv">9</span>] <span class="st">"hfiacat"</span>         <span class="st">"Nlt18"</span>           <span class="st">"Ncomp"</span>           <span class="st">"watmin"</span>         </span>
+<span id="cb6-7"><a href="sl3.html#cb6-7"></a>[<span class="dv">13</span>] <span class="st">"elec"</span>            <span class="st">"floor"</span>           <span class="st">"walls"</span>           <span class="st">"roof"</span>           </span>
+<span id="cb6-8"><a href="sl3.html#cb6-8"></a>[<span class="dv">17</span>] <span class="st">"asset_wardrobe"</span>  <span class="st">"asset_table"</span>     <span class="st">"asset_chair"</span>     <span class="st">"asset_khat"</span>     </span>
+<span id="cb6-9"><a href="sl3.html#cb6-9"></a>[<span class="dv">21</span>] <span class="st">"asset_chouki"</span>    <span class="st">"asset_tv"</span>        <span class="st">"asset_refrig"</span>    <span class="st">"asset_bike"</span>     </span>
+<span id="cb6-10"><a href="sl3.html#cb6-10"></a>[<span class="dv">25</span>] <span class="st">"asset_moto"</span>      <span class="st">"asset_sewmach"</span>   <span class="st">"asset_mobile"</span>    <span class="st">"delta_momage"</span>   </span>
+<span id="cb6-11"><a href="sl3.html#cb6-11"></a>[<span class="dv">29</span>] <span class="st">"delta_momheight"</span></span>
+<span id="cb6-12"><a href="sl3.html#cb6-12"></a></span>
+<span id="cb6-13"><a href="sl3.html#cb6-13"></a><span class="op">$</span>outcome</span>
+<span id="cb6-14"><a href="sl3.html#cb6-14"></a>[<span class="dv">1</span>] <span class="st">"whz"</span></span>
+<span id="cb6-15"><a href="sl3.html#cb6-15"></a></span>
+<span id="cb6-16"><a href="sl3.html#cb6-16"></a><span class="op">$</span>id</span>
+<span id="cb6-17"><a href="sl3.html#cb6-17"></a><span class="ot">NULL</span></span>
+<span id="cb6-18"><a href="sl3.html#cb6-18"></a></span>
+<span id="cb6-19"><a href="sl3.html#cb6-19"></a><span class="op">$</span>weights</span>
+<span id="cb6-20"><a href="sl3.html#cb6-20"></a><span class="ot">NULL</span></span>
+<span id="cb6-21"><a href="sl3.html#cb6-21"></a></span>
+<span id="cb6-22"><a href="sl3.html#cb6-22"></a><span class="op">$</span>offset</span>
+<span id="cb6-23"><a href="sl3.html#cb6-23"></a><span class="ot">NULL</span></span>
+<span id="cb6-24"><a href="sl3.html#cb6-24"></a></span>
+<span id="cb6-25"><a href="sl3.html#cb6-25"></a><span class="op">$</span>time</span>
+<span id="cb6-26"><a href="sl3.html#cb6-26"></a><span class="ot">NULL</span></span></code></pre></div>
+<p>We can’t see when we print the task, but the default cross-validation fold
+structure (<span class="math inline">\(V\)</span>-fold cross-validation with <span class="math inline">\(V\)</span>=10 folds) was created when we
+defined the task.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="sl3.html#cb7-1"></a><span class="kw">length</span>(washb_task<span class="op">$</span>folds) <span class="co"># how many folds?</span></span>
+<span id="cb7-2"><a href="sl3.html#cb7-2"></a>[<span class="dv">1</span>] <span class="dv">10</span></span>
+<span id="cb7-3"><a href="sl3.html#cb7-3"></a></span>
+<span id="cb7-4"><a href="sl3.html#cb7-4"></a><span class="kw">head</span>(washb_task<span class="op">$</span>folds[[<span class="dv">1</span>]]<span class="op">$</span>training_set) <span class="co"># row indexes for fold 1 training</span></span>
+<span id="cb7-5"><a href="sl3.html#cb7-5"></a>[<span class="dv">1</span>] <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span></span>
+<span id="cb7-6"><a href="sl3.html#cb7-6"></a><span class="kw">head</span>(washb_task<span class="op">$</span>folds[[<span class="dv">1</span>]]<span class="op">$</span>validation_set) <span class="co"># row indexes for fold 1 validation</span></span>
+<span id="cb7-7"><a href="sl3.html#cb7-7"></a>[<span class="dv">1</span>] <span class="dv">12</span> <span class="dv">21</span> <span class="dv">29</span> <span class="dv">41</span> <span class="dv">43</span> <span class="dv">53</span></span>
+<span id="cb7-8"><a href="sl3.html#cb7-8"></a></span>
+<span id="cb7-9"><a href="sl3.html#cb7-9"></a><span class="kw">any</span>(</span>
+<span id="cb7-10"><a href="sl3.html#cb7-10"></a>  washb_task<span class="op">$</span>folds[[<span class="dv">1</span>]]<span class="op">$</span>training_set <span class="op">%in%</span><span class="st"> </span>washb_task<span class="op">$</span>folds[[<span class="dv">1</span>]]<span class="op">$</span>validation_set</span>
+<span id="cb7-11"><a href="sl3.html#cb7-11"></a>)</span>
+<span id="cb7-12"><a href="sl3.html#cb7-12"></a>[<span class="dv">1</span>] <span class="ot">FALSE</span></span></code></pre></div>
+<p>Tip: If you type <code>washb_task$</code> and then press the tab button (you will
+need to press tab twice if you’re not in RStudio), you can view all of the
+active and public fields and methods that can be accessed from the <code>washb_task</code>
+object.</p>
+</div>
+<div id="make-a-super-learner" class="section level3 unnumbered">
+<h3>2. Make a Super Learner<a class="anchor" aria-label="anchor" href="#make-a-super-learner"><i class="fas fa-link"></i></a>
+</h3>
+<p>Now that we have defined our machine learning problem with the <code>sl3_Task</code>, we
+are ready to make the Super Learner (SL). This requires specification of</p>
+<ul>
+<li>A set of candidate machine learning algorithms, also commonly referred to as
+a library of learners. The set should include a diversity of algorithms
+that are believed to be consistent with the true data-generating distribution.</li>
+<li>A metalearner, to ensemble the base learners.</li>
+</ul>
+<p>We might also incorporate</p>
+<ul>
+<li>Feature selection, to pass only a subset of the predictors to the algorithm.</li>
+<li>Hyperparameter specification, to tune base learners.</li>
+</ul>
+<p>Learners have properties that indicate what features they support. We may use
+<code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_properties()</a></code> to get a list of all properties supported by at least
+one learner.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="sl3.html#cb8-1"></a><span class="kw">sl3_list_properties</span>()</span>
+<span id="cb8-2"><a href="sl3.html#cb8-2"></a> [<span class="dv">1</span>] <span class="st">"binomial"</span>      <span class="st">"categorical"</span>   <span class="st">"continuous"</span>    <span class="st">"cv"</span>           </span>
+<span id="cb8-3"><a href="sl3.html#cb8-3"></a> [<span class="dv">5</span>] <span class="st">"density"</span>       <span class="st">"h2o"</span>           <span class="st">"ids"</span>           <span class="st">"importance"</span>   </span>
+<span id="cb8-4"><a href="sl3.html#cb8-4"></a> [<span class="dv">9</span>] <span class="st">"offset"</span>        <span class="st">"preprocessing"</span> <span class="st">"sampling"</span>      <span class="st">"screener"</span>     </span>
+<span id="cb8-5"><a href="sl3.html#cb8-5"></a>[<span class="dv">13</span>] <span class="st">"timeseries"</span>    <span class="st">"weights"</span>       <span class="st">"wrapper"</span>      </span></code></pre></div>
+<p>Since we have a continuous outcome, we may identify the learners that support
+this outcome type with <code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners()</a></code>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="sl3.html#cb9-1"></a><span class="kw">sl3_list_learners</span>(<span class="st">"continuous"</span>)</span>
+<span id="cb9-2"><a href="sl3.html#cb9-2"></a> [<span class="dv">1</span>] <span class="st">"Lrnr_arima"</span>                     <span class="st">"Lrnr_bartMachine"</span>              </span>
+<span id="cb9-3"><a href="sl3.html#cb9-3"></a> [<span class="dv">3</span>] <span class="st">"Lrnr_bayesglm"</span>                  <span class="st">"Lrnr_bilstm"</span>                   </span>
+<span id="cb9-4"><a href="sl3.html#cb9-4"></a> [<span class="dv">5</span>] <span class="st">"Lrnr_bound"</span>                     <span class="st">"Lrnr_caret"</span>                    </span>
+<span id="cb9-5"><a href="sl3.html#cb9-5"></a> [<span class="dv">7</span>] <span class="st">"Lrnr_cv_selector"</span>               <span class="st">"Lrnr_dbarts"</span>                   </span>
+<span id="cb9-6"><a href="sl3.html#cb9-6"></a> [<span class="dv">9</span>] <span class="st">"Lrnr_earth"</span>                     <span class="st">"Lrnr_expSmooth"</span>                </span>
+<span id="cb9-7"><a href="sl3.html#cb9-7"></a>[<span class="dv">11</span>] <span class="st">"Lrnr_ga"</span>                        <span class="st">"Lrnr_gam"</span>                      </span>
+<span id="cb9-8"><a href="sl3.html#cb9-8"></a>[<span class="dv">13</span>] <span class="st">"Lrnr_gbm"</span>                       <span class="st">"Lrnr_glm"</span>                      </span>
+<span id="cb9-9"><a href="sl3.html#cb9-9"></a>[<span class="dv">15</span>] <span class="st">"Lrnr_glm_fast"</span>                  <span class="st">"Lrnr_glmnet"</span>                   </span>
+<span id="cb9-10"><a href="sl3.html#cb9-10"></a>[<span class="dv">17</span>] <span class="st">"Lrnr_grf"</span>                       <span class="st">"Lrnr_gru_keras"</span>                </span>
+<span id="cb9-11"><a href="sl3.html#cb9-11"></a>[<span class="dv">19</span>] <span class="st">"Lrnr_gts"</span>                       <span class="st">"Lrnr_h2o_glm"</span>                  </span>
+<span id="cb9-12"><a href="sl3.html#cb9-12"></a>[<span class="dv">21</span>] <span class="st">"Lrnr_h2o_grid"</span>                  <span class="st">"Lrnr_hal9001"</span>                  </span>
+<span id="cb9-13"><a href="sl3.html#cb9-13"></a>[<span class="dv">23</span>] <span class="st">"Lrnr_HarmonicReg"</span>               <span class="st">"Lrnr_hts"</span>                      </span>
+<span id="cb9-14"><a href="sl3.html#cb9-14"></a>[<span class="dv">25</span>] <span class="st">"Lrnr_lightgbm"</span>                  <span class="st">"Lrnr_lstm_keras"</span>               </span>
+<span id="cb9-15"><a href="sl3.html#cb9-15"></a>[<span class="dv">27</span>] <span class="st">"Lrnr_mean"</span>                      <span class="st">"Lrnr_multiple_ts"</span>              </span>
+<span id="cb9-16"><a href="sl3.html#cb9-16"></a>[<span class="dv">29</span>] <span class="st">"Lrnr_nnet"</span>                      <span class="st">"Lrnr_nnls"</span>                     </span>
+<span id="cb9-17"><a href="sl3.html#cb9-17"></a>[<span class="dv">31</span>] <span class="st">"Lrnr_optim"</span>                     <span class="st">"Lrnr_pkg_SuperLearner"</span>         </span>
+<span id="cb9-18"><a href="sl3.html#cb9-18"></a>[<span class="dv">33</span>] <span class="st">"Lrnr_pkg_SuperLearner_method"</span>   <span class="st">"Lrnr_pkg_SuperLearner_screener"</span></span>
+<span id="cb9-19"><a href="sl3.html#cb9-19"></a>[<span class="dv">35</span>] <span class="st">"Lrnr_polspline"</span>                 <span class="st">"Lrnr_randomForest"</span>             </span>
+<span id="cb9-20"><a href="sl3.html#cb9-20"></a>[<span class="dv">37</span>] <span class="st">"Lrnr_ranger"</span>                    <span class="st">"Lrnr_rpart"</span>                    </span>
+<span id="cb9-21"><a href="sl3.html#cb9-21"></a>[<span class="dv">39</span>] <span class="st">"Lrnr_rugarch"</span>                   <span class="st">"Lrnr_screener_correlation"</span>     </span>
+<span id="cb9-22"><a href="sl3.html#cb9-22"></a>[<span class="dv">41</span>] <span class="st">"Lrnr_solnp"</span>                     <span class="st">"Lrnr_stratified"</span>               </span>
+<span id="cb9-23"><a href="sl3.html#cb9-23"></a>[<span class="dv">43</span>] <span class="st">"Lrnr_svm"</span>                       <span class="st">"Lrnr_tsDyn"</span>                    </span>
+<span id="cb9-24"><a href="sl3.html#cb9-24"></a>[<span class="dv">45</span>] <span class="st">"Lrnr_xgboost"</span>                  </span></code></pre></div>
+<p>Now that we have an idea of some learners, we can construct them using the
+<code>make_learner</code> function or the <code>new</code> method.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># choose base learners</span>
+<span class="va">lrn_glm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_glm</span><span class="op">)</span>
+<span class="va">lrn_mean</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_mean.html">Lrnr_mean</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>We can customize learner hyperparameters to incorporate a diversity of different
+settings. Documentation for the learners and their hyperparameters can be found
+in the <a href="https://tlverse.org/sl3/reference/index.html#section-sl-learners"><code>sl3</code> Learners
+Reference</a>.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lrn_lasso</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_glmnet</span><span class="op">)</span> <span class="co"># alpha default is 1</span>
+<span class="va">lrn_ridge</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glmnet.html">Lrnr_glmnet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<span class="va">lrn_enet.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_glmnet</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+
+<span class="va">lrn_polspline</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_polspline.html">Lrnr_polspline</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">lrn_ranger100</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_ranger</span>, num.trees <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+
+<span class="va">lrn_hal_faster</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_hal9001.html">Lrnr_hal9001</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>max_degree <span class="op">=</span> <span class="fl">2</span>, reduce_basis <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>
+
+<span class="va">xgb_fast</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_xgboost.html">Lrnr_xgboost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span> <span class="co"># default with nrounds = 20 is pretty fast</span>
+<span class="va">xgb_50</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_xgboost.html">Lrnr_xgboost</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>nrounds <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
+<p>We can use <code>Lrnr_define_interactions</code> to define interaction terms among
+covariates. The interactions should be supplied as list of character vectors,
+where each vector specifies an interaction. For example, we specify
+interactions below between (1) <code>tr</code> (whether or not the subject received the
+WASH intervention) and <code>elec</code> (whether or not the subject had electricity); and
+between (2) <code>tr</code> and <code>hfiacat</code> (the subject’s level of food security).</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">interactions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"elec"</span>, <span class="st">"tr"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"tr"</span>, <span class="st">"hfiacat"</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># main terms as well as the interactions above will be included</span>
+<span class="va">lrn_interaction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_define_interactions</span>, <span class="va">interactions</span><span class="op">)</span></code></pre></div>
+<p>What we just defined above is incomplete. In order to fit learners with these
+interactions, we need to create a <code>Pipeline</code>. A <code>Pipeline</code> is a set of learners
+to be fit sequentially, where the fit from one learner is used to define the
+task for the next learner. We need to create a <code>Pipeline</code> with the interaction
+defining learner and another learner that incorporate these terms when fitting
+a model. Let’s create a learner pipeline that will fit a linear model with the
+combination of main terms and interactions terms, as specified in
+<code>lrn_interaction</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="sl3.html#cb13-1"></a><span class="co"># we already instantiated a linear model learner, no need to do that again</span></span>
+<span id="cb13-2"><a href="sl3.html#cb13-2"></a>lrn_glm_interaction &lt;-<span class="st"> </span><span class="kw">make_learner</span>(Pipeline, lrn_interaction, lrn_glm)</span>
+<span id="cb13-3"><a href="sl3.html#cb13-3"></a>lrn_glm_interaction</span>
+<span id="cb13-4"><a href="sl3.html#cb13-4"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_define_interactions_TRUE"</span></span>
+<span id="cb13-5"><a href="sl3.html#cb13-5"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_glm_TRUE"</span></span></code></pre></div>
+<p>We can also include learners from the <code>SuperLearner</code> <code>R</code> package.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lrn_bayesglm</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/SuperLearner_interface.html">Lrnr_pkg_SuperLearner</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="st">"SL.bayesglm"</span><span class="op">)</span></code></pre></div>
+<p>Here is a fun trick to create customized learners over a grid of parameters.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># I like to crock pot my SLs</span>
+<span class="va">grid_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  cost <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="fl">1</span>, <span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">1000</span><span class="op">)</span>,
+  gamma <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="fl">1</span><span class="op">)</span>,
+  kernel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"polynomial"</span>, <span class="st">"radial"</span>, <span class="st">"sigmoid"</span><span class="op">)</span>,
+  degree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="va">grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">grid_params</span>, KEEP.OUT.ATTRS <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">svm_learners</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">grid</span>, MARGIN <span class="op">=</span> <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">tuning_params</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">Lrnr_svm</span><span class="op">$</span><span class="va">new</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">tuning_params</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="sl3.html#cb16-1"></a>grid_params &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb16-2"><a href="sl3.html#cb16-2"></a>  <span class="dt">max_depth =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>),</span>
+<span id="cb16-3"><a href="sl3.html#cb16-3"></a>  <span class="dt">eta =</span> <span class="kw">c</span>(<span class="fl">0.001</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>),</span>
+<span id="cb16-4"><a href="sl3.html#cb16-4"></a>  <span class="dt">nrounds =</span> <span class="dv">100</span></span>
+<span id="cb16-5"><a href="sl3.html#cb16-5"></a>)</span>
+<span id="cb16-6"><a href="sl3.html#cb16-6"></a>grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(grid_params, <span class="dt">KEEP.OUT.ATTRS =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb16-7"><a href="sl3.html#cb16-7"></a>grid</span>
+<span id="cb16-8"><a href="sl3.html#cb16-8"></a>  max_depth   eta nrounds</span>
+<span id="cb16-9"><a href="sl3.html#cb16-9"></a><span class="dv">1</span>         <span class="dv">2</span> <span class="fl">0.001</span>     <span class="dv">100</span></span>
+<span id="cb16-10"><a href="sl3.html#cb16-10"></a><span class="dv">2</span>         <span class="dv">4</span> <span class="fl">0.001</span>     <span class="dv">100</span></span>
+<span id="cb16-11"><a href="sl3.html#cb16-11"></a><span class="dv">3</span>         <span class="dv">6</span> <span class="fl">0.001</span>     <span class="dv">100</span></span>
+<span id="cb16-12"><a href="sl3.html#cb16-12"></a><span class="dv">4</span>         <span class="dv">2</span> <span class="fl">0.100</span>     <span class="dv">100</span></span>
+<span id="cb16-13"><a href="sl3.html#cb16-13"></a><span class="dv">5</span>         <span class="dv">4</span> <span class="fl">0.100</span>     <span class="dv">100</span></span>
+<span id="cb16-14"><a href="sl3.html#cb16-14"></a><span class="dv">6</span>         <span class="dv">6</span> <span class="fl">0.100</span>     <span class="dv">100</span></span>
+<span id="cb16-15"><a href="sl3.html#cb16-15"></a><span class="dv">7</span>         <span class="dv">2</span> <span class="fl">0.300</span>     <span class="dv">100</span></span>
+<span id="cb16-16"><a href="sl3.html#cb16-16"></a><span class="dv">8</span>         <span class="dv">4</span> <span class="fl">0.300</span>     <span class="dv">100</span></span>
+<span id="cb16-17"><a href="sl3.html#cb16-17"></a><span class="dv">9</span>         <span class="dv">6</span> <span class="fl">0.300</span>     <span class="dv">100</span></span>
+<span id="cb16-18"><a href="sl3.html#cb16-18"></a></span>
+<span id="cb16-19"><a href="sl3.html#cb16-19"></a>xgb_learners &lt;-<span class="st"> </span><span class="kw">apply</span>(grid, <span class="dt">MARGIN =</span> <span class="dv">1</span>, <span class="cf">function</span>(tuning_params) {</span>
+<span id="cb16-20"><a href="sl3.html#cb16-20"></a>  <span class="kw">do.call</span>(Lrnr_xgboost<span class="op">$</span>new, <span class="kw">as.list</span>(tuning_params))</span>
+<span id="cb16-21"><a href="sl3.html#cb16-21"></a>})</span>
+<span id="cb16-22"><a href="sl3.html#cb16-22"></a>xgb_learners</span>
+<span id="cb16-23"><a href="sl3.html#cb16-23"></a>[[<span class="dv">1</span>]]</span>
+<span id="cb16-24"><a href="sl3.html#cb16-24"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_2_0.001"</span></span>
+<span id="cb16-25"><a href="sl3.html#cb16-25"></a></span>
+<span id="cb16-26"><a href="sl3.html#cb16-26"></a>[[<span class="dv">2</span>]]</span>
+<span id="cb16-27"><a href="sl3.html#cb16-27"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_4_0.001"</span></span>
+<span id="cb16-28"><a href="sl3.html#cb16-28"></a></span>
+<span id="cb16-29"><a href="sl3.html#cb16-29"></a>[[<span class="dv">3</span>]]</span>
+<span id="cb16-30"><a href="sl3.html#cb16-30"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_6_0.001"</span></span>
+<span id="cb16-31"><a href="sl3.html#cb16-31"></a></span>
+<span id="cb16-32"><a href="sl3.html#cb16-32"></a>[[<span class="dv">4</span>]]</span>
+<span id="cb16-33"><a href="sl3.html#cb16-33"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_2_0.1"</span></span>
+<span id="cb16-34"><a href="sl3.html#cb16-34"></a></span>
+<span id="cb16-35"><a href="sl3.html#cb16-35"></a>[[<span class="dv">5</span>]]</span>
+<span id="cb16-36"><a href="sl3.html#cb16-36"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_4_0.1"</span></span>
+<span id="cb16-37"><a href="sl3.html#cb16-37"></a></span>
+<span id="cb16-38"><a href="sl3.html#cb16-38"></a>[[<span class="dv">6</span>]]</span>
+<span id="cb16-39"><a href="sl3.html#cb16-39"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_6_0.1"</span></span>
+<span id="cb16-40"><a href="sl3.html#cb16-40"></a></span>
+<span id="cb16-41"><a href="sl3.html#cb16-41"></a>[[<span class="dv">7</span>]]</span>
+<span id="cb16-42"><a href="sl3.html#cb16-42"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_2_0.3"</span></span>
+<span id="cb16-43"><a href="sl3.html#cb16-43"></a></span>
+<span id="cb16-44"><a href="sl3.html#cb16-44"></a>[[<span class="dv">8</span>]]</span>
+<span id="cb16-45"><a href="sl3.html#cb16-45"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_4_0.3"</span></span>
+<span id="cb16-46"><a href="sl3.html#cb16-46"></a></span>
+<span id="cb16-47"><a href="sl3.html#cb16-47"></a>[[<span class="dv">9</span>]]</span>
+<span id="cb16-48"><a href="sl3.html#cb16-48"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_6_0.3"</span></span></code></pre></div>
+<p>Did you see <code>Lrnr_caret</code> when we called <code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_learners(c("binomial"))</a></code>? All
+we need to specify to use this popular algorithm as a candidate in our SL is
+the <code>algorithm</code> we want to tune, which is passed as <code>method</code> to <code><a href="https://rdrr.io/pkg/caret/man/train.html">caret::train()</a></code>.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Unlike xgboost, I have no idea how to tune a neural net or BART machine, so</span>
+<span class="co"># I let caret take the reins</span>
+<span class="va">lrnr_caret_nnet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_caret</span>, algorithm <span class="op">=</span> <span class="st">"nnet"</span><span class="op">)</span>
+<span class="va">lrnr_caret_bartMachine</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_caret</span>,
+  algorithm <span class="op">=</span> <span class="st">"bartMachine"</span>,
+  method <span class="op">=</span> <span class="st">"boot"</span>, metric <span class="op">=</span> <span class="st">"Accuracy"</span>,
+  tuneLength <span class="op">=</span> <span class="fl">10</span>
+<span class="op">)</span></code></pre></div>
+<p>In order to assemble the library of learners, we need to <code>Stack</code> them
+together.</p>
+<p>A <code>Stack</code> is a special learner and it has the same interface as all other
+learners. What makes a stack special is that it combines multiple learners by
+training them simultaneously, so that their predictions can be either combined
+or compared.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="sl3.html#cb18-1"></a>stack &lt;-<span class="st"> </span><span class="kw">make_learner</span>(</span>
+<span id="cb18-2"><a href="sl3.html#cb18-2"></a>  Stack, lrn_glm, lrn_polspline, lrn_enet<span class="fl">.5</span>, lrn_ridge, lrn_lasso, xgb_<span class="dv">50</span></span>
+<span id="cb18-3"><a href="sl3.html#cb18-3"></a>)</span>
+<span id="cb18-4"><a href="sl3.html#cb18-4"></a>stack</span>
+<span id="cb18-5"><a href="sl3.html#cb18-5"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_glm_TRUE"</span>                                  </span>
+<span id="cb18-6"><a href="sl3.html#cb18-6"></a>[<span class="dv">2</span>] <span class="st">"Lrnr_polspline_5"</span>                               </span>
+<span id="cb18-7"><a href="sl3.html#cb18-7"></a>[<span class="dv">3</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_0.5_100_TRUE_FALSE"</span></span>
+<span id="cb18-8"><a href="sl3.html#cb18-8"></a>[<span class="dv">4</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_0_100_TRUE_FALSE"</span>  </span>
+<span id="cb18-9"><a href="sl3.html#cb18-9"></a>[<span class="dv">5</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_1_100_TRUE_FALSE"</span>  </span>
+<span id="cb18-10"><a href="sl3.html#cb18-10"></a>[<span class="dv">6</span>] <span class="st">"Lrnr_xgboost_50_1"</span>                              </span></code></pre></div>
+<p>We can also stack the learners by first creating a vector, and then
+instantiating the stack. I prefer this method, since it easily allows us to
+modify the names of the learners.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="sl3.html#cb19-1"></a><span class="co"># named vector of learners first</span></span>
+<span id="cb19-2"><a href="sl3.html#cb19-2"></a>learners &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb19-3"><a href="sl3.html#cb19-3"></a>  lrn_glm, lrn_polspline, lrn_enet<span class="fl">.5</span>, lrn_ridge, lrn_lasso, xgb_<span class="dv">50</span></span>
+<span id="cb19-4"><a href="sl3.html#cb19-4"></a>)</span>
+<span id="cb19-5"><a href="sl3.html#cb19-5"></a><span class="kw">names</span>(learners) &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb19-6"><a href="sl3.html#cb19-6"></a>  <span class="st">"glm"</span>, <span class="st">"polspline"</span>, <span class="st">"enet.5"</span>, <span class="st">"ridge"</span>, <span class="st">"lasso"</span>, <span class="st">"xgboost50"</span></span>
+<span id="cb19-7"><a href="sl3.html#cb19-7"></a>)</span>
+<span id="cb19-8"><a href="sl3.html#cb19-8"></a><span class="co"># next make the stack</span></span>
+<span id="cb19-9"><a href="sl3.html#cb19-9"></a>stack &lt;-<span class="st"> </span><span class="kw">make_learner</span>(Stack, learners)</span>
+<span id="cb19-10"><a href="sl3.html#cb19-10"></a><span class="co"># now the names are pretty</span></span>
+<span id="cb19-11"><a href="sl3.html#cb19-11"></a>stack</span>
+<span id="cb19-12"><a href="sl3.html#cb19-12"></a>[<span class="dv">1</span>] <span class="st">"glm"</span>       <span class="st">"polspline"</span> <span class="st">"enet.5"</span>    <span class="st">"ridge"</span>     <span class="st">"lasso"</span>     <span class="st">"xgboost50"</span></span></code></pre></div>
+<p>We’re jumping ahead a bit, but let’s check something out quickly. It’s
+straightforward, and just one more step, to set up this stack such that
+all of the learners will train in a cross-validated manner.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="sl3.html#cb20-1"></a>cv_stack &lt;-<span class="st"> </span>Lrnr_cv<span class="op">$</span><span class="kw">new</span>(stack)</span>
+<span id="cb20-2"><a href="sl3.html#cb20-2"></a>cv_stack</span>
+<span id="cb20-3"><a href="sl3.html#cb20-3"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_cv"</span></span>
+<span id="cb20-4"><a href="sl3.html#cb20-4"></a>[<span class="dv">1</span>] <span class="st">"glm"</span>       <span class="st">"polspline"</span> <span class="st">"enet.5"</span>    <span class="st">"ridge"</span>     <span class="st">"lasso"</span>     <span class="st">"xgboost50"</span></span></code></pre></div>
+<div id="screening-algorithms-for-feature-selection" class="section level4 unnumbered">
+<h4>Screening Algorithms for Feature Selection<a class="anchor" aria-label="anchor" href="#screening-algorithms-for-feature-selection"><i class="fas fa-link"></i></a>
+</h4>
+<p>We can optionally select a subset of available covariates and pass only
+those variables to the modeling algorithm. The current set of learners that
+can be used for prescreening covariates is included below.</p>
+<ul>
+<li>
+<code>Lrnr_screener_importance</code> selects <code>num_screen</code> (default = 5) covariates
+based on the variable importance ranking provided by the <code>learner</code>. Any
+learner with an importance method can be used in <code>Lrnr_screener_importance</code>;
+and this currently includes <code>Lrnr_ranger</code>, <code>Lrnr_randomForest</code>, and
+<code>Lrnr_xgboost</code>.</li>
+<li>
+<code>Lrnr_screener_coefs</code>, which provides screening of covariates based on the
+magnitude of their estimated coefficients in a (possibly regularized) GLM.
+The <code>threshold</code> (default = 1e-3) defines the minimum absolute size of the
+coefficients, and thus covariates, to be kept. Also, a <code>max_retain</code> argument
+can be optionally provided to restrict the number of selected covariates to be
+no more than <code>max_retain</code>.</li>
+<li>
+<code>Lrnr_screener_correlation</code> provides covariate screening procedures by
+running a test of correlation (Pearson default), and then selecting the (1)
+top ranked variables (default), or (2) the variables with a pvalue lower than
+some pre-specified threshold.</li>
+<li>
+<code>Lrnr_screener_augment</code> augments a set of screened covariates with additional
+covariates that should be included by default, even if the screener did not
+select them. An example of how to use this screener is included below.</li>
+</ul>
+<p>Let’s consider screening covariates based on their <code>randomForest</code> variable
+importance ranking (ordered by mean decrease in accuracy). To select the top
+5 most important covariates according to this ranking, we can combine
+<code>Lrnr_screener_importance</code> with <code>Lrnr_ranger</code> (limiting the number of trees by
+setting <code>ntree = 20</code>).</p>
+<p>Hang on! Before you think it – we will confess: Bob Ross and us both know that
+20 trees makes for a lonely forest, and we shouldn’t consider it, but these are
+the sacrifices we make for this chapter to be built in time!</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="sl3.html#cb21-1"></a>miniforest &lt;-<span class="st"> </span>Lrnr_ranger<span class="op">$</span><span class="kw">new</span>(</span>
+<span id="cb21-2"><a href="sl3.html#cb21-2"></a>  <span class="dt">num.trees =</span> <span class="dv">20</span>, <span class="dt">write.forest =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb21-3"><a href="sl3.html#cb21-3"></a>  <span class="dt">importance =</span> <span class="st">"impurity_corrected"</span></span>
+<span id="cb21-4"><a href="sl3.html#cb21-4"></a>)</span>
+<span id="cb21-5"><a href="sl3.html#cb21-5"></a></span>
+<span id="cb21-6"><a href="sl3.html#cb21-6"></a><span class="co"># learner must already be instantiated, we did this when we created miniforest</span></span>
+<span id="cb21-7"><a href="sl3.html#cb21-7"></a>screen_rf &lt;-<span class="st"> </span>Lrnr_screener_importance<span class="op">$</span><span class="kw">new</span>(<span class="dt">learner =</span> miniforest, <span class="dt">num_screen =</span> <span class="dv">5</span>)</span>
+<span id="cb21-8"><a href="sl3.html#cb21-8"></a>screen_rf</span>
+<span id="cb21-9"><a href="sl3.html#cb21-9"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_screener_importance_5"</span></span>
+<span id="cb21-10"><a href="sl3.html#cb21-10"></a></span>
+<span id="cb21-11"><a href="sl3.html#cb21-11"></a><span class="co"># which covariates are selected on the full data?</span></span>
+<span id="cb21-12"><a href="sl3.html#cb21-12"></a>screen_rf<span class="op">$</span><span class="kw">train</span>(washb_task)</span>
+<span id="cb21-13"><a href="sl3.html#cb21-13"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_screener_importance_5"</span></span>
+<span id="cb21-14"><a href="sl3.html#cb21-14"></a><span class="op">$</span>selected</span>
+<span id="cb21-15"><a href="sl3.html#cb21-15"></a>[<span class="dv">1</span>] <span class="st">"aged"</span>         <span class="st">"month"</span>        <span class="st">"momedu"</span>       <span class="st">"Nlt18"</span>        <span class="st">"asset_refrig"</span></span></code></pre></div>
+<p>An example of how to format <code>Lrnr_screener_augment</code> is included below for
+clarity.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="sl3.html#cb22-1"></a>keepme &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"aged"</span>, <span class="st">"momage"</span>)</span>
+<span id="cb22-2"><a href="sl3.html#cb22-2"></a><span class="co"># screener must already be instantiated, we did this when we created screen_rf</span></span>
+<span id="cb22-3"><a href="sl3.html#cb22-3"></a>screen_augment_rf &lt;-<span class="st"> </span>Lrnr_screener_augment<span class="op">$</span><span class="kw">new</span>(</span>
+<span id="cb22-4"><a href="sl3.html#cb22-4"></a>  <span class="dt">screener =</span> screen_rf, <span class="dt">default_covariates =</span> keepme</span>
+<span id="cb22-5"><a href="sl3.html#cb22-5"></a>)</span>
+<span id="cb22-6"><a href="sl3.html#cb22-6"></a>screen_augment_rf</span>
+<span id="cb22-7"><a href="sl3.html#cb22-7"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_screener_augment_c(</span><span class="ch">\"</span><span class="st">aged</span><span class="ch">\"</span><span class="st">, </span><span class="ch">\"</span><span class="st">momage</span><span class="ch">\"</span><span class="st">)"</span></span></code></pre></div>
+<p>Selecting covariates with non-zero lasso coefficients is quite common. Let’s
+construct <code>Lrnr_screener_coefs</code> screener that does just that, and test it
+out.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="sl3.html#cb23-1"></a><span class="co"># we already instantiated a lasso learner above, no need to do it again</span></span>
+<span id="cb23-2"><a href="sl3.html#cb23-2"></a>screen_lasso &lt;-<span class="st"> </span>Lrnr_screener_coefs<span class="op">$</span><span class="kw">new</span>(<span class="dt">learner =</span> lrn_lasso, <span class="dt">threshold =</span> <span class="dv">0</span>)</span>
+<span id="cb23-3"><a href="sl3.html#cb23-3"></a>screen_lasso</span>
+<span id="cb23-4"><a href="sl3.html#cb23-4"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_screener_coefs_0_NULL_2"</span></span></code></pre></div>
+<p>To pipe only the selected covariates to the modeling algorithm, we need to
+make a <code>Pipeline</code>, similar to the one we built for the regression model with
+interaction terms.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">screen_rf_pipe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Pipeline</span>, <span class="va">screen_rf</span>, <span class="va">stack</span><span class="op">)</span>
+<span class="va">screen_lasso_pipe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Pipeline</span>, <span class="va">screen_lasso</span>, <span class="va">stack</span><span class="op">)</span></code></pre></div>
+<p>Now, these learners will be preceded by a screening step.</p>
+<p>We also consider the original <code>stack</code>, to compare how the feature selection
+methods perform in comparison to the methods without feature selection.</p>
+<p>Analogous to what we have seen before, we have to stack the pipeline and
+original <code>stack</code> together, so we may use them as base learners in our super
+learner.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="sl3.html#cb25-1"></a><span class="co"># pretty names again</span></span>
+<span id="cb25-2"><a href="sl3.html#cb25-2"></a>learners2 &lt;-<span class="st"> </span><span class="kw">c</span>(learners, screen_rf_pipe, screen_lasso_pipe)</span>
+<span id="cb25-3"><a href="sl3.html#cb25-3"></a><span class="kw">names</span>(learners2) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">names</span>(learners), <span class="st">"randomforest_screen"</span>, <span class="st">"lasso_screen"</span>)</span>
+<span id="cb25-4"><a href="sl3.html#cb25-4"></a></span>
+<span id="cb25-5"><a href="sl3.html#cb25-5"></a>fancy_stack &lt;-<span class="st"> </span><span class="kw">make_learner</span>(Stack, learners2)</span>
+<span id="cb25-6"><a href="sl3.html#cb25-6"></a>fancy_stack</span>
+<span id="cb25-7"><a href="sl3.html#cb25-7"></a>[<span class="dv">1</span>] <span class="st">"glm"</span>                 <span class="st">"polspline"</span>           <span class="st">"enet.5"</span>             </span>
+<span id="cb25-8"><a href="sl3.html#cb25-8"></a>[<span class="dv">4</span>] <span class="st">"ridge"</span>               <span class="st">"lasso"</span>               <span class="st">"xgboost50"</span>          </span>
+<span id="cb25-9"><a href="sl3.html#cb25-9"></a>[<span class="dv">7</span>] <span class="st">"randomforest_screen"</span> <span class="st">"lasso_screen"</span>       </span></code></pre></div>
+<p>We will use the <a href="https://tlverse.org/sl3/reference/default_metalearner.html">default
+metalearner</a>,
+which uses
+<a href="https://tlverse.org/sl3/reference/Lrnr_solnp.html"><code>Lrnr_solnp</code></a> to
+provide fitting procedures for a pairing of <a href="https://tlverse.org/sl3/reference/loss_functions.html">loss
+function</a> and
+<a href="https://tlverse.org/sl3/reference/metalearners.html">metalearner
+function</a>. This
+default metalearner selects a loss and metalearner pairing based on the outcome
+type. Note that any learner can be used as a metalearner.</p>
+<p>Now that we have made a diverse stack of base learners, we are ready to make the
+SL. The SL algorithm fits a metalearner on the validation set
+predictions/losses across all folds.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">sl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_sl</span>, learners <span class="op">=</span> <span class="va">fancy_stack</span><span class="op">)</span></code></pre></div>
+<p>We can also use <code>Lrnr_cv</code> to build a SL, cross-validate a stack of
+learners to compare performance of the learners in the stack, or cross-validate
+any single learner (see “Cross-validation” section of this <a href="https://tlverse.org/sl3/articles/intro_sl3.html"><code>sl3</code>
+introductory tutorial</a>).</p>
+<p>Furthermore, we can <a href="https://tlverse.org/sl3/articles/custom_lrnrs.html">Define New <code>sl3</code>
+Learners</a> which can be used
+in all the places you could otherwise use any other <code>sl3</code> learners, including
+<code>Pipelines</code>, <code>Stacks</code>, and the SL.</p>
+<p>Recall that the discrete SL, or cross-validated selector, is a metalearner that
+assigns a weight of 1 to the learner with the lowest cross-validated empirical
+risk, and weight of 0 to all other learners. This metalearner specification can
+be invoked with <code>Lrnr_cv_selector</code>.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">discrete_sl_metalrn</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_cv_selector.html">Lrnr_cv_selector</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<span class="va">discrete_sl</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_sl.html">Lrnr_sl</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  learners <span class="op">=</span> <span class="va">fancy_stack</span>,
+  metalearner <span class="op">=</span> <span class="va">discrete_sl_metalrn</span>
+<span class="op">)</span></code></pre></div>
+<!--
+In the plot below, we visualize the steps for executing the Super Learner in
+the `tlverse/delayed` framework. For those like myself who are not particularly
+keen on understanding the intricacies of `delayed`, let's focus on the main
+point of this figure: we can see there are 10 realizations of the stack which
+represent the 10 cross-validation folds and there is a separate hold-out
+(top branch of the figure) that will not be used to fit the Super Learner.
+
+
+```r
+dt_sl <- delayed_learner_train(sl, washb_task)
+plot(dt_sl, color = FALSE, height = "400px", width = "90%")
+```
+--->
+</div>
+</div>
+<div id="train-the-super-learner-on-the-machine-learning-task" class="section level3 unnumbered">
+<h3>3. Train the Super Learner on the machine learning task<a class="anchor" aria-label="anchor" href="#train-the-super-learner-on-the-machine-learning-task"><i class="fas fa-link"></i></a>
+</h3>
+<p>The SL algorithm fits a metalearner on the validation-set predictions in a
+cross-validated manner, thereby avoiding overfitting.</p>
+<p>Now we are ready to <code>train</code> our SL on our <code>sl3_task</code> object, <code>washb_task</code>.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">4197</span><span class="op">)</span>
+<span class="va">sl_fit</span> <span class="op">&lt;-</span> <span class="va">sl</span><span class="op">$</span><span class="fu">train</span><span class="op">(</span><span class="va">washb_task</span><span class="op">)</span></code></pre></div>
+</div>
+<div id="obtain-predicted-values" class="section level3 unnumbered">
+<h3>4. Obtain predicted values<a class="anchor" aria-label="anchor" href="#obtain-predicted-values"><i class="fas fa-link"></i></a>
+</h3>
+<p>Now that we have fit the SL, we are ready to calculate the predicted outcome
+for each subject.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="sl3.html#cb29-1"></a><span class="co"># we did it! now we have SL predictions</span></span>
+<span id="cb29-2"><a href="sl3.html#cb29-2"></a>sl_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span><span class="kw">predict</span>()</span>
+<span id="cb29-3"><a href="sl3.html#cb29-3"></a><span class="kw">head</span>(sl_preds)</span>
+<span id="cb29-4"><a href="sl3.html#cb29-4"></a>[<span class="dv">1</span>] <span class="fl">-0.60375</span> <span class="fl">-0.76000</span> <span class="fl">-0.69324</span> <span class="fl">-0.67469</span> <span class="fl">-0.64265</span> <span class="fl">-0.71172</span></span></code></pre></div>
+<!--
+Below we visualize the observed versus predicted values.
+
+For fun, we will also include the cross-validated predictions from most popular
+learner on the block, main terms linear regression.
+
+
+
+```r
+# df_plot <- data.frame(Observed = washb_data[["whz"]], Predicted = sl_preds,
+#                        count = seq(1:nrow(washb_data))
+
+# df_plot_melted <- melt(df_plot, id.vars = "count",
+#                         measure.vars = c("Observed", "Predicted"))
+
+# ggplot(df_plot_melted, aes(value, count, color = variable)) + geom_point()
+```
+-->
+<p>We can also obtain a summary of the results.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="sl3.html#cb30-1"></a>sl_fit<span class="op">$</span><span class="kw">cv_risk</span>(<span class="dt">eval_fun =</span> loss_squared_error)</span>
+<span id="cb30-2"><a href="sl3.html#cb30-2"></a>                          learner coefficients    MSE       se  fold_sd</span>
+<span id="cb30-3"><a href="sl3.html#cb30-3"></a> <span class="dv">1</span><span class="op">:</span><span class="st">                           </span>glm    <span class="fl">0.1128155</span> <span class="fl">1.0202</span> <span class="fl">0.023955</span> <span class="fl">0.067500</span></span>
+<span id="cb30-4"><a href="sl3.html#cb30-4"></a> <span class="dv">2</span><span class="op">:</span><span class="st">                     </span>polspline    <span class="fl">0.0000000</span> <span class="fl">1.0208</span> <span class="fl">0.023577</span> <span class="fl">0.067921</span></span>
+<span id="cb30-5"><a href="sl3.html#cb30-5"></a> <span class="dv">3</span><span class="op">:</span><span class="st">                        </span>enet<span class="fl">.5</span>    <span class="fl">0.0171843</span> <span class="fl">1.0133</span> <span class="fl">0.023618</span> <span class="fl">0.065940</span></span>
+<span id="cb30-6"><a href="sl3.html#cb30-6"></a> <span class="dv">4</span><span class="op">:</span><span class="st">                         </span>ridge    <span class="fl">0.1944195</span> <span class="fl">1.0154</span> <span class="fl">0.023736</span> <span class="fl">0.065991</span></span>
+<span id="cb30-7"><a href="sl3.html#cb30-7"></a> <span class="dv">5</span><span class="op">:</span><span class="st">                         </span>lasso    <span class="fl">0.0577189</span> <span class="fl">1.0130</span> <span class="fl">0.023605</span> <span class="fl">0.065828</span></span>
+<span id="cb30-8"><a href="sl3.html#cb30-8"></a> <span class="dv">6</span><span class="op">:</span><span class="st">                     </span>xgboost50    <span class="fl">0.1097927</span> <span class="fl">1.1136</span> <span class="fl">0.025262</span> <span class="fl">0.077580</span></span>
+<span id="cb30-9"><a href="sl3.html#cb30-9"></a> <span class="dv">7</span><span class="op">:</span><span class="st">       </span>randomforest_screen_glm    <span class="fl">0.0000000</span> <span class="fl">1.0229</span> <span class="fl">0.023733</span> <span class="fl">0.067706</span></span>
+<span id="cb30-10"><a href="sl3.html#cb30-10"></a> <span class="dv">8</span><span class="op">:</span><span class="st"> </span>randomforest_screen_polspline    <span class="fl">0.3116745</span> <span class="fl">1.0178</span> <span class="fl">0.023753</span> <span class="fl">0.067091</span></span>
+<span id="cb30-11"><a href="sl3.html#cb30-11"></a> <span class="dv">9</span><span class="op">:</span><span class="st">    </span>randomforest_screen_enet<span class="fl">.5</span>    <span class="fl">0.0000000</span> <span class="fl">1.0229</span> <span class="fl">0.023729</span> <span class="fl">0.067516</span></span>
+<span id="cb30-12"><a href="sl3.html#cb30-12"></a><span class="dv">10</span><span class="op">:</span><span class="st">     </span>randomforest_screen_ridge    <span class="fl">0.0000000</span> <span class="fl">1.0232</span> <span class="fl">0.023746</span> <span class="fl">0.067528</span></span>
+<span id="cb30-13"><a href="sl3.html#cb30-13"></a><span class="dv">11</span><span class="op">:</span><span class="st">     </span>randomforest_screen_lasso    <span class="fl">0.0000000</span> <span class="fl">1.0226</span> <span class="fl">0.023722</span> <span class="fl">0.067520</span></span>
+<span id="cb30-14"><a href="sl3.html#cb30-14"></a><span class="dv">12</span><span class="op">:</span><span class="st"> </span>randomforest_screen_xgboost50    <span class="fl">0.0172496</span> <span class="fl">1.1207</span> <span class="fl">0.025542</span> <span class="fl">0.088250</span></span>
+<span id="cb30-15"><a href="sl3.html#cb30-15"></a><span class="dv">13</span><span class="op">:</span><span class="st">              </span>lasso_screen_glm    <span class="fl">0.0614238</span> <span class="fl">1.0165</span> <span class="fl">0.023561</span> <span class="fl">0.064937</span></span>
+<span id="cb30-16"><a href="sl3.html#cb30-16"></a><span class="dv">14</span><span class="op">:</span><span class="st">        </span>lasso_screen_polspline    <span class="fl">0.0056719</span> <span class="fl">1.0184</span> <span class="fl">0.023537</span> <span class="fl">0.065581</span></span>
+<span id="cb30-17"><a href="sl3.html#cb30-17"></a><span class="dv">15</span><span class="op">:</span><span class="st">           </span>lasso_screen_enet<span class="fl">.5</span>    <span class="fl">0.0553858</span> <span class="fl">1.0164</span> <span class="fl">0.023561</span> <span class="fl">0.064912</span></span>
+<span id="cb30-18"><a href="sl3.html#cb30-18"></a><span class="dv">16</span><span class="op">:</span><span class="st">            </span>lasso_screen_ridge    <span class="fl">0.0000000</span> <span class="fl">1.0166</span> <span class="fl">0.023567</span> <span class="fl">0.064759</span></span>
+<span id="cb30-19"><a href="sl3.html#cb30-19"></a><span class="dv">17</span><span class="op">:</span><span class="st">            </span>lasso_screen_lasso    <span class="fl">0.0566635</span> <span class="fl">1.0164</span> <span class="fl">0.023560</span> <span class="fl">0.064898</span></span>
+<span id="cb30-20"><a href="sl3.html#cb30-20"></a><span class="dv">18</span><span class="op">:</span><span class="st">        </span>lasso_screen_xgboost50    <span class="fl">0.0000000</span> <span class="fl">1.1296</span> <span class="fl">0.025767</span> <span class="fl">0.084180</span></span>
+<span id="cb30-21"><a href="sl3.html#cb30-21"></a><span class="dv">19</span><span class="op">:</span><span class="st">                  </span>SuperLearner           <span class="ot">NA</span> <span class="fl">1.0078</span> <span class="fl">0.023461</span> <span class="fl">0.067144</span></span>
+<span id="cb30-22"><a href="sl3.html#cb30-22"></a>    fold_min_MSE fold_max_MSE</span>
+<span id="cb30-23"><a href="sl3.html#cb30-23"></a> <span class="dv">1</span><span class="op">:</span><span class="st">      </span><span class="fl">0.89442</span>       <span class="fl">1.1200</span></span>
+<span id="cb30-24"><a href="sl3.html#cb30-24"></a> <span class="dv">2</span><span class="op">:</span><span class="st">      </span><span class="fl">0.89892</span>       <span class="fl">1.1255</span></span>
+<span id="cb30-25"><a href="sl3.html#cb30-25"></a> <span class="dv">3</span><span class="op">:</span><span class="st">      </span><span class="fl">0.88927</span>       <span class="fl">1.1082</span></span>
+<span id="cb30-26"><a href="sl3.html#cb30-26"></a> <span class="dv">4</span><span class="op">:</span><span class="st">      </span><span class="fl">0.88570</span>       <span class="fl">1.1104</span></span>
+<span id="cb30-27"><a href="sl3.html#cb30-27"></a> <span class="dv">5</span><span class="op">:</span><span class="st">      </span><span class="fl">0.89037</span>       <span class="fl">1.1090</span></span>
+<span id="cb30-28"><a href="sl3.html#cb30-28"></a> <span class="dv">6</span><span class="op">:</span><span class="st">      </span><span class="fl">0.96019</span>       <span class="fl">1.2337</span></span>
+<span id="cb30-29"><a href="sl3.html#cb30-29"></a> <span class="dv">7</span><span class="op">:</span><span class="st">      </span><span class="fl">0.89923</span>       <span class="fl">1.1081</span></span>
+<span id="cb30-30"><a href="sl3.html#cb30-30"></a> <span class="dv">8</span><span class="op">:</span><span class="st">      </span><span class="fl">0.90342</span>       <span class="fl">1.1098</span></span>
+<span id="cb30-31"><a href="sl3.html#cb30-31"></a> <span class="dv">9</span><span class="op">:</span><span class="st">      </span><span class="fl">0.89912</span>       <span class="fl">1.1080</span></span>
+<span id="cb30-32"><a href="sl3.html#cb30-32"></a><span class="dv">10</span><span class="op">:</span><span class="st">      </span><span class="fl">0.89882</span>       <span class="fl">1.1073</span></span>
+<span id="cb30-33"><a href="sl3.html#cb30-33"></a><span class="dv">11</span><span class="op">:</span><span class="st">      </span><span class="fl">0.89912</span>       <span class="fl">1.1076</span></span>
+<span id="cb30-34"><a href="sl3.html#cb30-34"></a><span class="dv">12</span><span class="op">:</span><span class="st">      </span><span class="fl">0.95622</span>       <span class="fl">1.2330</span></span>
+<span id="cb30-35"><a href="sl3.html#cb30-35"></a><span class="dv">13</span><span class="op">:</span><span class="st">      </span><span class="fl">0.90204</span>       <span class="fl">1.1156</span></span>
+<span id="cb30-36"><a href="sl3.html#cb30-36"></a><span class="dv">14</span><span class="op">:</span><span class="st">      </span><span class="fl">0.89742</span>       <span class="fl">1.1162</span></span>
+<span id="cb30-37"><a href="sl3.html#cb30-37"></a><span class="dv">15</span><span class="op">:</span><span class="st">      </span><span class="fl">0.90184</span>       <span class="fl">1.1154</span></span>
+<span id="cb30-38"><a href="sl3.html#cb30-38"></a><span class="dv">16</span><span class="op">:</span><span class="st">      </span><span class="fl">0.90132</span>       <span class="fl">1.1148</span></span>
+<span id="cb30-39"><a href="sl3.html#cb30-39"></a><span class="dv">17</span><span class="op">:</span><span class="st">      </span><span class="fl">0.90183</span>       <span class="fl">1.1154</span></span>
+<span id="cb30-40"><a href="sl3.html#cb30-40"></a><span class="dv">18</span><span class="op">:</span><span class="st">      </span><span class="fl">0.96251</span>       <span class="fl">1.2327</span></span>
+<span id="cb30-41"><a href="sl3.html#cb30-41"></a><span class="dv">19</span><span class="op">:</span><span class="st">      </span><span class="fl">0.88301</span>       <span class="fl">1.0996</span></span></code></pre></div>
+</div>
+</div>
+<div id="cross-validated-super-learner" class="section level2 unnumbered">
+<h2>Cross-validated Super Learner<a class="anchor" aria-label="anchor" href="#cross-validated-super-learner"><i class="fas fa-link"></i></a>
+</h2>
+<p>We can cross-validate the SL to see how well the SL performs on unseen data, and
+obtain an estimate of the cross-validated risk of the SL.</p>
+<p>This estimation procedure requires an outer/external layer of
+cross-validation, also called nested cross-validation, which involves setting
+aside a separate holdout sample that we don’t use to fit the SL. This external
+cross-validation procedure may also incorporate 10 folds, which is the default
+in <code>sl3</code>. However, we will incorporate 2 outer/external folds of
+cross-validation for computational efficiency.</p>
+<p>We also need to specify a loss function to evaluate SL. Documentation for the
+available loss functions can be found in the <a href="https://tlverse.org/sl3/reference/loss_functions.html"><code>sl3</code> Loss Function
+Reference</a>.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">washb_task_new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/sl3_Task.html">make_sl3_Task</a></span><span class="op">(</span>
+  data <span class="op">=</span> <span class="va">washb_data</span>,
+  covariates <span class="op">=</span> <span class="va">covars</span>,
+  outcome <span class="op">=</span> <span class="va">outcome</span>,
+  folds <span class="op">=</span> <span class="fu">origami</span><span class="fu">::</span><span class="fu"><a href="http://tlverse.org/origami/reference/make_folds.html">make_folds</a></span><span class="op">(</span><span class="va">washb_data</span>, fold_fun <span class="op">=</span> <span class="va">folds_vfold</span>, V <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="va">CVsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/CV_lrnr_sl.html">CV_lrnr_sl</a></span><span class="op">(</span>
+  lrnr_sl <span class="op">=</span> <span class="va">sl_fit</span>, task <span class="op">=</span> <span class="va">washb_task_new</span>, eval_fun <span class="op">=</span> <span class="va">loss_squared_error</span>
+<span class="op">)</span>
+
+<span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/output_type.html">is_latex_output</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+   <span class="va">CVsl</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"latex"</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/output_type.html">is_html_output</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+   <span class="va">CVsl</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>fixed_thead <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/scroll_box.html">scroll_box</a></span><span class="op">(</span>width <span class="op">=</span> <span class="st">"100%"</span>, height <span class="op">=</span> <span class="st">"300px"</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+learner
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+coefficients
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+MSE
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+se
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+fold_sd
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+fold_min_MSE
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+fold_max_MSE
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+glm
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+1.0448
+</td>
+<td style="text-align:right;">
+0.02548
+</td>
+<td style="text-align:right;">
+0.06295
+</td>
+<td style="text-align:right;">
+1.00030
+</td>
+<td style="text-align:right;">
+1.0893
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+polspline
+</td>
+<td style="text-align:right;">
+0.19712
+</td>
+<td style="text-align:right;">
+1.0206
+</td>
+<td style="text-align:right;">
+0.02354
+</td>
+<td style="text-align:right;">
+0.05104
+</td>
+<td style="text-align:right;">
+0.98449
+</td>
+<td style="text-align:right;">
+1.0567
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+enet.5
+</td>
+<td style="text-align:right;">
+0.03436
+</td>
+<td style="text-align:right;">
+1.0191
+</td>
+<td style="text-align:right;">
+0.02366
+</td>
+<td style="text-align:right;">
+0.05005
+</td>
+<td style="text-align:right;">
+0.98372
+</td>
+<td style="text-align:right;">
+1.0545
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ridge
+</td>
+<td style="text-align:right;">
+0.17672
+</td>
+<td style="text-align:right;">
+1.0264
+</td>
+<td style="text-align:right;">
+0.02404
+</td>
+<td style="text-align:right;">
+0.05195
+</td>
+<td style="text-align:right;">
+0.98963
+</td>
+<td style="text-align:right;">
+1.0631
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lasso
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+1.0201
+</td>
+<td style="text-align:right;">
+0.02370
+</td>
+<td style="text-align:right;">
+0.05134
+</td>
+<td style="text-align:right;">
+0.98375
+</td>
+<td style="text-align:right;">
+1.0563
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+xgboost50
+</td>
+<td style="text-align:right;">
+0.05474
+</td>
+<td style="text-align:right;">
+1.1871
+</td>
+<td style="text-align:right;">
+0.02737
+</td>
+<td style="text-align:right;">
+0.03028
+</td>
+<td style="text-align:right;">
+1.16566
+</td>
+<td style="text-align:right;">
+1.2085
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+randomforest_screen_glm
+</td>
+<td style="text-align:right;">
+0.39880
+</td>
+<td style="text-align:right;">
+1.0171
+</td>
+<td style="text-align:right;">
+0.02370
+</td>
+<td style="text-align:right;">
+0.05001
+</td>
+<td style="text-align:right;">
+0.98176
+</td>
+<td style="text-align:right;">
+1.0525
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+randomforest_screen_polspline
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+1.0231
+</td>
+<td style="text-align:right;">
+0.02376
+</td>
+<td style="text-align:right;">
+0.05456
+</td>
+<td style="text-align:right;">
+0.98449
+</td>
+<td style="text-align:right;">
+1.0616
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+randomforest_screen_enet.5
+</td>
+<td style="text-align:right;">
+0.05333
+</td>
+<td style="text-align:right;">
+1.0171
+</td>
+<td style="text-align:right;">
+0.02370
+</td>
+<td style="text-align:right;">
+0.04994
+</td>
+<td style="text-align:right;">
+0.98183
+</td>
+<td style="text-align:right;">
+1.0525
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+randomforest_screen_ridge
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+1.0171
+</td>
+<td style="text-align:right;">
+0.02372
+</td>
+<td style="text-align:right;">
+0.05005
+</td>
+<td style="text-align:right;">
+0.98173
+</td>
+<td style="text-align:right;">
+1.0525
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+randomforest_screen_lasso
+</td>
+<td style="text-align:right;">
+0.04274
+</td>
+<td style="text-align:right;">
+1.0172
+</td>
+<td style="text-align:right;">
+0.02370
+</td>
+<td style="text-align:right;">
+0.04992
+</td>
+<td style="text-align:right;">
+0.98185
+</td>
+<td style="text-align:right;">
+1.0525
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+randomforest_screen_xgboost50
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+1.1967
+</td>
+<td style="text-align:right;">
+0.02737
+</td>
+<td style="text-align:right;">
+0.04170
+</td>
+<td style="text-align:right;">
+1.16725
+</td>
+<td style="text-align:right;">
+1.2262
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lasso_screen_glm
+</td>
+<td style="text-align:right;">
+0.04220
+</td>
+<td style="text-align:right;">
+1.0197
+</td>
+<td style="text-align:right;">
+0.02372
+</td>
+<td style="text-align:right;">
+0.04487
+</td>
+<td style="text-align:right;">
+0.98793
+</td>
+<td style="text-align:right;">
+1.0514
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lasso_screen_polspline
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+1.0229
+</td>
+<td style="text-align:right;">
+0.02374
+</td>
+<td style="text-align:right;">
+0.04655
+</td>
+<td style="text-align:right;">
+0.98997
+</td>
+<td style="text-align:right;">
+1.0558
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lasso_screen_enet.5
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+1.0195
+</td>
+<td style="text-align:right;">
+0.02372
+</td>
+<td style="text-align:right;">
+0.04475
+</td>
+<td style="text-align:right;">
+0.98790
+</td>
+<td style="text-align:right;">
+1.0512
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lasso_screen_ridge
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+1.0198
+</td>
+<td style="text-align:right;">
+0.02374
+</td>
+<td style="text-align:right;">
+0.04513
+</td>
+<td style="text-align:right;">
+0.98785
+</td>
+<td style="text-align:right;">
+1.0517
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lasso_screen_lasso
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+1.0195
+</td>
+<td style="text-align:right;">
+0.02372
+</td>
+<td style="text-align:right;">
+0.04474
+</td>
+<td style="text-align:right;">
+0.98791
+</td>
+<td style="text-align:right;">
+1.0512
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lasso_screen_xgboost50
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+1.1884
+</td>
+<td style="text-align:right;">
+0.02720
+</td>
+<td style="text-align:right;">
+0.08492
+</td>
+<td style="text-align:right;">
+1.12834
+</td>
+<td style="text-align:right;">
+1.2484
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SuperLearner
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.0171
+</td>
+<td style="text-align:right;">
+0.02380
+</td>
+<td style="text-align:right;">
+0.04548
+</td>
+<td style="text-align:right;">
+0.98490
+</td>
+<td style="text-align:right;">
+1.0492
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<!-- Explain summary!!!! -->
+</div>
+<div id="variable-importance-measures-with-sl3" class="section level2 unnumbered">
+<h2>Variable Importance Measures with <code>sl3</code><a class="anchor" aria-label="anchor" href="#variable-importance-measures-with-sl3"><i class="fas fa-link"></i></a>
+</h2>
+<p>Variable importance can be interesting and informative. It can also be
+contradictory and confusing. Nevertheless, we like it, and so do our
+collaborators, so we created a variable importance function in <code>sl3</code>! The <code>sl3</code>
+<code>importance</code> function returns a table with variables listed in decreasing order
+of importance (i.e., most important on the first row).</p>
+<p>The measure of importance in <code>sl3</code> is based on a risk ratio, or risk difference,
+between the learner fit with a removed, or permuted, covariate and the learner
+fit with the true covariate, across all covariates. In this manner, the larger
+the risk difference, the more important the variable is in the prediction.</p>
+<p>The intuition of this measure is that it calculates the risk (in terms of the
+average loss in predictive accuracy) of losing one covariate, while keeping
+everything else fixed, and compares it to the risk if the covariate was not
+lost. If this risk ratio is one, or risk difference is zero, then losing that
+covariate had no impact, and is thus not important by this measure. We do this
+across all of the covariates. As stated above, we can remove the covariate and
+refit the SL without it, or we just permute the covariate (faster)
+and hope for the shuffling to distort any meaningful information that was
+present in the covariate. This idea of permuting instead of removing saves a lot
+of time, and is also incorporated in the <code>randomForest</code> variable importance
+measures. However, the permutation approach is risky, so the importance function
+default is to remove and refit.</p>
+<p>Let’s explore the <code>sl3</code> variable importance measurements for the <code>washb</code> data.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">washb_varimp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/importance.html">importance</a></span><span class="op">(</span><span class="va">sl_fit</span>, eval_fun <span class="op">=</span> <span class="va">loss_squared_error</span>,
+                           type <span class="op">=</span> <span class="st">"permute"</span><span class="op">)</span>
+
+<span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/output_type.html">is_latex_output</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">washb_varimp</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"latex"</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/output_type.html">is_html_output</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">washb_varimp</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>fixed_thead <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/scroll_box.html">scroll_box</a></span><span class="op">(</span>width <span class="op">=</span> <span class="st">"100%"</span>, height <span class="op">=</span> <span class="st">"300px"</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+covariate
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+MSE_difference
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+aged
+</td>
+<td style="text-align:right;">
+0.03382
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+momedu
+</td>
+<td style="text-align:right;">
+0.00943
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+month
+</td>
+<td style="text-align:right;">
+0.00742
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_refrig
+</td>
+<td style="text-align:right;">
+0.00545
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_chair
+</td>
+<td style="text-align:right;">
+0.00291
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tr
+</td>
+<td style="text-align:right;">
+0.00169
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nlt18
+</td>
+<td style="text-align:right;">
+0.00160
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_chouki
+</td>
+<td style="text-align:right;">
+0.00112
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+momheight
+</td>
+<td style="text-align:right;">
+0.00104
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+elec
+</td>
+<td style="text-align:right;">
+0.00101
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hfiacat
+</td>
+<td style="text-align:right;">
+0.00091
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+walls
+</td>
+<td style="text-align:right;">
+0.00084
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_tv
+</td>
+<td style="text-align:right;">
+0.00083
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_sewmach
+</td>
+<td style="text-align:right;">
+0.00072
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+watmin
+</td>
+<td style="text-align:right;">
+0.00066
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_mobile
+</td>
+<td style="text-align:right;">
+0.00065
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_moto
+</td>
+<td style="text-align:right;">
+0.00038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+floor
+</td>
+<td style="text-align:right;">
+0.00038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+momage
+</td>
+<td style="text-align:right;">
+0.00029
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sex
+</td>
+<td style="text-align:right;">
+0.00026
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_table
+</td>
+<td style="text-align:right;">
+0.00025
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+delta_momheight
+</td>
+<td style="text-align:right;">
+0.00008
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ncomp
+</td>
+<td style="text-align:right;">
+0.00007
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_bike
+</td>
+<td style="text-align:right;">
+-0.00002
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+roof
+</td>
+<td style="text-align:right;">
+-0.00016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+delta_momage
+</td>
+<td style="text-align:right;">
+-0.00018
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_khat
+</td>
+<td style="text-align:right;">
+-0.00026
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+asset_wardrobe
+</td>
+<td style="text-align:right;">
+-0.00027
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fracode
+</td>
+<td style="text-align:right;">
+-0.00122
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># plot variable importance</span>
+<span class="fu"><a href="https://tlverse.org/sl3/reference/importance_plot.html">importance_plot</a></span><span class="op">(</span>
+  <span class="va">washb_varimp</span>
+<span class="op">)</span></code></pre></div>
+<div class="inline-figure">
+<img src="04-sl3_files/figure-html/varimp-plot-1.png" width="100%" style="display: block; margin: auto;"><!-- Explain summary!!!! -->
+</div>
+</div>
+<div id="sl3-exercises" class="section level2">
+<h2>
+<span class="header-section-number">3.1</span> Exercises<a class="anchor" aria-label="anchor" href="#sl3-exercises"><i class="fas fa-link"></i></a>
+</h2>
+<div id="sl3ex1" class="section level3">
+<h3>
+<span class="header-section-number">3.1.1</span> Predicting Myocardial Infarction with <code>sl3</code><a class="anchor" aria-label="anchor" href="#sl3ex1"><i class="fas fa-link"></i></a>
+</h3>
+<p>Follow the steps below to predict myocardial infarction (<code>mi</code>) using the
+available covariate data. We thank Prof. David Benkeser at Emory University for
+making the this Cardiovascular Health Study (CHS) data accessible.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># load the data set</span>
+<span class="va">db_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span>
+    <span class="st">"https://raw.githubusercontent.com/benkeser/sllecture/master/"</span>,
+    <span class="st">"chspred.csv"</span>
+  <span class="op">)</span>
+<span class="op">)</span>
+<span class="va">chspred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span>file <span class="op">=</span> <span class="va">db_data</span>, col_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="co"># take a quick peek</span>
+<span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/output_type.html">is_latex_output</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chspred</span><span class="op">)</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"latex"</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/output_type.html">is_html_output</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+   <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chspred</span><span class="op">)</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>fixed_thead <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/scroll_box.html">scroll_box</a></span><span class="op">(</span>width <span class="op">=</span> <span class="st">"100%"</span>, height <span class="op">=</span> <span class="st">"300px"</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+waist
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+alcoh
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+hdl
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+beta
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+smoke
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+ace
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+ldl
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+bmi
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+aspirin
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+gend
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+age
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+estrgn
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+glu
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+ins
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+cysgfr
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+dm
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+fetuina
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+whr
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+hsed
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+race
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+logcystat
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+logtrig
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+logcrp
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+logcre
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+health
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+logkcal
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+sysbp
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+mi
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+110.164
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+<td style="text-align:right;">
+66.497
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+114.216
+</td>
+<td style="text-align:right;">
+27.997
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+73.518
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+159.931
+</td>
+<td style="text-align:right;">
+70.3343
+</td>
+<td style="text-align:right;">
+75.008
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.17516
+</td>
+<td style="text-align:right;">
+1.16898
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-0.34202
+</td>
+<td style="text-align:right;">
+5.4063
+</td>
+<td style="text-align:right;">
+2.01260
+</td>
+<td style="text-align:right;">
+-0.67385
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4.3926
+</td>
+<td style="text-align:right;">
+177.135
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+89.976
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+<td style="text-align:right;">
+50.065
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+103.777
+</td>
+<td style="text-align:right;">
+20.893
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+61.772
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+153.389
+</td>
+<td style="text-align:right;">
+33.9695
+</td>
+<td style="text-align:right;">
+82.743
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.57165
+</td>
+<td style="text-align:right;">
+0.90114
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+-0.08465
+</td>
+<td style="text-align:right;">
+4.8592
+</td>
+<td style="text-align:right;">
+3.29328
+</td>
+<td style="text-align:right;">
+-0.55509
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6.2071
+</td>
+<td style="text-align:right;">
+136.374
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+106.194
+</td>
+<td style="text-align:right;">
+8.4174
+</td>
+<td style="text-align:right;">
+40.506
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+165.716
+</td>
+<td style="text-align:right;">
+28.455
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+72.931
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+121.715
+</td>
+<td style="text-align:right;">
+-17.3017
+</td>
+<td style="text-align:right;">
+74.699
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.35168
+</td>
+<td style="text-align:right;">
+1.17971
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-0.44511
+</td>
+<td style="text-align:right;">
+4.5088
+</td>
+<td style="text-align:right;">
+0.30132
+</td>
+<td style="text-align:right;">
+-0.01152
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+6.7320
+</td>
+<td style="text-align:right;">
+135.199
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+90.057
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+<td style="text-align:right;">
+36.175
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+45.203
+</td>
+<td style="text-align:right;">
+23.961
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+79.119
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+53.969
+</td>
+<td style="text-align:right;">
+11.7315
+</td>
+<td style="text-align:right;">
+95.782
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.54391
+</td>
+<td style="text-align:right;">
+1.13599
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+-0.48072
+</td>
+<td style="text-align:right;">
+5.1832
+</td>
+<td style="text-align:right;">
+3.02426
+</td>
+<td style="text-align:right;">
+-0.57507
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7.3972
+</td>
+<td style="text-align:right;">
+139.018
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+78.614
+</td>
+<td style="text-align:right;">
+2.9790
+</td>
+<td style="text-align:right;">
+71.064
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+131.312
+</td>
+<td style="text-align:right;">
+10.966
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+69.018
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+94.315
+</td>
+<td style="text-align:right;">
+9.7112
+</td>
+<td style="text-align:right;">
+72.711
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.49159
+</td>
+<td style="text-align:right;">
+1.10276
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.31206
+</td>
+<td style="text-align:right;">
+4.2190
+</td>
+<td style="text-align:right;">
+-0.70568
+</td>
+<td style="text-align:right;">
+0.00534
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8.2779
+</td>
+<td style="text-align:right;">
+88.047
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+91.659
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+<td style="text-align:right;">
+59.496
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+171.187
+</td>
+<td style="text-align:right;">
+29.132
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+81.835
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+212.907
+</td>
+<td style="text-align:right;">
+-28.2269
+</td>
+<td style="text-align:right;">
+69.218
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.46215
+</td>
+<td style="text-align:right;">
+0.95291
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+-0.28716
+</td>
+<td style="text-align:right;">
+5.1773
+</td>
+<td style="text-align:right;">
+0.97046
+</td>
+<td style="text-align:right;">
+0.21268
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5.9942
+</td>
+<td style="text-align:right;">
+69.594
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<ol style="list-style-type: decimal">
+<li>Create an <code>sl3</code> task, setting myocardial infarction <code>mi</code> as the outcome and
+using all available covariate data.</li>
+<li>Make a library of seven relatively fast base learning algorithms. Customize
+tuning parameters for one of your learners. Feel free to use learners from
+<code>sl3</code> or <code>SuperLearner</code>. You may use the same base learning library that is
+presented above.</li>
+<li>Incorporate at least one pipeline with feature selection. Any screener and
+learner(s) can be used.</li>
+<li>With the default metalearner and base learners, make the Super Learner (SL)
+and train it on the task.</li>
+<li>Print your SL fit by calling <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> with <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code>.</li>
+<li>Cross-validate your SL fit to see how well it performs on unseen
+data. Specify a valid loss function to evaluate the SL.</li>
+<li>Use the <code><a href="https://tlverse.org/sl3/reference/importance.html">importance()</a></code> function to identify the “most important” predictor of
+myocardial infarction, according to <code>sl3</code> importance metrics.</li>
+</ol>
+<!--
+## Super Learning of a Conditional Density
+
+### Super learning of a conditional density
+
+Suppose we want to construct a Super Learner of the conditional probability
+distribution $g_0(a\mid W)=P_0(A=a\mid W)$, where $a\in {\cal A}$.
+Let's denote the values of $a$ with $\{0,1,\ldots,K\}$. A valid loss function
+for the conditional density is
+\[
+L(g)(O)=-\log g(A\mid W).\]
+That is, $g_0=\arg\min_g P_0L(g)$, i.e., $g_0$ is the minimizer of the
+expectation of the log-likelihood loss.
+
+**Candidate estimators**
+
+1. Candidate estimators based on multinomial logistic regression: To start
+with, one can use existing parametric model based MLE and machine learning
+algorithms in `R` that fit a multinomial regression. For example, parametric
+model multinomial logistic regression is available in `R` so that one can
+already build a rich library of such estimators based on  different candidate
+parametric models. In addition, `polyclass()` is a multinomial logistic
+regression machine learning algorithm in `R`.
+
+2. Candidate estimators based on machine learning for multinomial logistic
+regression: Secondly, one can use a machine learning algorithm such as
+`polyclass()` in `R` that data adaptively fits a multinomial logistic
+regression, which itself has tuning parameters, again generating a class of
+candidate estimators.
+
+3. Incorporating screening: Note that one can also marry any of these choices
+with a screening algorithm, thereby creating more candidate estimators of
+interest. The screening can be particularly important when there are many
+variables.
+
+4. Candidate estimators by fitting separate logistic regressions and using
+post-normalization
+
+* Code $A$ in terms of Bernoullis $B_k=I(A=k)$, $k=0,\ldots,K$.
+* Construct an estimator $\bar{g}_{nk}$ of $\bar{g}_{0k}(W)\equiv P_0(B_k=1\mid
+  W)$ using any of the logistic regression algorithms, for all $k=0,\ldots,K$.
+* This implies an estimator
+\[
+g_n(a\mid W)=\frac{\bar{g}_{na}(W)}{\sum_{k=0}^K \bar{g}_{nk}(W)}.\]
+* In other words, we simply normalize these separate logistic regression
+estimators so that we obtain a valid conditional distribution.
+* This generates an enormous amount of interesting algorithms, since we have
+available the whole machine learning literature for binary outcome regression.
+
+5. Candidate estimators by estimating the conditional "hazard" with pooled
+logistic regression.
+Note that
+\[
+g_0(a\mid W)=\lambda_0(a\mid W) S_0(a\mid W),\]
+where \[
+\lambda_0(a\mid W)=P_0(A=a\mid A\geq a,W),\]
+
+and $S_0(a\mid W)=\prod_{s\leq a}(1-\lambda_0(s\mid W))$ is the conditional
+survival function $P_0(A>a\mid W)$. So we have now parameterized the
+conditional distribution of $A$, given $W$, by a conditional hazard
+$\lambda_0(a\mid W)$: $g_0=g_{\lambda_0}$.
+
+* We could now focus on constructing candidate estimators of
+$\lambda_0(a\mid W)$, which implies candidate estimators of $g_0$.
+
+* For every observation $A_i$, we can create $A_i+1$ rows of data
+$(W,s,I(A_i=s))$, $s=0,\ldots,A_i$, $i=1,\ldots,n$. We now run a logistic
+regression estimator based on the pooled data set, ignoring ID, where we
+regress the binary outcome $I(A_i=s)$ on the covariates $(W,s)$.
+
+* If one assumes a parametric model, then this is nothing else then using the
+maximum likelihood estimator, demonstrating that ignoring the ID is not
+inefficient.
+
+* This defines now an estimator of $\lambda_0(s\mid W)=P_0(A=s\mid W,A\geq s)$
+as a function of $(s,W)$.
+
+* Different choices of logistic regression based estimators will define
+different estimators.
+
+* The pooling across $s$ is not very sensible if $A$ is not an ordered variable
+If $A$ is categorical, we recommend to compute  a separate logistic regression
+estimator of $\lambda_0(a\mid W)$ for each $a$ (i.e., stratify by $s$ in the
+  above pooled data set).
+
+* For non-categorical $A$, one could include both stratified (by level) as well
+as pooled (across levels) based logistic regression estimators.
+
+
+## Exercise 2 -- Estimating the Propensity Score with `sl3` {#sl3ex-pscore}
+
+exercise where we can look at positivity and maybe modify target population,
+address issues related to this
+
+## Super Learning of an Optimal Individualized Treatment Rule
+
+* Data $O=(W,A,Y)$, and nonparametric model \mathcal{M} potentially containing
+assumptions on the conditional probability distribution of $A$ given $W$
+$g_0(A\mid W)$.
+* Target: Optimal treatment rule $\psi_0(W)=I(B_0(W)>0)$, where
+$B_0(W)=E_0(Y\mid A=1,W)-E_0(Y\mid A=0,W)$, the conditional treatment effect.
+* Possible loss function for $\psi_0$ is an IPCW-loss:
+\[
+L_{g_0}(\psi)=\frac{I(A=\psi(W))}{g(A\mid W)}Y.\]
+
+Indeed, $\psi_0$ is the minimizer of $EL_{g_0}(\psi)$ over all rules $\psi$.
+* Construct library of candidate estimators of $\psi_0=I(B_0>0)$. This can
+include estimators based on plugging in an estimator of $B_0$.
+* One could also include a candidate estimator $I(B_n>0)$ where $B_n$ is a
+Super Learner of $B_0$, e.g. based on loss function
+\[
+L_{g_0}(B)=\big(\frac{2A-1}{/g(A\mid W)}Y-B(W)\big)^2\]
+that directly targets $B_0=\arg\min_B P_0L_{g_0}(B)$. This loss function is
+still a squared error loss but its minimized by the true $B_0$.
+* Estimate $g_0$ if not known.
+* Compute cross-validation selector:
+\[
+k_n=\arg\min_k E_{B_n}P_{n,B_n}^1 L_{\hat{g}(P_{n,B_n}^0)}
+(\hat{\Psi}_k(P_{n,B_n}^0)).\]
+where $B_n = \{0,1\}^n$ is used for a binary vector of $n$ defining sample
+splits, where the validation sample is ${i:B_n(i) = 1}$ and ${i:B_n(i) = 0}$ is
+the training sample. The empirical distribution $P_{n,B_n}^0$ corresponds to
+the split $B_n$ of the training sample and the empirical distribution of the
+validation sample is $P_{n,B_n}^1$.
+* Super-learner of optimal rule $\psi_0$: $\hat{\Psi}_{k_n}(P_n)$.
+
+## Exercise 3 -- Estimating the Blip {#sl3ex3}
+-->
+</div>
+</div>
+<div id="concluding-remarks" class="section level2">
+<h2>
+<span class="header-section-number">3.2</span> Concluding Remarks<a class="anchor" aria-label="anchor" href="#concluding-remarks"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li><p>Super Learner (SL) is a general approach that can be applied to a diversity of
+estimation and prediction problems which can be defined by a loss function.</p></li>
+<li>
+<p>It would be straightforward to plug in the estimator returned by SL into the
+target parameter mapping.</p>
+<ul>
+<li>For example, suppose we are after the average treatment effect (ATE) of a
+binary treatment intervention:
+<span class="math inline">\(\Psi_0 = \mathbb{E}_{0,W}[\mathbb{E}_0(Y \mid A=1,W) -  \mathbb{E}_0(Y \mid A=0,W)]\)</span>.</li>
+<li>We could use the SL that was trained on the original data (let’s call
+this <code>sl_fit</code>) to predict the outcome for all subjects under each
+intervention. All we would need to do is take the average difference
+between the counterfactual outcomes under each intervention of interest.</li>
+<li>Considering <span class="math inline">\(\Psi_0\)</span> above, we would first need two <span class="math inline">\(n\)</span>-length vectors of
+predicted outcomes under each intervention. One vector would represent the
+predicted outcomes under an intervention that sets all subjects to
+receive <span class="math inline">\(A=1\)</span>, <span class="math inline">\(Y_i \mid A_i=1,W_i\)</span> for all <span class="math inline">\(i=1,\ldots,n\)</span>. The other
+vector would represent the predicted outcomes under an intervention that
+sets all subjects to receive <span class="math inline">\(A=0\)</span>, <span class="math inline">\(Y_i \mid A_i=0,W_i\)</span> for all
+<span class="math inline">\(i=1,\ldots,n\)</span>.</li>
+<li>After obtaining these vectors of counterfactual predicted outcomes, all
+we would need to do is average and then take the difference in order to
+plug-in the SL estimator into the target parameter mapping.</li>
+<li>In <code>sl3</code> and with our current ATE example, this could be achieved with
+<code>mean(sl_fit$predict(A1_task)) - mean(sl_fit$predict(A0_task))</code>;
+where <code>A1_task$data</code> would contain all 1’s (or the level that pertains to
+receiving the treatment) for the treatment column in the data (keeping all
+else the same), and <code>A0_task$data</code> would contain all 0’s (or the level
+that pertains to not receiving the treatment) for the treatment column in
+the data.</li>
+</ul>
+</li>
+<li><p>It’s a worthwhile exercise to obtain the predicted counterfactual outcomes
+and create these counterfactual <code>sl3</code> tasks. It’s too biased; however, to
+plug the SL fit into the target parameter mapping, (e.g., calling the result
+of <code>mean(sl_fit$predict(A1_task)) - mean(sl_fit$predict(A0_task))</code> the
+estimated ATE. We would end up with an estimator for the ATE that was
+optimized for estimation of the prediction function, and not the ATE!</p></li>
+<li>
+<p>Ultimately, we want an estimator that is optimized for our target estimand of
+interest. Here, we cared about doing a good job estimating the ATE. The
+SL is an essential step to help us get there. In fact, we will use the
+counterfactual predicted outcomes that were explained at length above.
+However, SL might not be not the end of the estimation procedure.
+Plugging in the Super Learner in the target parameter representation would
+generally not result in an asymptotically linear estimator of the target
+estimand. This begs the question, why is it important for an estimator to
+possess these properties?</p>
+<ul>
+<li><p>An asymptotically linear estimator converges to the estimand at
+<span class="math inline">\(\frac{1}{\sqrt{n}}\)</span> rate – and thus behaves as sample mean – so it’s
+sampling distribution can be estimated in order to conduct formal
+statistical inference (i.e., confidence intervals and <span class="math inline">\(p\)</span>-values).</p></li>
+<li><p>Substitution, or plug-in, estimators of the estimand are desirable because
+they respect both the local and global constraints of the statistical model
+(e.g., bounds), and have they have better finite-sample properties.</p></li>
+<li>
+<p>An efficient estimator is optimal in the sense that it has the lowest
+possible variance, and is thus the most precise. An estimator is efficient
+if and only if is asymptotically linear with influence curve equal to the
+canonical gradient.</p>
+<ul>
+<li>The canonical gradient is a mathematical object that is specific to
+the target estimand, and it provides information on the level of
+difficulty of the estimation problem. Various canonical gradient are
+shown in the chapters that follow.</li>
+<li>Practitioner’s do not need to know how to calculate a canonical
+gradient in order to understand efficiency and use Targeted Maximum
+Likelihood Estimation (TMLE). Metaphorically, you do not need to be
+Yoda in order to be a Jedi.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>TMLE is a general strategy that succeeds in constructing efficient and
+asymptotically linear plug-in estimators.</p></li>
+<li><p>SL is fantastic for pure prediction, and for obtaining an initial
+estimate in the first step of TMLE, but we need the second step of TMLE to
+have the desirable statistical properties mentioned above.</p></li>
+<li><p>In the chapters that follow, we focus on the Targeted Maximum Likelihood
+Estimator and it’s generalization to Targeted Minimum Loss-based Estimator,
+both referred to as TMLE.</p></li>
+</ul>
+<!--
+## Super Learning Exercise Solutions {#solutions-sl}
+
+### Exercise 1 Solution {#sl3ex1-sol}
+
+Here is a potential solution to the [`sl3` Exercise 1 -- Predicting Myocardial
+Infarction with `sl3`](#sl3ex1).
+
+
+```r
+library(data.table)
+library(readr)
+library(origami)
+library(sl3)
+
+db_data <- url(
+  "https://raw.githubusercontent.com/benkeser/sllecture/master/chspred.csv"
+)
+chspred <- read_csv(file = db_data, col_names = TRUE)
+```
+
+1. Create an `sl3` task, setting myocardial infarction `mi` as the outcome and
+   using all available covariate data.
+
+```r
+chspred_task <- make_sl3_Task(
+  data = chspred, covariates = head(colnames(chspred), -1), outcome = "mi"
+)
+```
+
+2. Make a library of seven relatively fast base learning algorithms. Customize
+   tuning parameters for one of your learners. Feel free to use learners from
+   `sl3` or `SuperLearner`.
+
+```r
+lasso_learner <- Lrnr_glmnet$new(alpha = 1)
+ridge_learner <- Lrnr_glmnet$new(alpha = 0)
+enet_learner <- Lrnr_glmnet$new(alpha = 0.5)
+glm_fast_learner <- Lrnr_glm_fast$new()
+ranger_learner <- Lrnr_ranger$new()
+svm_learner <- Lrnr_svm$new()
+xgb_learner <- Lrnr_xgboost$new()
+# curated_glm_learner uses formula = "mi ~ smoke + beta + waist"
+curated_glm_learner <- Lrnr_glm_fast$new(covariates = c("smoke, beta, waist"))
+mean_learner <- Lrnr_mean$new() # That is one mean learner!
+```
+
+3. Incorporate at least one pipeline with feature selection. Any screener and
+   learner(s) can be used.
+
+```r
+screen_cor <- make_learner(Lrnr_screener_correlation)
+glm_pipeline <- make_learner(Pipeline, screen_cor, glm_fast_learner)
+```
+
+4. With the default metalearner and base learners, make the Super Learner (SL)
+   and train it on the task.
+
+```r
+# stack learners together
+stack <- make_learner(
+  Stack,
+  glm_pipeline, lasso_learner, ridge_learner, enet_learner,
+  curated_glm_learner, mean_learner, glm_fast_learner,
+  ranger_learner, svm_learner, xgb_learner
+)
+
+# make SL with default metalearner
+sl <- Lrnr_sl$new(stack)
+
+# train SL
+sl_fit <- sl$train(chspred_task)
+```
+
+5. Print your SL fit by calling `print()` with `$`.
+
+```r
+sl_fit$print()
+```
+
+6. Cross-validate your SL fit to see how well it performs on unseen
+   data. Specify a valid loss function to evaluate the SL.
+
+```r
+CVsl <- CV_lrnr_sl(sl_fit, chspred_task, loss_loglik_binomial)
+CVsl
+```
+
+7. Use the `importance()` function to identify the "most important" predictor
+   of myocardial infarction, according to `sl3` importance metrics.
+
+```r
+varimp <- importance(sl_fit, type = "permute")
+varimp %>%
+  importance_plot()
+```
+-->
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="intro.html"><span class="header-section-number">2</span> The Roadmap for Targeted Learning</a></div>
+<div class="next"><a href="tmle3.html"><span class="header-section-number">4</span> The TMLE Framework</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#sl3"><span class="header-section-number">3</span> Super (Machine) Learning</a></li>
+<li><a class="nav-link" href="#learning-objectives-2">Learning Objectives</a></li>
+<li><a class="nav-link" href="#motivation-1">Motivation</a></li>
+<li>
+<a class="nav-link" href="#introduction-1">Introduction</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#why-use-the-super-learner">Why use the Super Learner?</a></li>
+<li><a class="nav-link" href="#general-overview-of-the-algorithm"><span class="header-section-number">3.0.1</span> General Overview of the Algorithm</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#sl3-microwave-dinner-implementation">sl3 “Microwave Dinner” Implementation</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#wash-benefits-study-example">WASH Benefits Study Example</a></li>
+<li><a class="nav-link" href="#load-the-necessary-libraries-and-data">0. Load the necessary libraries and data</a></li>
+<li><a class="nav-link" href="#define-the-machine-learning-task">1. Define the machine learning task</a></li>
+<li><a class="nav-link" href="#make-a-super-learner">2. Make a Super Learner</a></li>
+<li><a class="nav-link" href="#train-the-super-learner-on-the-machine-learning-task">3. Train the Super Learner on the machine learning task</a></li>
+<li><a class="nav-link" href="#obtain-predicted-values">4. Obtain predicted values</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#cross-validated-super-learner">Cross-validated Super Learner</a></li>
+<li><a class="nav-link" href="#variable-importance-measures-with-sl3">Variable Importance Measures with sl3</a></li>
+<li>
+<a class="nav-link" href="#sl3-exercises"><span class="header-section-number">3.1</span> Exercises</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#sl3ex1"><span class="header-section-number">3.1.1</span> Predicting Myocardial Infarction with sl3</a></li></ul>
+</li>
+<li><a class="nav-link" href="#concluding-remarks"><span class="header-section-number">3.2</span> Concluding Remarks</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/tlverse/tlverse-workshops/blob/master/04-sl3.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tlverse/tlverse-workshops/edit/master/04-sl3.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>[ACIC 2022] Targeted Learning in the <code>tlverse</code></strong>: Causal Inference Meets Machine Learning" was written by Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on updated: May 17, 2022.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

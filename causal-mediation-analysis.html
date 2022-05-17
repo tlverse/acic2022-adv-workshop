@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 7 Causal Mediation Analysis | [ACIC 2022] Targeted Learning in the tlverse</title>
+<meta name="author" content="Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips">
+<meta name="description" content="Nima Hejazi Based on the tmle3mediate R package.  7.1 Learning Objectives Examine how the presence of post-treatment mediating variables can complicate a causal analysis, and how direct and...">
+<meta name="generator" content="bookdown 0.24.1 with bs4_book()">
+<meta property="og:title" content="Chapter 7 Causal Mediation Analysis | [ACIC 2022] Targeted Learning in the tlverse">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://tlverse.org/tlverse-workshops/causal-mediation-analysis.html">
+<meta property="og:description" content="Nima Hejazi Based on the tmle3mediate R package.  7.1 Learning Objectives Examine how the presence of post-treatment mediating variables can complicate a causal analysis, and how direct and...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 7 Causal Mediation Analysis | [ACIC 2022] Targeted Learning in the tlverse">
+<meta name="twitter:description" content="Nima Hejazi Based on the tmle3mediate R package.  7.1 Learning Objectives Examine how the presence of post-treatment mediating variables can complicate a causal analysis, and how direct and...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="libs/vis-9.1.0/vis-network.min.js"></script><script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+</head>
+<body>
+<span class="math inline">
+  \(\DeclareMathOperator{\expit}{expit}\)
+  \(\DeclareMathOperator{\logit}{logit}\)
+  \(\DeclareMathOperator*{\argmin}{\arg\!\min}\)
+  \(\newcommand{\indep}{\perp\!\!\!\perp}\)
+  \(\newcommand{\coloneqq}{\mathrel{=}}\)
+  \(\newcommand{\R}{\mathbb{R}}\)
+  \(\newcommand{\E}{\mathbb{E}}\)
+  \(\newcommand{\M}{\mathcal{M}}\)
+  \(\renewcommand{\P}{\mathbb{P}}\)
+  \(\newcommand{\I}{\mathbb{I}}\)
+  \(\newcommand{\1}{\mathbbm{1}}\)
+  </span>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="Causal Inference Meets Machine Learning">[ACIC 2022] Targeted Learning in the <code>tlverse</code></a>:
+        <small class="text-muted">Causal Inference Meets Machine Learning</small>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Welcome!</a></li>
+<li><a class="" href="motivation.html">Motivation</a></li>
+<li><a class="" href="tlverse.html"><span class="header-section-number">1</span> Welcome to the tlverse</a></li>
+<li><a class="" href="intro.html"><span class="header-section-number">2</span> The Roadmap for Targeted Learning</a></li>
+<li><a class="" href="sl3.html"><span class="header-section-number">3</span> Super (Machine) Learning</a></li>
+<li><a class="" href="tmle3.html"><span class="header-section-number">4</span> The TMLE Framework</a></li>
+<li><a class="" href="optimal-individualized-treatment-regimes.html"><span class="header-section-number">5</span> Optimal Individualized Treatment Regimes</a></li>
+<li><a class="" href="stochastic-treatment-regimes-optional.html"><span class="header-section-number">6</span> Stochastic Treatment Regimes (optional)</a></li>
+<li><a class="active" href="causal-mediation-analysis.html"><span class="header-section-number">7</span> Causal Mediation Analysis</a></li>
+<li><a class="" href="r6.html"><span class="header-section-number">8</span> A Primer on the R6 Class System</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/tlverse/tlverse-workshops">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="causal-mediation-analysis" class="section level1">
+<h1>
+<span class="header-section-number">7</span> Causal Mediation Analysis<a class="anchor" aria-label="anchor" href="#causal-mediation-analysis"><i class="fas fa-link"></i></a>
+</h1>
+<p><em>Nima Hejazi</em></p>
+<p>Based on the <a href="https://github.com/tlverse/tmle3mediate"><code>tmle3mediate</code> <code>R</code>
+package</a>.</p>
+<div id="learning-objectives-5" class="section level2">
+<h2>
+<span class="header-section-number">7.1</span> Learning Objectives<a class="anchor" aria-label="anchor" href="#learning-objectives-5"><i class="fas fa-link"></i></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>Examine how the presence of post-treatment mediating variables can complicate
+a causal analysis, and how direct and indirect effects can be defined to
+resolve these complications.</li>
+<li>Describe the essential similarities and differences between direct and
+indirect causal effects, including their definition in terms of stochastic
+interventions.</li>
+<li>Differentiate the joint interventions required to define direct and indirect
+effects from the static, dynamic, and stochastic interventions that yield
+<em>total</em> causal effects.</li>
+<li>Describe the assumptions needed for identification of the natural direct and
+indirect effects, as well as the limitations of these effect definitions.</li>
+<li>Estimate the natural direct and indirect effects for a binary treatment using
+the <code>tmle3mediate</code> <code>R</code> package.</li>
+<li>Differentiate the population intervention direct and indirect effects of
+stochastic interventions from the natural direct and indirect effects,
+including differences in the assumptions required for their identification.</li>
+<li>Estimate the population intervention direct effect of a binary treatment
+using the <code>tmle3mediate</code> <code>R</code> package.</li>
+</ol>
+</div>
+<div id="causal-mediation-analysis-1" class="section level2">
+<h2>
+<span class="header-section-number">7.2</span> Causal Mediation Analysis<a class="anchor" aria-label="anchor" href="#causal-mediation-analysis-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>In applications ranging from biology and epidemiology to economics and
+psychology, scientific inquires are often concerned with ascertaining the effect
+of a treatment on an outcome variable only through particular pathways between
+the two. In the presence of post-treatment intermediate variables affected by
+exposure (that is, <em>mediators</em>), path-specific effects allow for such complex,
+mechanistic relationships to be teased apart. These causal effects are of such
+wide interest that their definition and identification has been the object of
+study in statistics for nearly a century – indeed, the earliest examples of
+modern causal mediation analysis can be traced back to work on path analysis
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="wright1934method"><strong>???</strong></span>)</span>. In recent decades, renewed interest has resulted in the
+formulation of novel direct and indirect effects within both the potential
+outcomes and nonparametric structural equation modeling frameworks
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="robins1986new"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="pearl1995causal"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="spirtes2000causation"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="dawid2000causal"><strong>???</strong></span>; Pearl <a href="references.html#ref-pearl2009causality" role="doc-biblioref">2009</a>)</span>. Generally, the indirect effect (IE) is the portion of the
+total effect found to work <em>through</em> mediating variables, while the direct
+effect (DE) encompasses <em>all other components</em> of the total effect, including
+both the effect of the treatment directly on the outcome <em>and</em> its effect
+through all paths not explicitly involving the mediators. The mechanistic
+knowledge conveyed by the direct and indirect effects can be used to improve
+understanding of both <em>why</em> and <em>how</em> treatments may be efficacious.</p>
+<p>Modern approaches to causal inference have allowed for significant advances over
+the methodology of traditional path analysis, overcoming significant
+restrictions imposed by the use of parametric modeling approaches
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="vanderweele2015explanation"><strong>???</strong></span>)</span>. Using distinct frameworks,
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="robins1992identifiability"><strong>???</strong></span>)</span> and <span class="citation">(<span class="citeproc-not-found" data-reference-id="pearl2001direct"><strong>???</strong></span>)</span> provided equivalent
+nonparametric decompositions of the average treatment effect into the <em>natural</em>
+direct and indirect effects. <span class="citation">(<span class="citeproc-not-found" data-reference-id="vanderweele2015explanation"><strong>???</strong></span>)</span> provides a
+comprehensive overview of classical causal mediation analysis. We provide an
+alternative perspective, focusing instead on the construction of efficient
+estimators of these quantities, which have appeared only recently
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="tchetgen2012semiparametric"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="zheng2012targeted"><strong>???</strong></span>)</span>, as well as on more flexible
+direct and indirect definitions based upon stochastic interventions
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="diaz2020causal"><strong>???</strong></span>)</span>.</p>
+</div>
+<div id="data-structure-and-notation-1" class="section level2">
+<h2>
+<span class="header-section-number">7.3</span> Data Structure and Notation<a class="anchor" aria-label="anchor" href="#data-structure-and-notation-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>Let us return to our familiar sample of <span class="math inline">\(n\)</span> units <span class="math inline">\(O_1, \ldots, O_n\)</span>, where we
+now consider a slightly more complex data structure <span class="math inline">\(O = (W, A, Z, Y)\)</span> for any
+given observational unit. As before, <span class="math inline">\(W\)</span> represents a vector of observed
+covariates, <span class="math inline">\(A\)</span> a binary or continuous treatment, and <span class="math inline">\(Y\)</span> a binary or continuous
+outcome; the new post-treatment variable <span class="math inline">\(Z\)</span> represents a (possibly
+multivariate) set of mediators. Avoiding assumptions unsupported by background
+scientific knowledge, we assume only that <span class="math inline">\(O \sim P_0 \in \M\)</span>, where <span class="math inline">\(\M\)</span> is the
+nonparametric statistical model that places no assumptions on the form of the
+data-generating distribution <span class="math inline">\(P_0\)</span>.</p>
+<p>As in preceding chapters, a structural causal model (SCM) <span class="citation">(Pearl <a href="references.html#ref-pearl2009causality" role="doc-biblioref">2009</a>)</span>
+helps to formalize the definition of our counterfactual variables:
+<span class="math display" id="eq:npsem-mediate">\[\begin{align}
+  W &amp;= f_W(U_W) \\ \nonumber
+  A &amp;= f_A(W, U_A) \\ \nonumber
+  Z &amp;= f_Z(W, A, U_Z) \\ \nonumber
+  Y &amp;= f_Y(W, A, Z, U_Y).
+  \tag{7.1}
+\end{align}\]</span>
+This set of equations
+constitutes a mechanistic model generating the observed data <span class="math inline">\(O\)</span>; furthermore,
+the SCM encodes several fundamental assumptions. Firstly, there is an implicit
+temporal ordering: <span class="math inline">\(W\)</span> occurs first, depending only on exogenous factors <span class="math inline">\(U_W\)</span>;
+<span class="math inline">\(A\)</span> happens next, based on both <span class="math inline">\(W\)</span> and exogenous factors <span class="math inline">\(U_A\)</span>; then come the
+mediators <span class="math inline">\(Z\)</span>, which depend on <span class="math inline">\(A\)</span>, <span class="math inline">\(W\)</span>, and another set of exogenous factors
+<span class="math inline">\(U_Z\)</span>; and finally appears the outcome <span class="math inline">\(Y\)</span>. We assume neither access to the set
+of exogenous factors <span class="math inline">\(\{U_W, U_A, U_Z, U_Y\}\)</span> nor knowledge of the forms of the
+deterministic generating functions <span class="math inline">\(\{f_W, f_A, f_Z, f_Y\}\)</span>. In practice, any
+available knowledge about the data-generating experiment should be incorporated
+into this model – for example, if the data from a randomized controlled trial
+(RCT), the form of <span class="math inline">\(f_A\)</span> may be known. The SCM corresponds to the following DAG:</p>
+<div class="inline-figure"><img src="08-tmle3mediate_files/figure-html/mediation-DAG-1.png" width="60%" style="display: block; margin: auto;"></div>
+<p>By factorizing the likelihood of the data <span class="math inline">\(O\)</span>, we can express <span class="math inline">\(p_0\)</span>, the
+density of <span class="math inline">\(O\)</span> with respect to the product measure, when evaluated on a
+particular observation <span class="math inline">\(o\)</span>, in terms of several orthogonal components:
+<span class="math display" id="eq:likelihood-factorization-mediate">\[\begin{align}
+  p_0(o) = &amp;q_{0,Y}(y \mid Z = z, A = a, W = w) \\ \nonumber
+    &amp;q_{0,Z}(z \mid A = a, W = w) \\ \nonumber
+    &amp;g_{0,A}(a \mid W = w) \\ \nonumber
+    &amp;q_{0,W}(w).\\ \nonumber
+  \tag{7.2}
+\end{align}\]</span>
+In Equation <a href="causal-mediation-analysis.html#eq:likelihood-factorization-mediate">(7.2)</a>, <span class="math inline">\(q_{0, Y}\)</span> is the
+conditional density of <span class="math inline">\(Y\)</span> given <span class="math inline">\(\{Z, A, W\}\)</span>, <span class="math inline">\(q_{0, Z}\)</span> is the conditional
+density of <span class="math inline">\(Z\)</span> given <span class="math inline">\(\{A, W\}\)</span>, <span class="math inline">\(g_{0, A}\)</span> is the conditional density of <span class="math inline">\(A\)</span>
+given <span class="math inline">\(W\)</span>, and <span class="math inline">\(q_{0, W}\)</span> is the marginal density of <span class="math inline">\(W\)</span>. For convenience and
+consistency of notation, we will define <span class="math inline">\(\overline{Q}_Y(Z, A, W) := \E[Y \mid Z, A, W]\)</span> and <span class="math inline">\(g(A \mid W) := \P(A \mid W)\)</span> (i.e., the propensity score).</p>
+<p>We have explicitly excluded potential confounders of the mediator-outcome
+relationship affected by exposure (i.e., variables affected by <span class="math inline">\(A\)</span> and affecting
+both <span class="math inline">\(Z\)</span> and <span class="math inline">\(Y\)</span>). Mediation analysis in the presence of such variables is
+challenging <span class="citation">(<span class="citeproc-not-found" data-reference-id="avin2005identifiability"><strong>???</strong></span>)</span>; thus, most efforts to develop
+definitions of causal direct and indirect effects explicitly assume the absence
+of such confounders. Without further assumptions, common mediation parameters
+(the natural direct and indirect effects) cannot be identified in the presence
+of such confounding, though <span class="citation">(<span class="citeproc-not-found" data-reference-id="tchetgen2014identification"><strong>???</strong></span>)</span> discuss a monotonicity
+assumption that may be useful when justified by available scientific knowledge
+about the system under study. The interested reader may wish to consult recent
+advances in the vast and quickly growing literature on causal mediation
+analysis, including <em>interventional</em> direct and indirect effects
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="didelez2006direct"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="vanderweele2014effect"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="lok2016defining"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="vansteelandt2017interventional"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="rudolph2017robust"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="nguyen2019clarifying"><strong>???</strong></span>)</span>,
+whose identification is robust to this complex form of post-treatment
+confounding. Within this thread of the literature, <span class="citation">(<span class="citeproc-not-found" data-reference-id="diaz2020nonparametric"><strong>???</strong></span>)</span> and
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="benkeser2020nonparametric"><strong>???</strong></span>)</span> provide considerations of nonparametric effect
+decompositions and efficiency theory, while <span class="citation">(<span class="citeproc-not-found" data-reference-id="hejazi2021nonparametric"><strong>???</strong></span>)</span> formulate a
+novel class of effects utilizing stochastic interventions.</p>
+</div>
+<div id="defining-the-natural-direct-and-indirect-effects" class="section level2">
+<h2>
+<span class="header-section-number">7.4</span> Defining the Natural Direct and Indirect Effects<a class="anchor" aria-label="anchor" href="#defining-the-natural-direct-and-indirect-effects"><i class="fas fa-link"></i></a>
+</h2>
+<div id="decomposing-the-average-treatment-effect" class="section level3">
+<h3>
+<span class="header-section-number">7.4.1</span> Decomposing the Average Treatment Effect<a class="anchor" aria-label="anchor" href="#decomposing-the-average-treatment-effect"><i class="fas fa-link"></i></a>
+</h3>
+<p>The natural direct and indirect effects arise from a decomposition of the ATE:
+<span class="math display">\[\begin{align*}
+  \E[Y(1) - Y(0)] =
+    &amp;\underbrace{\E[Y(1, Z(0)) - Y(0, Z(0))]}_{\text{NDE}} \\ &amp;+
+    \underbrace{\E[Y(1, Z(1)) - Y(1, Z(0))]}_{\text{NIE}}.
+\end{align*}\]</span>
+In particular, the natural indirect effect (NIE) measures the effect of the
+treatment <span class="math inline">\(A \in \{0, 1\}\)</span> on the outcome <span class="math inline">\(Y\)</span> through the mediators <span class="math inline">\(Z\)</span>, while
+the natural direct effect (NDE) measures the effect of the treatment on the
+outcome <em>through all other pathways</em>. Identification of the natural direct and
+indirect effects requires the following non-testable causal assumptions. Note
+that the standard assumptions of consistency and no interference (i.e., SUTVA
+<span class="citation">(Rubin <a href="references.html#ref-rubin1978bayesian" role="doc-biblioref">1978</a>, <a href="references.html#ref-rubin1980randomization" role="doc-biblioref">1980</a>)</span>) hold owing to the fact that (1)
+the SCM we consider is restricted so as to give rise only to independent and
+identically distributed (iid) units; and (2) consistency is an implied property
+of the SCM, as counterfactuals are derived quantities (as opposed to primitive
+quantities in the potential outcomes framework); <span class="citation">(<span class="citeproc-not-found" data-reference-id="pearl2010brief"><strong>???</strong></span>)</span> provides an
+illuminating discussion on this latter point.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-8" class="definition"><strong>Definition 7.1  (Exchangeability) </strong></span><span class="math inline">\(Y(a, z) \indep (A, Z) \mid W\)</span>, which further implies that <span class="math inline">\(\E\{Y(a, z) \mid A=a, W=w, Z=z\} \equiv \E\{Y(a, z) \mid W=w\}\)</span>. This is a special, more
+restrictive case of the standard assumption of no unmeasured counfounding in the
+presence of mediators. The analogous randomization assumption is simply the
+standard randomization assumption applied to a joint intervention on both the
+treatment <span class="math inline">\(A\)</span> and mediators <span class="math inline">\(Z\)</span>.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-9" class="definition"><strong>Definition 7.2  (Treatment Positivity) </strong></span>For any <span class="math inline">\(a \in \mathcal{A}\)</span> and <span class="math inline">\(w \in \mathcal{W}\)</span>, the conditional probability
+of treatment <span class="math inline">\(g(a \mid w)\)</span> is bounded away from the limits of the unit interval
+by a small factor <span class="math inline">\(\xi &gt; 0\)</span>. More precisely, <span class="math inline">\(\xi &lt; g(a \mid w) &lt; 1 - \xi\)</span>. This
+mirrors the standard positivity assumption required for static interventions,
+<a href="tmle3.html#tmle3">discussed previously</a>.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-10" class="definition"><strong>Definition 7.3  (Mediator Positivity) </strong></span>For any <span class="math inline">\(z \in \mathcal{Z}\)</span>, <span class="math inline">\(a \in \mathcal{A}\)</span>, and <span class="math inline">\(w \in \mathcal{W}\)</span>, the
+conditional mediator density must be bounded away from zero by a small factor
+<span class="math inline">\(\epsilon &gt; 0\)</span>, specifically, <span class="math inline">\(\epsilon &lt; q_{0,Z}(z \mid a, w)\)</span>. Essentially,
+this requires that the conditional mediator density be bounded away from zero
+for all <span class="math inline">\(\{z, a, w\}\)</span> in their joint support <span class="math inline">\(\mathcal{Z} \times \mathcal{A} \times \mathcal{W}\)</span>, which is to say that it must be possible to observe any
+given mediator value across all strata defined by both treatment <span class="math inline">\(A\)</span> and
+baseline covariates <span class="math inline">\(W\)</span>. A less restrictive form of this assumption is also
+possible – specifically, that the ratio of the mediator densities under both
+treatment contrasts be bounded for the two realizations of the mediator density
+under differing treatment contrasts.</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-11" class="definition"><strong>Definition 7.4  (Cross-world Counterfactual Independence) </strong></span>For all <span class="math inline">\(a \neq a'\)</span>, where <span class="math inline">\(a, a' \in \mathcal{A}\)</span>, and <span class="math inline">\(z \in \mathcal{Z}\)</span>,
+<span class="math inline">\(Y(a', z)\)</span> must be independent of <span class="math inline">\(Z(a)\)</span>, given <span class="math inline">\(W\)</span>. That is, the counterfactual
+outcome under the treatment contrast <span class="math inline">\(a' \in \mathcal{A}\)</span> and the counterfactual
+mediator value <span class="math inline">\(Z(a) \in \mathcal{Z}\)</span> (under the alternative contrast <span class="math inline">\(a \in \mathcal{A}\)</span>) must both be <em>observable</em>. The term “cross-world” refers to the two
+counterfactuals <span class="math inline">\(Z(a)\)</span> and <span class="math inline">\(Y(a', z)\)</span> existing under two differing treatment
+contrasts. Though their joint distribution is well-defined, these
+counterfactuals can never be jointly realized.</p>
+</div>
+<p>While the first three assumptions may be familiar based on their analogs in
+simpler settings, the cross-world independence requirement is unique to
+identification of the natural direct and indirect effects. This assumption
+resolves a challenging complication to the identification of these path-specific
+effects, which has been termed the “recanting witness” by
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="avin2005identifiability"><strong>???</strong></span>)</span>, who introduce a graphical resolution equivalent to
+this assumption. This independence of counterfactuals indexed by distinct
+interventions is, in fact, a serious limitation to the scientific relevance of
+these effect definitions, as it results in the NDE and NIE being unidentifiable
+in randomized trials <span class="citation">(<span class="citeproc-not-found" data-reference-id="robins2010alternative"><strong>???</strong></span>)</span>, implying that corresponding
+scientific claims cannot be falsified through experimentation <span class="citation">(<span class="citeproc-not-found" data-reference-id="popper1934logic"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="dawid2000causal"><strong>???</strong></span>)</span> and, consequently, directly contradicting a foundational
+pillar of the scientific method.</p>
+<p>While many attempts have been made to weaken this last assumption
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="petersen2006estimation"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="imai2010identification"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="vansteelandt2012imputation"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="vansteelandt2012natural"><strong>???</strong></span>)</span>, these results either impose stringent modeling
+assumptions, propose alternative interpretations of the natural effects, or
+provide a limited degree of additional flexibility by developing conditions that
+may more easily be satisfied. For example, <span class="citation">(<span class="citeproc-not-found" data-reference-id="petersen2006estimation"><strong>???</strong></span>)</span> weaken this
+assumption by requiring it only for conditional means (rather than distinct
+counterfactuals) and adopt a view of the natural direct effect as a weighted
+average of another type of direct effect, the controlled direct effect. The
+motivated reader may wish to further examine these details independently. We
+next review estimation of the NDE and NIE, which remain widely used in modern
+applications of causal mediation analysis.</p>
+</div>
+<div id="estimating-the-natural-direct-effect" class="section level3">
+<h3>
+<span class="header-section-number">7.4.2</span> Estimating the Natural Direct Effect<a class="anchor" aria-label="anchor" href="#estimating-the-natural-direct-effect"><i class="fas fa-link"></i></a>
+</h3>
+<p>The NDE is defined as
+<span class="math display">\[\begin{align*}
+  \psi_{\text{NDE}} =&amp;~\E[Y(1, Z(0)) - Y(0, Z(0))] \\
+  =&amp; \sum_w \sum_z
+  [\underbrace{\E(Y \mid A = 1, z, w)}_{\overline{Q}_Y(A = 1, z, w)} -
+  \underbrace{\E(Y \mid A = 0, z, w)}_{\overline{Q}_Y(A = 0, z, w)}] \\
+  &amp;\times \underbrace{p(z \mid A = 0, w)}_{q_Z(Z \mid 0, w))}
+  \underbrace{p(w)}_{q_W},
+\end{align*}\]</span>
+where the likelihood factors arise from a factorization of the joint
+likelihood:
+<span class="math display">\[\begin{equation*}
+  p(w, a, z, y) = \underbrace{p(y \mid w, a, z)}_{q_Y(A, W, Z)}
+  \underbrace{p(z \mid w, a)}_{q_Z(Z \mid A, W)}
+  \underbrace{p(a \mid w)}_{g(A \mid W)}
+  \underbrace{p(w)}_{q_W}.
+\end{equation*}\]</span></p>
+<p>The process of estimating the NDE begins by constructing <span class="math inline">\(\overline{Q}_{Y, n}\)</span>,
+an estimate of the conditional mean of the outcome, given <span class="math inline">\(Z\)</span>, <span class="math inline">\(A\)</span>, and <span class="math inline">\(W\)</span>.
+With an estimate of this conditional mean in hand, predictions of the
+quantities <span class="math inline">\(\overline{Q}_Y(Z, 1, W)\)</span> (setting <span class="math inline">\(A = 1\)</span>) and,
+likewise, <span class="math inline">\(\overline{Q}_Y(Z, 0, W)\)</span> (setting <span class="math inline">\(A = 0\)</span>) are readily obtained. We
+denote the difference of these conditional means <span class="math inline">\(\overline{Q}_{\text{diff}} = \overline{Q}_Y(Z, 1, W) - \overline{Q}_Y(Z, 0, W)\)</span>, which is itself only a
+functional parameter of the data distribution. <span class="math inline">\(\overline{Q}_{\text{diff}}\)</span>
+captures differences in the conditional mean of <span class="math inline">\(Y\)</span> across contrasts of <span class="math inline">\(A\)</span>.</p>
+<p>A procedure for constructing a targeted maximum likelihood (TML) estimator of
+the NDE treats <span class="math inline">\(\overline{Q}_{\text{diff}}\)</span> itself as a nuisance parameter,
+regressing its estimate <span class="math inline">\(\overline{Q}_{\text{diff}, n}\)</span> on baseline covariates
+<span class="math inline">\(W\)</span>, among observations in the control condition only (i.e., those for whom
+<span class="math inline">\(A = 0\)</span> is observed); the goal of this step is to remove part of the marginal
+impact of <span class="math inline">\(Z\)</span> on <span class="math inline">\(\overline{Q}_{\text{diff}}\)</span>, since the covariates <span class="math inline">\(W\)</span> precede
+the mediators <span class="math inline">\(Z\)</span> in time. Regressing this difference on <span class="math inline">\(W\)</span> among the controls
+recovers the expected <span class="math inline">\(\overline{Q}_{\text{diff}}\)</span>, under the setting in which
+all individuals are treated as falling in the control condition <span class="math inline">\(A = 0\)</span>. Any
+residual additive effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(\overline{Q}_{\text{diff}}\)</span> is removed
+during the TML estimation step using the auxiliary (or “clever”) covariate,
+which accounts for the mediators <span class="math inline">\(Z\)</span>. This auxiliary covariate takes the form</p>
+<p><span class="math display">\[\begin{equation*}
+  C_Y(q_Z, g)(O) = \Bigg\{\frac{\mathbb{I}(A = 1)}{g(1 \mid W)}
+  \frac{q_Z(Z \mid 0, W)}{q_Z(Z \mid 1, W)} -
+  \frac{\mathbb{I}(A = 0)}{g(0 \mid W)} \Bigg\} \ .
+\end{equation*}\]</span>
+Breaking this down, <span class="math inline">\(\mathbb{I}(A = 1) / g(1 \mid W)\)</span> is the inverse propensity
+score weight for <span class="math inline">\(A = 1\)</span> and, likewise, <span class="math inline">\(\mathbb{I}(A = 0) / g(0 \mid W)\)</span> is the
+inverse propensity score weight for <span class="math inline">\(A = 0\)</span>. The middle term is the ratio of the
+conditional densities of the mediator under the control (<span class="math inline">\(A = 0\)</span>) and treatment
+(<span class="math inline">\(A = 1\)</span>) conditions (n.b., recall the mediator positivity condition above).</p>
+<p>This subtle appearance of a ratio of conditional densities is concerning –
+tools to estimate such quantities are sparse in the statistics literature
+<span class="citation">(Dı́az and van der Laan <a href="references.html#ref-diaz2011super" role="doc-biblioref">2011</a>; Hejazi, Benkeser, and van der Laan <a href="references.html#ref-hejazi2020haldensify" role="doc-biblioref">2020</a>)</span>, unfortunately, and the problem is still
+more complicated (and computationally taxing) when <span class="math inline">\(Z\)</span> is high-dimensional. As
+only the ratio of these conditional densities is required, a convenient
+re-parametrization may be achieved, that is,
+<span class="math display">\[\begin{equation*}
+  \frac{p(A = 0 \mid Z, W)}{g(0 \mid W)}
+  \frac{g(1 \mid W)}{p(A = 1 \mid Z, W)} \ .
+\end{equation*}\]</span>
+Going forward, we will denote this re-parameterized conditional probability
+functional <span class="math inline">\(e(A \mid Z, W) := p(A \mid Z, W)\)</span>. The same re-parameterization
+technique has been used by <span class="citation">(<span class="citeproc-not-found" data-reference-id="zheng2012targeted"><strong>???</strong></span>)</span>, <span class="citation">(<span class="citeproc-not-found" data-reference-id="tchetgen2013inverse"><strong>???</strong></span>)</span>,
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="diaz2020causal"><strong>???</strong></span>)</span>, <span class="citation">(<span class="citeproc-not-found" data-reference-id="diaz2020nonparametric"><strong>???</strong></span>)</span>, and <span class="citation">(<span class="citeproc-not-found" data-reference-id="hejazi2021nonparametric"><strong>???</strong></span>)</span> in similar
+contexts. This reformulation is particularly useful for the fact that it reduces
+the estimation problem to one requiring only the estimation of conditional
+means, opening the door to the use of a <a href="sl3.html#sl3">wide range of machine learning
+algorithms, as discussed previously</a>.</p>
+<p>Underneath the hood, the mean outcome difference <span class="math inline">\(\overline{Q}_{\text{diff}}\)</span>
+and <span class="math inline">\(e(A \mid Z, W)\)</span>, the conditional probability of <span class="math inline">\(A\)</span> given <span class="math inline">\(Z\)</span> and <span class="math inline">\(W\)</span>, are
+used in constructing the auxiliary covariate for TML estimation. These nuisance
+parameters play an important role in the bias-correcting update step of the TML
+estimation procedure.</p>
+</div>
+<div id="estimating-the-natural-indirect-effect" class="section level3">
+<h3>
+<span class="header-section-number">7.4.3</span> Estimating the Natural Indirect Effect<a class="anchor" aria-label="anchor" href="#estimating-the-natural-indirect-effect"><i class="fas fa-link"></i></a>
+</h3>
+<p>Derivation and estimation of the NIE is analogous to that of the NDE. Recall
+that the NIE is the effect of <span class="math inline">\(A\)</span> on <span class="math inline">\(Y\)</span> <em>only through the mediator <span class="math inline">\(Z\)</span></em>.
+This counterfactual quantity, which may be expressed <span class="math inline">\(\E(Y(Z(1), 1) - \E(Y(Z(0), 1)\)</span>, corresponds to the difference of the conditional mean of <span class="math inline">\(Y\)</span>
+given <span class="math inline">\(A = 1\)</span> and <span class="math inline">\(Z(1)\)</span> (the values the mediator would take under <span class="math inline">\(A = 1\)</span>) and
+the conditional expectation of <span class="math inline">\(Y\)</span> given <span class="math inline">\(A = 1\)</span> and <span class="math inline">\(Z(0)\)</span> (the values the
+mediator would take under <span class="math inline">\(A = 0\)</span>).</p>
+<p>As with the NDE, re-parameterization can be used to replace <span class="math inline">\(q_Z(Z \mid A, W)\)</span>
+with <span class="math inline">\(e(A \mid Z, W)\)</span> in the estimation process, avoiding estimation of a
+possibly multivariate conditional density. However, in this case, the mediated
+mean outcome difference, previously computed by regressing
+<span class="math inline">\(\overline{Q}_{\text{diff}}\)</span> on <span class="math inline">\(W\)</span> among the control units (for whom <span class="math inline">\(A = 0\)</span> is
+observed) is instead replaced by a two-step process. First, <span class="math inline">\(\overline{Q}_Y(Z, 1, W)\)</span>, the conditional mean of <span class="math inline">\(Y\)</span> given <span class="math inline">\(Z\)</span> and <span class="math inline">\(W\)</span> when <span class="math inline">\(A = 1\)</span>, is regressed
+on <span class="math inline">\(W\)</span>, among only the treated units (i.e., for whom <span class="math inline">\(A = 1\)</span> is observed). Then,
+the same quantity, <span class="math inline">\(\overline{Q}_Y(Z, 1, W)\)</span> is again regressed on <span class="math inline">\(W\)</span>, but this
+time among only the control units (i.e., for whom <span class="math inline">\(A = 0\)</span> is observed). The mean
+difference of these two functionals of the data distribution is a valid
+estimator of the NIE. It can be thought of as the additive marginal effect of
+treatment on the conditional mean of <span class="math inline">\(Y\)</span> given <span class="math inline">\((W, A = 1, Z)\)</span> through its
+effect on <span class="math inline">\(Z\)</span>. So, in the case of the NIE, while our estimand
+<span class="math inline">\(\psi_{\text{NIE}}\)</span> is different, the same estimation techniques useful for
+constructing efficient estimators of the NDE come into play.</p>
+</div>
+</div>
+<div id="the-population-intervention-direct-and-indirect-effects" class="section level2">
+<h2>
+<span class="header-section-number">7.5</span> The Population Intervention Direct and Indirect Effects<a class="anchor" aria-label="anchor" href="#the-population-intervention-direct-and-indirect-effects"><i class="fas fa-link"></i></a>
+</h2>
+<p>At times, the natural direct and indirect effects may prove too limiting, as
+these effect definitions are based on <em>static interventions</em> (i.e., setting
+<span class="math inline">\(A = 0\)</span> or <span class="math inline">\(A = 1\)</span>), which may be unrealistic for real-world interventions. In
+such cases, one may turn instead to the population intervention direct effect
+(PIDE) and the population intervention indirect effect (PIIE), which are based
+on decomposing the effect of the population intervention effect (PIE) of
+flexible stochastic interventions <span class="citation">(<span class="citeproc-not-found" data-reference-id="diaz2020causal"><strong>???</strong></span>)</span>.</p>
+<p>We previously discussed stochastic interventions when considering <a href="#shift">how to
+intervene on continuous-valued treatments</a>; however, these intervention
+schemes may be applied to all manner of treatment variables.
+A particular type of stochastic intervention well-suited to working with binary
+treatments is the <em>incremental propensity score intervention</em> (IPSI), first
+proposed by <span class="citation">(<span class="citeproc-not-found" data-reference-id="kennedy2019nonparametric"><strong>???</strong></span>)</span>. Such interventions do not
+deterministically set the treatment level of an observed unit to a fixed
+quantity (i.e., setting <span class="math inline">\(A = 1\)</span>), but instead <em>alter the odds of receiving the
+treatment</em> by a fixed amount (<span class="math inline">\(0 \leq \delta \leq \infty\)</span>) for each individual.
+In particular, this intervention takes the form
+<span class="math display">\[\begin{equation*}
+  g_{\delta}(1 \mid w) = \frac{\delta g(1 \mid w)}{\delta g(1 \mid w) + 1
+  - g(1\mid w)},
+\end{equation*}\]</span>
+where the scalar <span class="math inline">\(0 &lt; \delta &lt; \infty\)</span> specifies a <em>change in the odds of
+receiving treatment</em>. As described by <span class="citation">(<span class="citeproc-not-found" data-reference-id="diaz2020causal"><strong>???</strong></span>)</span> in the context of causal
+mediation analysis, the identification assumptions required for the PIDE and the
+PIIE are significantly more lax than those required for the NDE and NIE. These
+identification assumptions include the following. Importantly, the assumption of
+cross-world counterfactual independence is not at all required.</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-12" class="definition"><strong>Definition 7.5  (Conditional Exchangeability of Treatment and Mediators) </strong></span>Assume that <span class="math inline">\(\E\{Y(a, z) \mid Z, A, W\} = \E\{Y(a, z) \mid Z, W\}~\forall~(a, z) \in \mathcal{A} \times \mathcal{Z}W\)</span>. This assumption is
+stronger than and implied by the assumption <span class="math inline">\(Y(a, z) \indep (A,Z) \mid W\)</span>,
+originally proposed by <span class="citation">(<span class="citeproc-not-found" data-reference-id="vansteelandt2012natural"><strong>???</strong></span>)</span> for identification of mediated
+effects among the treated. In introducing this assumption <span class="citation">(<span class="citeproc-not-found" data-reference-id="diaz2020causal"><strong>???</strong></span>)</span> state
+that “This assumption would be satisfied for any pre-exposure <span class="math inline">\(W\)</span> in a
+randomized experiment in which exposure and mediators are randomized. Thus, the
+direct effect for a population intervention corresponds to contrasts between
+treatment regimes of a randomized experiment via interventions on <span class="math inline">\(A\)</span> and <span class="math inline">\(Z\)</span>,
+unlike the natural direct effect for the average treatment effect
+<span class="citation">(<span class="citeproc-not-found" data-reference-id="robins2010alternative"><strong>???</strong></span>)</span>.”</p>
+</div>
+<div class="definition">
+<p><span id="def:unlabeled-div-13" class="definition"><strong>Definition 7.6  (Common Support of Treatment and Mediators) </strong></span>Assume that <span class="math inline">\(\text{supp}\{g_{\delta}(\cdot \mid w)\} \subseteq \text{supp}\{g(\cdot \mid w)\}~\forall~w \in \mathcal{W}\)</span>. This assumption is
+standard and requires only that the post-intervention value of <span class="math inline">\(A\)</span> be supported
+in the data. Note that this is significantly weaker than the treatment and
+mediator positivity conditions required for the natural direct and indirect
+effects, and it is a direct consequence of using stochastic (rather than static)
+interventions.</p>
+</div>
+<div id="decomposing-the-population-intervention-effect" class="section level3">
+<h3>
+<span class="header-section-number">7.5.1</span> Decomposing the Population Intervention Effect<a class="anchor" aria-label="anchor" href="#decomposing-the-population-intervention-effect"><i class="fas fa-link"></i></a>
+</h3>
+<p>We may decompose the population intervention effect (PIE) in terms of the
+<em>population intervention direct effect</em> (PIDE) and the <em>population
+intervention indirect effect</em> (PIIE):
+<span class="math display">\[\begin{equation*}
+  \mathbb{E}\{Y(A_\delta)\} - \mathbb{E}Y =
+    \overbrace{\mathbb{E}\{Y(A_\delta, Z(A_\delta))
+      - Y(A_\delta, Z)\}}^{\text{PIIE}} +
+    \overbrace{\mathbb{E}\{Y(A_\delta, Z) - Y(A, Z)\}}^{\text{PIDE}}.
+\end{equation*}\]</span></p>
+<p>This decomposition of the PIE as the sum of the population intervention direct
+and indirect effects has an interpretation analogous to the corresponding
+standard decomposition of the average treatment effect. In the sequel, we will
+compute each of the components of the direct and indirect effects above using
+appropriate estimators as follows</p>
+<ul>
+<li>For <span class="math inline">\(\E\{Y(A, Z)\}\)</span>, the sample mean <span class="math inline">\(\frac{1}{n}\sum_{i=1}^n Y_i\)</span> is
+consistent;</li>
+<li>for <span class="math inline">\(\E\{Y(A_{\delta}, Z)\}\)</span>, a TML estimator for the effect of a joint
+intervention altering the treatment mechanism but not the mediation mechanism,
+based on the proposal in <span class="citation">(<span class="citeproc-not-found" data-reference-id="diaz2020causal"><strong>???</strong></span>)</span>; and,</li>
+<li>for <span class="math inline">\(\E\{Y(A_{\delta}, Z_{A_{\delta}})\}\)</span>, an efficient estimator for the
+effect of a joint intervention on both the treatment and mediation mechanisms,
+as per <span class="citation">(<span class="citeproc-not-found" data-reference-id="kennedy2019nonparametric"><strong>???</strong></span>)</span>.</li>
+</ul>
+</div>
+<div id="estimating-the-effect-decomposition-term" class="section level3">
+<h3>
+<span class="header-section-number">7.5.2</span> Estimating the Effect Decomposition Term<a class="anchor" aria-label="anchor" href="#estimating-the-effect-decomposition-term"><i class="fas fa-link"></i></a>
+</h3>
+<p>As described by <span class="citation">(<span class="citeproc-not-found" data-reference-id="diaz2020causal"><strong>???</strong></span>)</span>, the statistical functional identifying the
+decomposition term that appears in both the PIDE and PIIE <span class="math inline">\(\E\{Y(A_{\delta}, Z)\}\)</span>, which corresponds to altering the treatment mechanism while keeping the
+mediation mechanism fixed, is
+<span class="math display">\[\begin{equation*}
+  \psi_0(\delta) = \int \overline{Q}_{0,Y}(a, z, w)
+    g_{0,\delta}(a \mid w) p_0(z, w) d\nu(a, z, w),
+\end{equation*}\]</span>
+for which a TML estimator is available. In the case of <span class="math inline">\(A \in \{0, 1\}\)</span>, the
+<em>efficient influence function</em> (EIF) with respect to the nonparametric
+statistical model <span class="math inline">\(\mathcal{M}\)</span> is <span class="math inline">\(D_{\delta}(o) = D^Y_{\delta}(o) + D^A_{\delta}(o) + D^{Z,W}_{\delta}(o) - \psi(\delta)\)</span>, where the
+orthogonal components of the EIF are defined as follows:</p>
+<ul>
+<li>
+<span class="math inline">\(D^Y_{\delta}(o) = \{g_{\delta}(a \mid w) / e(a \mid z, w)\} \{y - \overline{Q}_{Y}(z,a,w)\}\)</span>,</li>
+<li>
+<span class="math inline">\(D^A_{\delta}(o) = \{\delta\phi(w) (a - g(1 \mid w))\} / \{(\delta g(1 \mid w) + g(0 \mid w))^2\}\)</span>, and where <span class="math inline">\(\phi(w) := \E\{\overline{Q}_{Y}(1, Z, W) - \overline{Q}_{Y}(0, Z, W) \mid W = w\}\)</span>,</li>
+<li>
+<span class="math inline">\(D^{Z,W}_{\delta}(o) = \int_{\mathcal{A}} \overline{Q}_{Y}(z, a, w) g_{\delta}(a \mid w) d\kappa(a)\)</span>.</li>
+</ul>
+<p>The TML estimator may be computed by fluctuating initial estimates of the
+nuisance parameters so as to solve the EIF estimating equation. The resultant
+TML estimator is
+<span class="math display">\[\begin{equation*}
+  \psi_{n}^{\star}(\delta) = \int_{\mathcal{A}} \frac{1}{n} \sum_{i=1}^n
+  \overline{Q}_{Y,n}^{\star}(Z_i, a, W_i)
+  g_{\delta, n}^{\star}(a \mid W_i) d\kappa(a),
+\end{equation*}\]</span>
+where <span class="math inline">\(g_{\delta,n}^{\star}(a \mid w)\)</span> and <span class="math inline">\(\overline{Q}_{Y,n}^{\star}(z,a,w)\)</span>
+are generated by  regressions that fluctuate (or tilt) initial
+nuisance parameter estimates towards solutions of the score equations <span class="math inline">\(n^{-1} \sum_{i=1}^n D^A_{\delta}(O_i) = 0\)</span> and <span class="math inline">\(n^{-1} \sum_{i=1}^n D^Y_{\delta}(O_i) = 0\)</span>, respectively. This TML estimator <span class="math inline">\(\psi_{n}^{\star}(\delta)\)</span> is implemented
+in <code>tmle3mediate</code> package. We demonstrate the use of <code>tmle3mediate</code> to obtain
+<span class="math inline">\(\E\{Y(A_{\delta}, Z)\}\)</span> via its TML estimator in the following worked code
+examples.</p>
+</div>
+</div>
+<div id="evaluating-the-direct-and-indirect-effects" class="section level2">
+<h2>
+<span class="header-section-number">7.6</span> Evaluating the Direct and Indirect Effects<a class="anchor" aria-label="anchor" href="#evaluating-the-direct-and-indirect-effects"><i class="fas fa-link"></i></a>
+</h2>
+<p>We now turn to estimating the natural direct and indirect effects, as well as
+the population intervention direct effect, using the WASH Benefits data,
+introduced in earlier chapters. Let’s first load the data:</p>
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/sl3">sl3</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/tmle3">tmle3</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/tmle3mediate">tmle3mediate</a></span><span class="op">)</span>
+
+<span class="co"># download data</span>
+<span class="va">washb_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fread.html">fread</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span>
+    <span class="st">"https://raw.githubusercontent.com/tlverse/tlverse-data/master/"</span>,
+    <span class="st">"wash-benefits/washb_data.csv"</span>
+  <span class="op">)</span>,
+  stringsAsFactors <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>
+
+<span class="co"># make intervention node binary and subsample</span>
+<span class="va">washb_data</span> <span class="op">&lt;-</span> <span class="va">washb_data</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">.N</span>, <span class="fl">600</span><span class="op">)</span>, <span class="op">]</span>
+<span class="va">washb_data</span><span class="op">[</span>, <span class="va">tr</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">tr</span> <span class="op">!=</span> <span class="st">"Control"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<p>We’ll next define the baseline covariates <span class="math inline">\(W\)</span>, treatment <span class="math inline">\(A\)</span>, mediators <span class="math inline">\(Z\)</span>,
+and outcome <span class="math inline">\(Y\)</span> nodes of the NPSEM via a “Node List” object:</p>
+<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">node_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  W <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+    <span class="st">"momage"</span>, <span class="st">"momedu"</span>, <span class="st">"momheight"</span>, <span class="st">"hfiacat"</span>, <span class="st">"Nlt18"</span>, <span class="st">"Ncomp"</span>, <span class="st">"watmin"</span>,
+    <span class="st">"elec"</span>, <span class="st">"floor"</span>, <span class="st">"walls"</span>, <span class="st">"roof"</span>
+  <span class="op">)</span>,
+  A <span class="op">=</span> <span class="st">"tr"</span>,
+  Z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sex"</span>, <span class="st">"month"</span>, <span class="st">"aged"</span><span class="op">)</span>,
+  Y <span class="op">=</span> <span class="st">"whz"</span>
+<span class="op">)</span></code></pre></div>
+<p>Here, the <code>node_list</code> encodes the parents of each node – for example, <span class="math inline">\(Z\)</span> (the
+mediators) have parents <span class="math inline">\(A\)</span> (the treatment) and <span class="math inline">\(W\)</span> (the baseline confounders),
+and <span class="math inline">\(Y\)</span> (the outcome) has parents <span class="math inline">\(Z\)</span>, <span class="math inline">\(A\)</span>, and <span class="math inline">\(W\)</span>. We’ll also handle any
+missingness in the data by invoking <code>process_missing</code>:</p>
+<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/process_missing.html">process_missing</a></span><span class="op">(</span><span class="va">washb_data</span>, <span class="va">node_list</span><span class="op">)</span>
+<span class="va">washb_data</span> <span class="op">&lt;-</span> <span class="va">processed</span><span class="op">$</span><span class="va">data</span>
+<span class="va">node_list</span> <span class="op">&lt;-</span> <span class="va">processed</span><span class="op">$</span><span class="va">node_list</span></code></pre></div>
+<p>We’ll now construct an ensemble learner using a handful of popular machine
+learning algorithms:</p>
+<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># SL learners used for continuous data (the nuisance parameter Z)</span>
+<span class="va">enet_contin_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glmnet.html">Lrnr_glmnet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  alpha <span class="op">=</span> <span class="fl">0.5</span>, family <span class="op">=</span> <span class="st">"gaussian"</span>, nfolds <span class="op">=</span> <span class="fl">3</span>
+<span class="op">)</span>
+<span class="va">lasso_contin_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glmnet.html">Lrnr_glmnet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  alpha <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"gaussian"</span>, nfolds <span class="op">=</span> <span class="fl">3</span>
+<span class="op">)</span>
+<span class="va">fglm_contin_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glm_fast.html">Lrnr_glm_fast</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">gaussian</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mean_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_mean.html">Lrnr_mean</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<span class="va">contin_learner_lib</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Stack.html">Stack</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  <span class="va">enet_contin_learner</span>, <span class="va">lasso_contin_learner</span>, <span class="va">fglm_contin_learner</span>, <span class="va">mean_learner</span>
+<span class="op">)</span>
+<span class="va">sl_contin_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_sl.html">Lrnr_sl</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>learners <span class="op">=</span> <span class="va">contin_learner_lib</span><span class="op">)</span>
+
+<span class="co"># SL learners used for binary data (nuisance parameters G and E in this case)</span>
+<span class="va">enet_binary_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glmnet.html">Lrnr_glmnet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  alpha <span class="op">=</span> <span class="fl">0.5</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, nfolds <span class="op">=</span> <span class="fl">3</span>
+<span class="op">)</span>
+<span class="va">lasso_binary_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glmnet.html">Lrnr_glmnet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  alpha <span class="op">=</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, nfolds <span class="op">=</span> <span class="fl">3</span>
+<span class="op">)</span>
+<span class="va">fglm_binary_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glm_fast.html">Lrnr_glm_fast</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="va">binary_learner_lib</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Stack.html">Stack</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
+  <span class="va">enet_binary_learner</span>, <span class="va">lasso_binary_learner</span>, <span class="va">fglm_binary_learner</span>, <span class="va">mean_learner</span>
+<span class="op">)</span>
+<span class="va">sl_binary_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_sl.html">Lrnr_sl</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>learners <span class="op">=</span> <span class="va">binary_learner_lib</span><span class="op">)</span>
+
+<span class="co"># create list for treatment and outcome mechanism regressions</span>
+<span class="va">learner_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  Y <span class="op">=</span> <span class="va">sl_contin_learner</span>,
+  A <span class="op">=</span> <span class="va">sl_binary_learner</span>
+<span class="op">)</span></code></pre></div>
+<div id="targeted-estimation-of-the-natural-indirect-effect" class="section level3">
+<h3>
+<span class="header-section-number">7.6.1</span> Targeted Estimation of the Natural Indirect Effect<a class="anchor" aria-label="anchor" href="#targeted-estimation-of-the-natural-indirect-effect"><i class="fas fa-link"></i></a>
+</h3>
+<p>We demonstrate calculation of the NIE below, starting by instantiating a “Spec”
+object that encodes exactly which learners to use for the nuisance parameters
+<span class="math inline">\(e(A \mid Z, W)\)</span> and <span class="math inline">\(\psi_Z\)</span>. We then pass our Spec object to the <code>tmle3</code>
+function, alongside the data, the node list (created above), and a learner list
+indicating which machine learning algorithms to use for estimating the nuisance
+parameters based on <span class="math inline">\(A\)</span> and <span class="math inline">\(Y\)</span>.</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="causal-mediation-analysis.html#cb127-1"></a>tmle_spec_NIE &lt;-<span class="st"> </span><span class="kw">tmle_NIE</span>(</span>
+<span id="cb127-2"><a href="causal-mediation-analysis.html#cb127-2"></a>  <span class="dt">e_learners =</span> Lrnr_cv<span class="op">$</span><span class="kw">new</span>(lasso_binary_learner, <span class="dt">full_fit =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb127-3"><a href="causal-mediation-analysis.html#cb127-3"></a>  <span class="dt">psi_Z_learners =</span> Lrnr_cv<span class="op">$</span><span class="kw">new</span>(lasso_contin_learner, <span class="dt">full_fit =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb127-4"><a href="causal-mediation-analysis.html#cb127-4"></a>  <span class="dt">max_iter =</span> <span class="dv">1</span></span>
+<span id="cb127-5"><a href="causal-mediation-analysis.html#cb127-5"></a>)</span>
+<span id="cb127-6"><a href="causal-mediation-analysis.html#cb127-6"></a>washb_NIE &lt;-<span class="st"> </span><span class="kw">tmle3</span>(</span>
+<span id="cb127-7"><a href="causal-mediation-analysis.html#cb127-7"></a>  tmle_spec_NIE, washb_data, node_list, learner_list</span>
+<span id="cb127-8"><a href="causal-mediation-analysis.html#cb127-8"></a>)</span>
+<span id="cb127-9"><a href="causal-mediation-analysis.html#cb127-9"></a>washb_NIE</span>
+<span id="cb127-10"><a href="causal-mediation-analysis.html#cb127-10"></a>A tmle3_Fit that took <span class="dv">1</span> <span class="kw">step</span>(s)</span>
+<span id="cb127-11"><a href="causal-mediation-analysis.html#cb127-11"></a>   type                  param  init_est  tmle_est     se     lower   upper</span>
+<span id="cb127-12"><a href="causal-mediation-analysis.html#cb127-12"></a><span class="dv">1</span><span class="op">:</span><span class="st">  </span>NIE NIE[Y_{A=<span class="dv">1</span>} <span class="op">-</span><span class="st"> </span>Y_{A=<span class="dv">0</span>}] <span class="fl">0.0027983</span> <span class="fl">0.0021978</span> <span class="fl">0.0444</span> <span class="fl">-0.084824</span> <span class="fl">0.08922</span></span>
+<span id="cb127-13"><a href="causal-mediation-analysis.html#cb127-13"></a>   psi_transformed lower_transformed upper_transformed</span>
+<span id="cb127-14"><a href="causal-mediation-analysis.html#cb127-14"></a><span class="dv">1</span><span class="op">:</span><span class="st">       </span><span class="fl">0.0021978</span>         <span class="fl">-0.084824</span>           <span class="fl">0.08922</span></span></code></pre></div>
+<p>Based on the output, we conclude that the indirect effect of the treatment
+through the mediators (sex, month, aged) is
+0.0022.</p>
+</div>
+<div id="targeted-estimation-of-the-natural-direct-effect" class="section level3">
+<h3>
+<span class="header-section-number">7.6.2</span> Targeted Estimation of the Natural Direct Effect<a class="anchor" aria-label="anchor" href="#targeted-estimation-of-the-natural-direct-effect"><i class="fas fa-link"></i></a>
+</h3>
+<p>An analogous procedure applies for estimation of the NDE, only replacing the
+Spec object for the NIE with <code>tmle_spec_NDE</code> to define learners for the NDE
+nuisance parameters:</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="causal-mediation-analysis.html#cb128-1"></a>tmle_spec_NDE &lt;-<span class="st"> </span><span class="kw">tmle_NDE</span>(</span>
+<span id="cb128-2"><a href="causal-mediation-analysis.html#cb128-2"></a>  <span class="dt">e_learners =</span> Lrnr_cv<span class="op">$</span><span class="kw">new</span>(lasso_binary_learner, <span class="dt">full_fit =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb128-3"><a href="causal-mediation-analysis.html#cb128-3"></a>  <span class="dt">psi_Z_learners =</span> Lrnr_cv<span class="op">$</span><span class="kw">new</span>(lasso_contin_learner, <span class="dt">full_fit =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb128-4"><a href="causal-mediation-analysis.html#cb128-4"></a>  <span class="dt">max_iter =</span> <span class="dv">1</span></span>
+<span id="cb128-5"><a href="causal-mediation-analysis.html#cb128-5"></a>)</span>
+<span id="cb128-6"><a href="causal-mediation-analysis.html#cb128-6"></a>washb_NDE &lt;-<span class="st"> </span><span class="kw">tmle3</span>(</span>
+<span id="cb128-7"><a href="causal-mediation-analysis.html#cb128-7"></a>  tmle_spec_NDE, washb_data, node_list, learner_list</span>
+<span id="cb128-8"><a href="causal-mediation-analysis.html#cb128-8"></a>)</span>
+<span id="cb128-9"><a href="causal-mediation-analysis.html#cb128-9"></a>washb_NDE</span>
+<span id="cb128-10"><a href="causal-mediation-analysis.html#cb128-10"></a>A tmle3_Fit that took <span class="dv">1</span> <span class="kw">step</span>(s)</span>
+<span id="cb128-11"><a href="causal-mediation-analysis.html#cb128-11"></a>   type                  param init_est tmle_est       se    lower   upper</span>
+<span id="cb128-12"><a href="causal-mediation-analysis.html#cb128-12"></a><span class="dv">1</span><span class="op">:</span><span class="st">  </span>NDE NDE[Y_{A=<span class="dv">1</span>} <span class="op">-</span><span class="st"> </span>Y_{A=<span class="dv">0</span>}] <span class="fl">0.019662</span> <span class="fl">0.019662</span> <span class="fl">0.085909</span> <span class="fl">-0.14872</span> <span class="fl">0.18804</span></span>
+<span id="cb128-13"><a href="causal-mediation-analysis.html#cb128-13"></a>   psi_transformed lower_transformed upper_transformed</span>
+<span id="cb128-14"><a href="causal-mediation-analysis.html#cb128-14"></a><span class="dv">1</span><span class="op">:</span><span class="st">        </span><span class="fl">0.019662</span>          <span class="fl">-0.14872</span>           <span class="fl">0.18804</span></span></code></pre></div>
+<p>From this, we can draw the conclusion that the direct effect of the treatment
+(through all paths not involving the mediators (sex, month, aged)) is
+0.01966. Note that, together, the estimates of
+the natural direct and indirect effects approximately recover the <em>average
+treatment effect</em>, that is, based on these estimates of the NDE and NIE, the
+ATE is roughly
+0.02186.</p>
+</div>
+<div id="targeted-estimation-of-the-population-intervention-direct-effect" class="section level3">
+<h3>
+<span class="header-section-number">7.6.3</span> Targeted Estimation of the Population Intervention Direct Effect<a class="anchor" aria-label="anchor" href="#targeted-estimation-of-the-population-intervention-direct-effect"><i class="fas fa-link"></i></a>
+</h3>
+<p>As previously noted, the assumptions underlying the natural direct and indirect
+effects may be challenging to justify; moreover, the effect definitions
+themselves depend on the application of a static intervention to the treatment,
+sharply limiting their flexibility. When considering binary treatments,
+incremental propensity score shifts provide an alternative class of flexible,
+stochastic interventions. We’ll now consider estimating the PIDE with an IPSI
+that modulates the odds of receiving treatment by <span class="math inline">\(\delta = 3\)</span>. Such an
+intervention may be interpreted (hypothetically) as the effect of a design that
+encourages study participants to opt in to receiving the treatment, thus
+increasing their relative odds of receiving said treatment. To exemplify our
+approach, we postulate a motivational intervention that <em>triples the odds</em>
+(i.e., <span class="math inline">\(\delta = 3\)</span>) of receiving the treatment for each individual:</p>
+<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># set the IPSI multiplicative shift</span>
+<span class="va">delta_ipsi</span> <span class="op">&lt;-</span> <span class="fl">3</span>
+
+<span class="co"># instantiate tmle3 spec for stochastic mediation</span>
+<span class="va">tmle_spec_pie_decomp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/tmle3mediate/reference/tmle_medshift.html">tmle_medshift</a></span><span class="op">(</span>
+  delta <span class="op">=</span> <span class="va">delta_ipsi</span>,
+  e_learners <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_cv.html">Lrnr_cv</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lasso_binary_learner</span>, full_fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+  phi_learners <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_cv.html">Lrnr_cv</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lasso_contin_learner</span>, full_fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="co"># compute the TML estimate</span>
+<span class="va">washb_pie_decomp</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span><span class="op">(</span>
+  <span class="va">tmle_spec_pie_decomp</span>, <span class="va">washb_data</span>, <span class="va">node_list</span>, <span class="va">learner_list</span>
+<span class="op">)</span>
+<span class="va">washb_pie_decomp</span>
+
+<span class="co"># get the PIDE</span>
+<span class="va">washb_pie_decomp</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">tmle_est</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/get.html">get</a></span><span class="op">(</span><span class="va">node_list</span><span class="op">$</span><span class="va">Y</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<p>Recall that, based on the decomposition outlined previously, the PIDE may be
+denoted <span class="math inline">\(\beta_{0,\text{PIDE}}(\delta) = \psi_0(\delta) - \E Y\)</span>. Thus,
+a TML estimator of the PIDE, <span class="math inline">\(\beta_{n,\text{PIDE}}(\delta)\)</span> may be expressed
+as a composition of estimators of its constituent parameters:
+<span class="math display">\[\begin{equation*}
+  \beta_{n,\text{PIDE}}({\delta}) = \psi^{\star}_{n}(\delta) -
+  \frac{1}{n} \sum_{i = 1}^n Y_i.
+\end{equation*}\]</span></p>
+<!--
+Based on the above, we may construct an estimator of the PIDE using the already
+estimated decomposition term and the empirical (marginal) mean of the outcome.
+Note that this is a straightforward application of the delta method and could
+equivalently be performed using the functionality exposed in the [`tmle3`
+package](https://github.com/tlverse/tmle3).
+-->
+<!--
+
+```r
+tmle_task <- tmle_spec_pie_decomp$make_tmle_task(
+  weight_behavior_complete, node_list
+)
+initial_likelihood <- tmle_spec_pie_decomp$make_initial_likelihood(
+  tmle_task, learner_list
+)
+```
+-->
+</div>
+</div>
+<div id="exercises-2" class="section level2">
+<h2>
+<span class="header-section-number">7.7</span> Exercises<a class="anchor" aria-label="anchor" href="#exercises-2"><i class="fas fa-link"></i></a>
+</h2>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-14" class="exercise"><strong>Exercise 7.1  </strong></span>Examine the WASH Benefits dataset and choose a different set of potential
+mediators of the effect of the treatment on weight-for-height Z-score. Using
+this newly chosen set of mediators (or single mediator), estimate the natural
+direct and indirect effects. Provide an interpretation of these estimates.</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-15" class="exercise"><strong>Exercise 7.2  </strong></span>Assess whether additivity of the natural direct and indirect effects holds.
+Using the natural direct and indirect effects estimated above, does their sum
+recover the ATE?</p>
+</div>
+<div class="exercise">
+<p><span id="exr:unlabeled-div-16" class="exercise"><strong>Exercise 7.3  </strong></span>Evaluate whether the assumptions required for identification of the natural
+direct and indirect effects are plausible in the WASH Benefits example. In
+particular, position this evaluation in terms of empirical diagnostics of
+treatment and mediator positivity.</p>
+</div>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="stochastic-treatment-regimes-optional.html"><span class="header-section-number">6</span> Stochastic Treatment Regimes (optional)</a></div>
+<div class="next"><a href="r6.html"><span class="header-section-number">8</span> A Primer on the R6 Class System</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#causal-mediation-analysis"><span class="header-section-number">7</span> Causal Mediation Analysis</a></li>
+<li><a class="nav-link" href="#learning-objectives-5"><span class="header-section-number">7.1</span> Learning Objectives</a></li>
+<li><a class="nav-link" href="#causal-mediation-analysis-1"><span class="header-section-number">7.2</span> Causal Mediation Analysis</a></li>
+<li><a class="nav-link" href="#data-structure-and-notation-1"><span class="header-section-number">7.3</span> Data Structure and Notation</a></li>
+<li>
+<a class="nav-link" href="#defining-the-natural-direct-and-indirect-effects"><span class="header-section-number">7.4</span> Defining the Natural Direct and Indirect Effects</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#decomposing-the-average-treatment-effect"><span class="header-section-number">7.4.1</span> Decomposing the Average Treatment Effect</a></li>
+<li><a class="nav-link" href="#estimating-the-natural-direct-effect"><span class="header-section-number">7.4.2</span> Estimating the Natural Direct Effect</a></li>
+<li><a class="nav-link" href="#estimating-the-natural-indirect-effect"><span class="header-section-number">7.4.3</span> Estimating the Natural Indirect Effect</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#the-population-intervention-direct-and-indirect-effects"><span class="header-section-number">7.5</span> The Population Intervention Direct and Indirect Effects</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#decomposing-the-population-intervention-effect"><span class="header-section-number">7.5.1</span> Decomposing the Population Intervention Effect</a></li>
+<li><a class="nav-link" href="#estimating-the-effect-decomposition-term"><span class="header-section-number">7.5.2</span> Estimating the Effect Decomposition Term</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#evaluating-the-direct-and-indirect-effects"><span class="header-section-number">7.6</span> Evaluating the Direct and Indirect Effects</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#targeted-estimation-of-the-natural-indirect-effect"><span class="header-section-number">7.6.1</span> Targeted Estimation of the Natural Indirect Effect</a></li>
+<li><a class="nav-link" href="#targeted-estimation-of-the-natural-direct-effect"><span class="header-section-number">7.6.2</span> Targeted Estimation of the Natural Direct Effect</a></li>
+<li><a class="nav-link" href="#targeted-estimation-of-the-population-intervention-direct-effect"><span class="header-section-number">7.6.3</span> Targeted Estimation of the Population Intervention Direct Effect</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#exercises-2"><span class="header-section-number">7.7</span> Exercises</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/tlverse/tlverse-workshops/blob/master/08-tmle3mediate.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tlverse/tlverse-workshops/edit/master/08-tmle3mediate.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>[ACIC 2022] Targeted Learning in the <code>tlverse</code></strong>: Causal Inference Meets Machine Learning" was written by Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on updated: May 17, 2022.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
