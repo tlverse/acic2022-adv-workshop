@@ -1,10 +1,12 @@
-# `tlverse` workshop template [![Booklet](https://github.com/tlverse/tlverse-workshops/actions/workflows/bookdown.yml/badge.svg)](https://github.com/tlverse/tlverse-workshops/actions/workflows/bookdown.yml) [![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/tlverse/tlverse-workshops/master?urlpath=rstudio)
+# ACIC 2022 `tlverse` Workshop [![Booklet](https://github.com/tlverse/acic2022-adv-workshop/actions/workflows/bookdown.yml/badge.svg)](https://github.com/tlverse/acic2022-adv-workshop/actions/workflows/bookdown.yml) [![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/tlverse/acic2022-adv-workshop/master?urlpath=rstudio)
 
-Welcome to the GitHub repository for a full-day introductory workshop on
-Targeted Learning with the `tlverse` software ecosystem. This repository serves
-as a template for academic conference workshops as well as invited short
-courses. These teaching materials are adapted from a draft of the forthcoming
-book [*Targeted Learning in `R`: Causal Data Science with the `tlverse` Software
+Welcome to the GitHub repository for a full-day advanced workshop on causal
+inference and Targeted Learning with the `tlverse` software ecosystem. This
+repository contains the full set of lesson materials for this workshop, offered
+at the [2022 American Causal Inference
+Conference](https://ctml.berkeley.edu/workshop-schedule). These teaching
+materials are adapted from a draft of the forthcoming book [*Targeted Learning
+in `R`: Causal Data Science with the `tlverse` Software
 Ecosystem*](https://tlverse.org/tlverse-handbook/), by Mark van der Laan, Jeremy
 Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Alan Hubbard. The
 unabridged book is [freely available](https://tlverse.org/tlverse-handbook); its
