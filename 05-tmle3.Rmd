@@ -19,7 +19,7 @@ The following sections describe a simple way of
 specifying and estimating a TMLE in the `tlverse`. In designing `tmle3`, we
 sought to replicate as closely as possible the very general estimation framework
 of TMLE, and so each theoretical object relevant to TMLE is encoded in a
-corresponding software object/method. More information on this design can be found in the (handbook)[http://tlverse.org/tlverse-handbook/tmle3.html#tmle3-components].
+corresponding software object/method. More information on this design can be found in the [handbook](http://tlverse.org/tlverse-handbook/tmle3.html#tmle3-components).
 
 ## Easy-Bake Example: `tmle3` for ATE
 
