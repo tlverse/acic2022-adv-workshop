@@ -4,7 +4,7 @@ title: "[ACIC 2022] Targeted Learning in the `tlverse`"
 subtitle: "Causal Inference Meets Machine Learning"
 author: "Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana
   Malenica, Rachael Phillips"
-date: "updated: May 17, 2022"
+date: "updated: May 23, 2022"
 documentclass: book
 site: bookdown::bookdown_site
 bibliography: [book.bib, packages.bib]
@@ -47,9 +47,8 @@ useful reference to accompany these workshop materials.
 
 ## Important links {-}
 
-* __Software installation__: Please install the relevant software before the
-  workshop using the [installation
-  script](https://github.com/tlverse/tlverse-workshops/blob/master/install.R).
+* __Load R environment__: Please set up the R virtual environment using the  
+ [instructions](https://github.com/tlverse/tlverse-workshops/blob/master/install.md).
 
 * You will probably exceed the GitHub API rate limit during this installation,
   which will throw an error. This issue and the solution are addressed
@@ -222,7 +221,7 @@ following packages:
 |readr        |2.0.2   |CRAN (R 4.2.0)                         |
 |rmarkdown    |2.11    |CRAN (R 4.2.0)                         |
 |skimr        |2.1.3   |CRAN (R 4.2.0)                         |
-|sl3          |1.4.4   |Github (tlverse/sl3\@6544257)          |
+|sl3          |1.4.5   |Github (tlverse/sl3\@fae6165)          |
 |stringr      |1.4.0   |CRAN (R 4.2.0)                         |
 |tibble       |3.1.7   |CRAN (R 4.2.0)                         |
 |tidyr        |1.2.0   |CRAN (R 4.2.0)                         |

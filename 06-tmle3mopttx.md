@@ -5,7 +5,7 @@ _Ivana Malenica_
 Based on the [`tmle3mopttx` `R` package](https://github.com/tlverse/tmle3mopttx)
 by _Ivana Malenica, Jeremy Coyle, and Mark van der Laan_.
 
-Updated: 2022-05-17
+Updated: 2022-05-23
 
 ## Learning Objectives
 By the end of this lesson you will be able to:
@@ -611,24 +611,24 @@ notation by bundling the ensemble learners into a list object below:
 learner_list <- list(Y = Q_learner, A = g_learner, B = b_learner)
 learner_list
 $Y
-[1] "SuperLearner:"
+[1] "Super learner:"
 List of 3
- $ : chr "Lrnr_glmnet_NULL_deviance_10_1_100_TRUE_FALSE"
+ $ : chr "Lrnr_glmnet_NULL_deviance_10_1_100_TRUE"
  $ : chr "Lrnr_mean"
  $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
 
 $A
-[1] "SuperLearner:"
+[1] "Super learner:"
 List of 2
- $ : chr "Lrnr_glmnet_NULL_deviance_10_1_100_TRUE_FALSE"
+ $ : chr "Lrnr_glmnet_NULL_deviance_10_1_100_TRUE"
  $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
 
 $B
-[1] "SuperLearner:"
+[1] "Super learner:"
 List of 3
  $ : chr "Lrnr_mean"
  $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
- $ : chr "Lrnr_glmnet_NULL_deviance_10_1_100_TRUE_FALSE"
+ $ : chr "Lrnr_glmnet_NULL_deviance_10_1_100_TRUE"
 ```
 
 <br>
@@ -1033,20 +1033,20 @@ sl3_list_learners(c("categorical"))
 learner_list <- list(Y = Q_learner, A = g_learner, B = b_learner)
 learner_list
 $Y
-[1] "SuperLearner:"
+[1] "Super learner:"
 List of 3
  $ : chr "Lrnr_xgboost_50_1"
  $ : chr "Lrnr_mean"
  $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
 
 $A
-[1] "SuperLearner:"
+[1] "Super learner:"
 List of 2
  $ : chr "Lrnr_xgboost_50_1"
  $ : chr "Lrnr_mean"
 
 $B
-[1] "SuperLearner:"
+[1] "Super learner:"
 List of 3
  $ : chr "Lrnr_xgboost_50_1_multivariate"
  $ : chr "Lrnr_mean_multivariate"
@@ -1285,27 +1285,27 @@ delta_learner <- Lrnr_sl$new(
 learner_list <- list(Y = Q_learner, A = g_learner, B = b_learner, delta_Y=delta_learner)
 learner_list
 $Y
-[1] "SuperLearner:"
+[1] "Super learner:"
 List of 3
  $ : chr "Lrnr_xgboost_50_1"
  $ : chr "Lrnr_mean"
  $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
 
 $A
-[1] "SuperLearner:"
+[1] "Super learner:"
 List of 2
  $ : chr "Lrnr_xgboost_50_1"
  $ : chr "Lrnr_mean"
 
 $B
-[1] "SuperLearner:"
+[1] "Super learner:"
 List of 3
  $ : chr "Lrnr_xgboost_50_1_multivariate"
  $ : chr "Lrnr_mean_multivariate"
  $ : chr "Lrnr_glm_fast_TRUE_Cholesky_multivariate"
 
 $delta_Y
-[1] "SuperLearner:"
+[1] "Super learner:"
 List of 2
  $ : chr "Lrnr_mean"
  $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
