@@ -7,37 +7,22 @@ package](https://github.com/tlverse/tmle3mediate).
 
 ## Learning Objectives
 
-1. Examine how the presence of post-treatment mediating variables can complicate
-   a causal analysis, and how direct and indirect effects can be defined to
-   resolve these complications.
-2. Describe the essential similarities and differences between direct and
-   indirect causal effects, including their definition in terms of stochastic
-   interventions.
-3. Differentiate the joint interventions required to define direct and indirect
-   effects from the static, dynamic, and stochastic interventions that yield
-   _total_ causal effects.
-4. Describe the assumptions needed for identification of the natural direct and
-   indirect effects, as well as the limitations of these effect definitions.
-5. Estimate the natural direct and indirect effects for a binary treatment using
-   the `tmle3mediate` `R` package.
-6. Differentiate the population intervention direct and indirect effects of
-   stochastic interventions from the natural direct and indirect effects,
-   including differences in the assumptions required for their identification.
-7. Estimate the population intervention direct effect of a binary treatment
-   using the `tmle3mediate` `R` package.
+1. Understand that you can estimate the natural direct and indirect effects for a binary treatment using the `tmle3mediate` `R` package.
+2. Know where to learn more about the `tmle3mediate` package.
 
 ## Causal Mediation Analysis
 
-In applications ranging from biology and epidemiology to economics and
-psychology, scientific inquires are often concerned with ascertaining the effect
-of a treatment on an outcome variable only through particular pathways between
-the two. In the presence of post-treatment intermediate variables affected by
+We only have time to briefly introduce this parameter. You can find more information in the relevant (handbook chapter)[http://tlverse.org/tlverse-handbook/causal-mediation-analysis.html]
+
+In the presence of post-treatment intermediate variables affected by
 exposure (that is, _mediators_), path-specific effects allow for such complex,
 mechanistic relationships to be teased apart. These causal effects are of such
 wide interest that their definition and identification has been the object of
 study in statistics for nearly a century -- indeed, the earliest examples of
 modern causal mediation analysis can be traced back to work on path analysis
-[@wright1934method]. In recent decades, renewed interest has resulted in the
+[@wright1934method]. 
+
+In recent decades, renewed interest has resulted in the
 formulation of novel direct and indirect effects within both the potential
 outcomes and nonparametric structural equation modeling frameworks
 [@robins1986new; @pearl1995causal; @pearl2009causality; @spirtes2000causation;
