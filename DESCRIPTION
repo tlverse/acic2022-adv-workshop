@@ -42,8 +42,7 @@ Suggests:
   SuperLearner,
   hal9001 (>= 0.4.3),
   haldensify (>= 0.2.3),
-  earth,
-  caret
+  earth
 Remotes:
   rstudio/bslib,
   rstudio/bookdown,
