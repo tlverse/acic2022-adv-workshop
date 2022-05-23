@@ -533,7 +533,8 @@ We can see from the CV risk table above that the SL is not contained. This is
 because we do not have a CV risk for the SL unless we cross-validate it or
 include it as a candidate in another SL; the latter is shown in the next
 subsection. Below we show how to obtain a cross-validated risk estimate for the
-SL using `cv_sl`.
+SL using `cv_sl`. (Note: we set `eval = FALSE` for this part of the code as 
+it was killing the build).
 
 ```{r cvsl, eval = FALSE}
 set.seed(569)
@@ -1336,6 +1337,7 @@ making the this Cardiovascular Health Study (CHS) data accessible.
 
 ```{r ex-setup}
 # load the data set
+library(readr)
 db_data <- url(
   paste0(
     "https://raw.githubusercontent.com/benkeser/sllecture/master/",
