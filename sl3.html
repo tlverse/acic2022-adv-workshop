@@ -133,11 +133,11 @@ samples, given the learners specified <span class="citation">(van der Laan, Poll
 entirely pre-specified, data-adaptive, and theoretically grounded approach for
 predictive modeling. It has been shown to be adaptive and robust in a variety of
 applications, and in even in very small samples. Detailed descriptions outlining
-the SL procedure are widely available <span class="citation">(Polley and van der Laan <a href="references.html#ref-polley2010super" role="doc-biblioref">2010</a>; <span class="citeproc-not-found" data-reference-id="naimi2018stacked"><strong>???</strong></span>)</span>.
+the SL procedure are widely available <span class="citation">(Polley and van der Laan <a href="references.html#ref-polley2010super" role="doc-biblioref">2010</a>; Naimi and Balzer <a href="references.html#ref-naimi2018stacked" role="doc-biblioref">2018</a>)</span>.
 Practical considerations for specifying the SL, including how to specify a rich
 and diverse library of learners, choose a performance metric for the SL, and
 specify a cross-validation (CV) scheme, are described in a pre-print article
-<span class="citation">(<span class="citeproc-not-found" data-reference-id="rvp2022super"><strong>???</strong></span>)</span>. Here, we focus on introducing <code>sl3</code>, the standard <code>tlverse</code>
+<span class="citation">(Phillips et al. <a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span>. Here, we focus on introducing <code>sl3</code>, the standard <code>tlverse</code>
 software package for SL.</p>
 <!--
 Add more about sl3: how it's different from SuperLearner, supported features,
@@ -892,9 +892,8 @@ many internals of an object. In the next section, will see how we can use <code>
 to dig into SL fit objects as well, to obtain predictions from an SL fit or candidate learners, examine an SL fit or its candidates, and summarize an
 SL fit.</p>
 </div>
-<div id="instantiate-the-sl-with-lrnr_sl" class="section level3">
-<h3>
-<span class="header-section-number">3.2.1</span> 2. Instantiate the SL with <code>Lrnr_sl</code><a class="anchor" aria-label="anchor" href="#instantiate-the-sl-with-lrnr_sl"><i class="fas fa-link"></i></a>
+<div id="instantiate-the-sl-with-lrnr_sl" class="section level3 unnumbered">
+<h3>2. Instantiate the SL with <code>Lrnr_sl</code><a class="anchor" aria-label="anchor" href="#instantiate-the-sl-with-lrnr_sl"><i class="fas fa-link"></i></a>
 </h3>
 <p>In order to create <code>Lrnr_sl</code> we need to specify, at the minimum, a set of
 learners for the SL to consider as candidates. This set of algorithms is
@@ -903,7 +902,7 @@ meta-learner, which is the algorithm that ensembles the learners, but this is
 optional since there are already defaults set up in <code>sl3</code>. See “Practical
 considerations for specifying a super learner” for step-by-step guidelines for
 tailoring the SL specification, including the library and meta-learner(s), to
-perform well for the prediction task at hand <span class="citation">(<span class="citeproc-not-found" data-reference-id="rvp2022super"><strong>???</strong></span>)</span>.</p>
+perform well for the prediction task at hand <span class="citation">(Phillips et al. <a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span>.</p>
 <p>Learners have properties that indicate what features they support. We may use
 the <code><a href="https://tlverse.org/sl3/reference/list_learners.html">sl3_list_properties()</a></code> function to get a list of all properties supported
 by at least one learner:</p>
@@ -1016,9 +1015,8 @@ outcomes, and we will still go ahead and specify it for illustrative purposes.</
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sl</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_sl.html">Lrnr_sl</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>learners <span class="op">=</span> <span class="va">stack</span>, metalearner <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_nnls.html">Lrnr_nnls</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="fit-the-sl-to-the-task-with-train" class="section level3">
-<h3>
-<span class="header-section-number">3.2.2</span> 3. Fit the SL to the task with <code>train</code><a class="anchor" aria-label="anchor" href="#fit-the-sl-to-the-task-with-train"><i class="fas fa-link"></i></a>
+<div id="fit-the-sl-to-the-task-with-train" class="section level3 unnumbered">
+<h3>3. Fit the SL to the task with <code>train</code><a class="anchor" aria-label="anchor" href="#fit-the-sl-to-the-task-with-train"><i class="fas fa-link"></i></a>
 </h3>
 <p>The last step for fitting the SL to the prediction task is to call <code>train</code> and
 supply the task. We will also set a random number generator before calling
@@ -1037,7 +1035,7 @@ illustrated. This consists of the following three steps:</p>
 <li>Instantiate the SL with <code>Lrnr_sl</code>.</li>
 <li>Fit the SL to the task with <code>train</code>.</li>
 </ol>
-<p>This example was for demonstrative purposes only. See <span class="citation">(<span class="citeproc-not-found" data-reference-id="rvp2022super"><strong>???</strong></span>)</span> for
+<p>This example was for demonstrative purposes only. See <span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span> for
 step-by-step guidelines for constructing a SL that is well-specified for the
 prediction task at hand.</p>
 </div>
@@ -1470,9 +1468,8 @@ let’s assume we have data <code>washb_data_new</code> for which we want to SL 
 <h3>
 <span class="header-section-number">3.3.2</span> Summarizing SL Fits<a class="anchor" aria-label="anchor" href="#summarizing-sl-fits"><i class="fas fa-link"></i></a>
 </h3>
-<div id="coefficients" class="section level4">
-<h4>
-<span class="header-section-number">3.3.2.1</span> Coefficients<a class="anchor" aria-label="anchor" href="#coefficients"><i class="fas fa-link"></i></a>
+<div id="coefficients" class="section level4 unnumbered">
+<h4>Coefficients<a class="anchor" aria-label="anchor" href="#coefficients"><i class="fas fa-link"></i></a>
 </h4>
 <p>We can see how the meta-learner created a function of the learners in a few
 ways. In our illustrative example, we considered the default, NNLS meta-learner
@@ -1511,9 +1508,8 @@ fit object.</p>
 complex meta-learners (e.g., non-parametric meta-learners) that are not defined
 by a simple set of main terms regression coefficients.</p>
 </div>
-<div id="cross-validated-predictive-performance" class="section level4">
-<h4>
-<span class="header-section-number">3.3.2.2</span> Cross-validated predictive performance<a class="anchor" aria-label="anchor" href="#cross-validated-predictive-performance"><i class="fas fa-link"></i></a>
+<div id="cross-validated-predictive-performance" class="section level4 unnumbered">
+<h4>Cross-validated predictive performance<a class="anchor" aria-label="anchor" href="#cross-validated-predictive-performance"><i class="fas fa-link"></i></a>
 </h4>
 <p>We can obtain a table of the cross-validated (CV) predictive performance, i.e.,
 the CV risk, for each learner included in the SL. Below, we use the
@@ -1522,7 +1518,7 @@ squared error (MSE) as the metric to summarize predictive performance. The
 reason why we use the MSE is because it is a valid metric for estimating the
 conditional mean, which is what we’re learning the prediction function for in
 the WASH Benefits example. For more information on selecting an appropriate
-performance metric, see <span class="citation">(<span class="citeproc-not-found" data-reference-id="rvp2022super"><strong>???</strong></span>)</span>.</p>
+performance metric, see <span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span>.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cv_risk_table</span> <span class="op">&lt;-</span> <span class="va">sl_fit</span><span class="op">$</span><span class="fu">cv_risk</span><span class="op">(</span>eval_fun <span class="op">=</span> <span class="va">loss_squared_error</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -1690,9 +1686,8 @@ Column "se" in the CV risk table is the standard error across all losses for a l
 Column "fold_sd" in the CV risk table is the standard deviation of the V-fold-specific risks, i.e., fold_sd = sd(risk), where risk is a V length vector of the mean loss across the folds.
 -->
 </div>
-<div id="cross-validated-sl" class="section level4">
-<h4>
-<span class="header-section-number">3.3.2.3</span> Cross-validated SL<a class="anchor" aria-label="anchor" href="#cross-validated-sl"><i class="fas fa-link"></i></a>
+<div id="cross-validated-sl" class="section level4 unnumbered">
+<h4>Cross-validated SL<a class="anchor" aria-label="anchor" href="#cross-validated-sl"><i class="fas fa-link"></i></a>
 </h4>
 <p>We can see from the CV risk table above that the SL is not contained. This is
 because we do not have a CV risk for the SL unless we cross-validate it or
@@ -1733,7 +1728,7 @@ between including the eSL in the dSL and calling <code>cv_sl</code> is that the 
 automates a procedure for the final SL to be the learner that achieved the best
 CV predictive performance, i.e., lowest CV risk. If the eSL performs better than
 any other candidate, the dSL will end up selecting it. As mentioned in
-<span class="citation">(<span class="citeproc-not-found" data-reference-id="rvp2022super"><strong>???</strong></span>)</span>, "another advantage of this approach is that multiple eSLs that
+<span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span>, "another advantage of this approach is that multiple eSLs that
 use more flexible meta-learner methods (e.g., non-parametric machine learning
 algorithms like HAL) can be evaluated simultaneously.</p>
 <!--
@@ -1757,7 +1752,7 @@ of this internally; specifically, this data pre-processing occurs when
 <code>make_sl3_Task</code> is called.</p>
 <p>Users can also perform any pre-processing before creating the <code>sl3_Task</code>
 (as needed) to bypass the default functionality discussed in the following.
-See <span class="citation">(<span class="citeproc-not-found" data-reference-id="rvp2022super"><strong>???</strong></span>)</span>, section “Preliminaries: Analytic dataset pre-processing”
+See <span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span>, section “Preliminaries: Analytic dataset pre-processing”
 for more information and general guidelines to follow for pre-processing of the
 analytic dataset, including considerations for pre-processing in high
 dimensional settings.</p>
@@ -1780,9 +1775,8 @@ task in order to examine the pre-processing of <code>washb_data</code>.</p>
 <span id="cb33-11"><a href="sl3.html#cb33-11"></a>)</span>
 <span id="cb33-12"><a href="sl3.html#cb33-12"></a>Warning <span class="cf">in</span> <span class="kw">process_data</span>(data, nodes, <span class="dt">column_names =</span> column_names, <span class="dt">flag =</span> flag, <span class="op">:</span></span>
 <span id="cb33-13"><a href="sl3.html#cb33-13"></a>Missing covariate data detected<span class="op">:</span><span class="st"> </span>imputing covariates.</span></code></pre></div>
-<div id="imputation-and-missingness-indicators" class="section level4">
-<h4>
-<span class="header-section-number">3.3.4.1</span> Imputation and missingness indicators<a class="anchor" aria-label="anchor" href="#imputation-and-missingness-indicators"><i class="fas fa-link"></i></a>
+<div id="imputation-and-missingness-indicators" class="section level4 unnumbered">
+<h4>Imputation and missingness indicators<a class="anchor" aria-label="anchor" href="#imputation-and-missingness-indicators"><i class="fas fa-link"></i></a>
 </h4>
 <p>Notice the warning that appeared when we created the task above. (We muted this
 warning when we created the task in the previous section). This warning states
@@ -1867,9 +1861,8 @@ function that is approximated (e.g., with SL) and incorporated that in the
 estimation of the target parameter and the inference / uncertainty
 quantification.</p>
 </div>
-<div id="character-and-categorical-covariates" class="section level4">
-<h4>
-<span class="header-section-number">3.3.4.2</span> Character and categorical covariates<a class="anchor" aria-label="anchor" href="#character-and-categorical-covariates"><i class="fas fa-link"></i></a>
+<div id="character-and-categorical-covariates" class="section level4 unnumbered">
+<h4>Character and categorical covariates<a class="anchor" aria-label="anchor" href="#character-and-categorical-covariates"><i class="fas fa-link"></i></a>
 </h4>
 <p>First any character covariates are converted to factors. Then all factor
 covariates are one-hot encoded, i.e., the levels of a factor become a set of
@@ -3150,7 +3143,7 @@ very helpful to consider different tuning parameter specifications. However,
 this is time consuming, so computational feasibility should be considered.
 Also, when the effective sample size is small, highly data-adaptive learners
 will likely not perform well since they typically require a lot of data to fit
-their models. See <span class="citation">(<span class="citeproc-not-found" data-reference-id="rvp2022super"><strong>???</strong></span>)</span> for information on the effective sample size,
+their models. See <span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span> for information on the effective sample size,
 and step-by-step guidelines for tailoring the SL specification to perform well
 for the prediction task at hand.</p>
 <p>We show two ways to customize learners over a grid of tuning parameters. The
@@ -3160,9 +3153,8 @@ specify a set of tuning parameters themselves. The second approach does not
 require the user to have specialized knowledge of an algorithm (although some
 understanding is still helpful); it uses the <code>caret</code> software to automatically
 select an “optimal” set of tuning parameters over a grid of them.</p>
-<div id="do-it-yourself-grid" class="section level4">
-<h4>
-<span class="header-section-number">3.3.7.1</span> Do-it-yourself grid<a class="anchor" aria-label="anchor" href="#do-it-yourself-grid"><i class="fas fa-link"></i></a>
+<div id="do-it-yourself-grid" class="section level4 unnumbered">
+<h4>Do-it-yourself grid<a class="anchor" aria-label="anchor" href="#do-it-yourself-grid"><i class="fas fa-link"></i></a>
 </h4>
 <p>Below, we show how we can create several variations of an XGBoost learner,
 <code>Lrnr_xgboost</code>, by hand. This example is just for demonstrative purposes; users
@@ -3216,9 +3208,8 @@ these learners we could do that as well:</p>
   <span class="st">"XGBoost_depth3_eta.3"</span>, <span class="st">"XGBoost_depth5_eta.3"</span>, <span class="st">"XGBoost_depth8_eta.3"</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div id="automatic-grid-and-selection-with-caret" class="section level4">
-<h4>
-<span class="header-section-number">3.3.7.2</span> Automatic grid and selection with <code>caret</code><a class="anchor" aria-label="anchor" href="#automatic-grid-and-selection-with-caret"><i class="fas fa-link"></i></a>
+<div id="automatic-grid-and-selection-with-caret" class="section level4 unnumbered">
+<h4>Automatic grid and selection with <code>caret</code><a class="anchor" aria-label="anchor" href="#automatic-grid-and-selection-with-caret"><i class="fas fa-link"></i></a>
 </h4>
 <p>We can use the <code>Lrnr_caret</code> to use the <code>caret</code> software. As described in the
 <code>Lrnr_caret</code> documentation, <code>Lrnr_caret</code> “uses the <code>caret</code> package’s <code>train</code>
@@ -3233,7 +3224,7 @@ learner “NNET_autotune”.</p>
 <h3>
 <span class="header-section-number">3.3.8</span> Learners with Interactions and <code>formula</code> Interface<a class="anchor" aria-label="anchor" href="#learners-with-interactions-and-formula-interface"><i class="fas fa-link"></i></a>
 </h3>
-<p>As described in in <span class="citation">(<span class="citeproc-not-found" data-reference-id="rvp2022super"><strong>???</strong></span>)</span>, if it’s known/possible that there are
+<p>As described in in <span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span>, if it’s known/possible that there are
 interactions among covariates then we can include learners that pick up on that
 explicitly (e.g., by including in the library a parametric regression learner
 with interactions specified in a formula) or implicitly (e.g., by including in
@@ -3259,12 +3250,12 @@ will appear in the Help tab).</p>
 <p>One characteristic of a rich library of learners is that it is effective at
 handling covariates of high dimension. When there are many covariates in the
 data relative to the effective sample size (see Figure 1 Flowchart in
-<span class="citation">(<span class="citeproc-not-found" data-reference-id="rvp2022super"><strong>???</strong></span>)</span>), candidate learners should be coupled with a range of so-called
+<span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span>), candidate learners should be coupled with a range of so-called
 “screeners”. A screener is simply a function that returns a subset of
 covariates. A screener is intended to be coupled with a candidate learner, to
 define a new candidate learner that considers the reduced set of
 screener-returned covariates as its covariates.</p>
-<p>As stated in <span class="citation">(<span class="citeproc-not-found" data-reference-id="rvp2022super"><strong>???</strong></span>)</span>, “covariate screening is essential when the
+<p>As stated in <span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span>, “covariate screening is essential when the
 dimensionality of the data is very large, and it can be practically useful in
 any SL or machine learning application. Screening of covariates that considers
 associations with the outcome must be cross validated to avoid biasing the
@@ -3282,9 +3273,8 @@ screeners available in <code>sl3</code> is described in each part below.</p>
 we need to create a <code>Pipeline</code>. A <code>Pipeline</code> is a set of learners
 to be fit sequentially, where the fit from one learner is used to define the
 task for the next learner.</p>
-<div id="variable-importance-based-screeners" class="section level4">
-<h4>
-<span class="header-section-number">3.3.9.1</span> Variable importance-based screeners<a class="anchor" aria-label="anchor" href="#variable-importance-based-screeners"><i class="fas fa-link"></i></a>
+<div id="variable-importance-based-screeners" class="section level4 unnumbered">
+<h4>Variable importance-based screeners<a class="anchor" aria-label="anchor" href="#variable-importance-based-screeners"><i class="fas fa-link"></i></a>
 </h4>
 <p>Variable importance-based screeners retain the top <span class="math inline">\(j\)</span> most important covariates
 according to some importance metric. This screener is provided by
@@ -3316,9 +3306,8 @@ learner in it is fit to the screener-selected, reduced set of ten covariates.</p
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">RFscreen_top10_stack</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Pipeline.html">Pipeline</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">RFscreen_top10</span>, <span class="va">stack</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="coefficient-threshold-based-screeners" class="section level4">
-<h4>
-<span class="header-section-number">3.3.9.2</span> Coefficient threshold-based screeners<a class="anchor" aria-label="anchor" href="#coefficient-threshold-based-screeners"><i class="fas fa-link"></i></a>
+<div id="coefficient-threshold-based-screeners" class="section level4 unnumbered">
+<h4>Coefficient threshold-based screeners<a class="anchor" aria-label="anchor" href="#coefficient-threshold-based-screeners"><i class="fas fa-link"></i></a>
 </h4>
 <p><code>Lrnr_screener_coefs</code> provides screening of covariates based on the magnitude
 of their estimated coefficients in a (possibly regularized) GLM. The
@@ -3341,9 +3330,8 @@ learner in it is fit to the lasso screener-selected, reduced set of covariates.<
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lasso_screen_stack</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Pipeline.html">Pipeline</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lasso_screen</span>, <span class="va">stack</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="correlation-based-screeners" class="section level4">
-<h4>
-<span class="header-section-number">3.3.9.3</span> Correlation-based screeners<a class="anchor" aria-label="anchor" href="#correlation-based-screeners"><i class="fas fa-link"></i></a>
+<div id="correlation-based-screeners" class="section level4 unnumbered">
+<h4>Correlation-based screeners<a class="anchor" aria-label="anchor" href="#correlation-based-screeners"><i class="fas fa-link"></i></a>
 </h4>
 <p><code>Lrnr_screener_correlation</code> provides covariate screening procedures by
 running a test of correlation (Pearson default), and then selecting the (1) top
@@ -3366,9 +3354,8 @@ previous examples.</p>
 <span class="op">)</span>
 <span class="va">corP_screen_stack</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Pipeline.html">Pipeline</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">corP_screen</span>, <span class="va">stack</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="augmented-screeners" class="section level4">
-<h4>
-<span class="header-section-number">3.3.9.4</span> Augmented screeners<a class="anchor" aria-label="anchor" href="#augmented-screeners"><i class="fas fa-link"></i></a>
+<div id="augmented-screeners" class="section level4 unnumbered">
+<h4>Augmented screeners<a class="anchor" aria-label="anchor" href="#augmented-screeners"><i class="fas fa-link"></i></a>
 </h4>
 <p>Augmented screeners are special in that they enforce certain covariates to
 always be included. That is, if a screener removes a “mandatory” covariate then
@@ -3387,9 +3374,8 @@ fitting.</p>
 <p><code>Lrnr_screener_augment</code> is useful when subject-matter experts feel strongly
 that certain covariate sets must be included, even under screening procedures.</p>
 </div>
-<div id="stack-with-range-of-screeners" class="section level4">
-<h4>
-<span class="header-section-number">3.3.9.5</span> Stack with range of screeners<a class="anchor" aria-label="anchor" href="#stack-with-range-of-screeners"><i class="fas fa-link"></i></a>
+<div id="stack-with-range-of-screeners" class="section level4 unnumbered">
+<h4>Stack with range of screeners<a class="anchor" aria-label="anchor" href="#stack-with-range-of-screeners"><i class="fas fa-link"></i></a>
 </h4>
 <p>Above, we mentioned that we’d like to consider a range of screeners to
 diversify the library. Here we show how we can create a new <code>Stack</code> from other
@@ -3597,9 +3583,8 @@ estimation of nuisance quantities (the conditional mean or the conditional
 hazard, respectively). We elaborate on these two frameworks below. Importantly,
 per <span class="citation">Dudoit and van der Laan (<a href="references.html#ref-dudoit2005asymptotics" role="doc-biblioref">2005</a>)</span> and related works, a loss function appropriate for
 density estimation is the negative log-density loss <span class="math inline">\(L(\cdot) = -\log(p_n(\cdot))\)</span>.</p>
-<div id="moment-restricted-location-scale" class="section level4">
-<h4>
-<span class="header-section-number">3.4.2.1</span> Moment-restricted location-scale<a class="anchor" aria-label="anchor" href="#moment-restricted-location-scale"><i class="fas fa-link"></i></a>
+<div id="moment-restricted-location-scale" class="section level4 unnumbered">
+<h4>Moment-restricted location-scale<a class="anchor" aria-label="anchor" href="#moment-restricted-location-scale"><i class="fas fa-link"></i></a>
 </h4>
 <p>This family of semiparametric CDE approaches exploits the general form <span class="math inline">\(\rho(Y - \mu(X) / \sigma(X))\)</span>, where <span class="math inline">\(Y\)</span> is the dependent variable of interest (e.g.,
 treatment <span class="math inline">\(A\)</span> in the PS), <span class="math inline">\(X\)</span> are the predictors (e.g., covariates <span class="math inline">\(W\)</span> in the
@@ -3665,9 +3650,8 @@ demonstrate CDE with this approach below.</p>
 <span id="cb57-14"><a href="sl3.html#cb57-14"></a>  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</span>
 <span id="cb57-15"><a href="sl3.html#cb57-15"></a>)</span></code></pre></div>
 </div>
-<div id="pooled-hazard-regression" class="section level4">
-<h4>
-<span class="header-section-number">3.4.2.2</span> Pooled hazard regression<a class="anchor" aria-label="anchor" href="#pooled-hazard-regression"><i class="fas fa-link"></i></a>
+<div id="pooled-hazard-regression" class="section level4 unnumbered">
+<h4>Pooled hazard regression<a class="anchor" aria-label="anchor" href="#pooled-hazard-regression"><i class="fas fa-link"></i></a>
 </h4>
 <p>Another approach for CDE available in <code>sl3</code>, and originally proposed in
 <span class="citation">Dı́az and van der Laan (<a href="references.html#ref-diaz2011super" role="doc-biblioref">2011</a>)</span>, leverages the relationship between the (conditional) hazard and
@@ -4602,8 +4586,8 @@ Infarction with <code>sl3</code></a>.</p>
 <li><a class="nav-link" href="#wash-benefits-study-example">WASH Benefits Study Example</a></li>
 <li><a class="nav-link" href="#preliminaries">Preliminaries</a></li>
 <li><a class="nav-link" href="#define-the-prediction-task-with-make_sl3_task">1. Define the prediction task with make_sl3_Task</a></li>
-<li><a class="nav-link" href="#instantiate-the-sl-with-lrnr_sl"><span class="header-section-number">3.2.1</span> 2. Instantiate the SL with Lrnr_sl</a></li>
-<li><a class="nav-link" href="#fit-the-sl-to-the-task-with-train"><span class="header-section-number">3.2.2</span> 3. Fit the SL to the task with train</a></li>
+<li><a class="nav-link" href="#instantiate-the-sl-with-lrnr_sl">2. Instantiate the SL with Lrnr_sl</a></li>
+<li><a class="nav-link" href="#fit-the-sl-to-the-task-with-train">3. Fit the SL to the task with train</a></li>
 <li><a class="nav-link" href="#summary">Summary</a></li>
 </ul>
 </li>

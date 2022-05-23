@@ -1321,7 +1321,7 @@ will define the <code>xgboost</code> over a grid of parameters, and initialize a
 <span class="co">## Define the g learner, which is a multinomial learner:</span>
 <span class="co"># specify the appropriate loss of the multinomial learner:</span>
 <span class="va">mn_metalearner</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_solnp</span>,
-  loss_function <span class="op">=</span> <span class="va">loss_loglik_multinomial</span>,
+  eval_function <span class="op">=</span> <span class="va">loss_loglik_multinomial</span>,
   learner_function <span class="op">=</span> <span class="va">metalearner_linear_multinomial</span>
 <span class="op">)</span>
 <span class="va">g_learner</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_sl</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>, <span class="va">lrn_mean</span><span class="op">)</span>, <span class="va">mn_metalearner</span><span class="op">)</span>
