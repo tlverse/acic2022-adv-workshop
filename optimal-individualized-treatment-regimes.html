@@ -542,10 +542,10 @@ that each variable in the data set plays as the nodes in a DAG.</li>
 </ol>
 <div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Define sl3 library and metalearners:</span>
-<span class="va">lrn_mean</span>  <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_mean.html">Lrnr_mean</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
-<span class="va">lrn_glm</span>   <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glm_fast.html">Lrnr_glm_fast</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<span class="va">lrn_mean</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_mean.html">Lrnr_mean</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+<span class="va">lrn_glm</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glm_fast.html">Lrnr_glm_fast</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
 <span class="va">lrn_lasso</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glmnet.html">Lrnr_glmnet</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
-<span class="va">lrnr_hal</span>  <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_hal9001.html">Lrnr_hal9001</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>reduce_basis<span class="op">=</span><span class="fl">1</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> <span class="op">)</span>
+<span class="va">lrnr_hal</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_hal9001.html">Lrnr_hal9001</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>reduce_basis <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Define the Q learner:</span>
 <span class="va">Q_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_sl.html">Lrnr_sl</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
@@ -612,8 +612,8 @@ mean outcome under the rule (<code>maximize=TRUE</code>).</p></li>
   V <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"W1"</span>, <span class="st">"W2"</span>, <span class="st">"W3"</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"blip1"</span>,
   learners <span class="op">=</span> <span class="va">learner_list</span>,
   maximize <span class="op">=</span> <span class="cn">TRUE</span>, complex <span class="op">=</span> <span class="cn">TRUE</span>,
-  realistic <span class="op">=</span> <span class="cn">FALSE</span>, resource <span class="op">=</span> <span class="fl">1</span>, 
-  interpret<span class="op">=</span><span class="cn">TRUE</span>
+  realistic <span class="op">=</span> <span class="cn">FALSE</span>, resource <span class="op">=</span> <span class="fl">1</span>,
+  interpret <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># fit the TML estimator</span>
@@ -1066,9 +1066,9 @@ our outcome.</p>
 <div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data_missing</span> <span class="op">&lt;-</span> <span class="va">data_cat_realistic</span>
 
-<span class="co">#Add some random missingless:</span>
+<span class="co"># Add some random missingless:</span>
 <span class="va">rr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">data_missing</span><span class="op">)</span>, <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="va">data_missing</span><span class="op">[</span><span class="va">rr</span>,<span class="st">"Y"</span><span class="op">]</span><span class="op">&lt;-</span><span class="cn">NA</span></code></pre></div>
+<span class="va">data_missing</span><span class="op">[</span><span class="va">rr</span>, <span class="st">"Y"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></code></pre></div>
 <div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="optimal-individualized-treatment-regimes.html#cb102-1"></a><span class="co"># look at the data again:</span></span>
 <span id="cb102-2"><a href="optimal-individualized-treatment-regimes.html#cb102-2"></a><span class="kw">summary</span>(data_missing<span class="op">$</span>Y)</span>
 <span id="cb102-3"><a href="optimal-individualized-treatment-regimes.html#cb102-3"></a>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA<span class="st">'s </span></span>
@@ -1083,7 +1083,7 @@ our outcome.</p>
 <span id="cb103-4"><a href="optimal-individualized-treatment-regimes.html#cb103-4"></a>)</span>
 <span id="cb103-5"><a href="optimal-individualized-treatment-regimes.html#cb103-5"></a></span>
 <span id="cb103-6"><a href="optimal-individualized-treatment-regimes.html#cb103-6"></a><span class="co"># specify outcome and treatment regressions and create learner list</span></span>
-<span id="cb103-7"><a href="optimal-individualized-treatment-regimes.html#cb103-7"></a>learner_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_learner, <span class="dt">B =</span> b_learner, <span class="dt">delta_Y=</span>delta_learner)</span>
+<span id="cb103-7"><a href="optimal-individualized-treatment-regimes.html#cb103-7"></a>learner_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Q_learner, <span class="dt">A =</span> g_learner, <span class="dt">B =</span> b_learner, <span class="dt">delta_Y =</span> delta_learner)</span>
 <span id="cb103-8"><a href="optimal-individualized-treatment-regimes.html#cb103-8"></a>learner_list</span>
 <span id="cb103-9"><a href="optimal-individualized-treatment-regimes.html#cb103-9"></a><span class="op">$</span>Y</span>
 <span id="cb103-10"><a href="optimal-individualized-treatment-regimes.html#cb103-10"></a>[<span class="dv">1</span>] <span class="st">"Super learner:"</span></span>
@@ -1145,7 +1145,7 @@ need to considered covariates that are categorical variables.</p>
 to the data-generating distribution described in the previous section:</li>
 </ul>
 <div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="optimal-individualized-treatment-regimes.html#cb107-1"></a><span class="co"># bin baseline covariates to 3 categories:</span></span>
-<span id="cb107-2"><a href="optimal-individualized-treatment-regimes.html#cb107-2"></a>data<span class="op">$</span>W1&lt;-<span class="kw">ifelse</span>(data<span class="op">$</span>W1<span class="op">&lt;</span><span class="kw">quantile</span>(data<span class="op">$</span>W1)[<span class="dv">2</span>],<span class="dv">1</span>,<span class="kw">ifelse</span>(data<span class="op">$</span>W1<span class="op">&lt;</span><span class="kw">quantile</span>(data<span class="op">$</span>W1)[<span class="dv">3</span>],<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb107-2"><a href="optimal-individualized-treatment-regimes.html#cb107-2"></a>data<span class="op">$</span>W1 &lt;-<span class="st"> </span><span class="kw">ifelse</span>(data<span class="op">$</span>W1 <span class="op">&lt;</span><span class="st"> </span><span class="kw">quantile</span>(data<span class="op">$</span>W1)[<span class="dv">2</span>], <span class="dv">1</span>, <span class="kw">ifelse</span>(data<span class="op">$</span>W1 <span class="op">&lt;</span><span class="st"> </span><span class="kw">quantile</span>(data<span class="op">$</span>W1)[<span class="dv">3</span>], <span class="dv">2</span>, <span class="dv">3</span>))</span>
 <span id="cb107-3"><a href="optimal-individualized-treatment-regimes.html#cb107-3"></a></span>
 <span id="cb107-4"><a href="optimal-individualized-treatment-regimes.html#cb107-4"></a>node_list &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
 <span id="cb107-5"><a href="optimal-individualized-treatment-regimes.html#cb107-5"></a>  <span class="dt">W =</span> <span class="kw">c</span>(<span class="st">"W3"</span>, <span class="st">"W4"</span>, <span class="st">"W2"</span>),</span>
@@ -1179,7 +1179,7 @@ interest (called a <code>tmle3_Spec</code> in the <code>tlverse</code> nomenclat
 <div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># initialize a tmle specification</span>
 <span class="va">tmle_spec_vim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tmle3mopttx/man/tmle3_mopttx_vim.html">tmle3_mopttx_vim</a></span><span class="op">(</span>
-  V<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"W2"</span><span class="op">)</span>,
+  V <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"W2"</span><span class="op">)</span>,
   type <span class="op">=</span> <span class="st">"blip2"</span>,
   learners <span class="op">=</span> <span class="va">learner_list</span>,
   maximize <span class="op">=</span> <span class="cn">FALSE</span>,
@@ -1274,22 +1274,24 @@ and take a quick look at it:</p>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">washb_data</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <p>As before, we specify the NPSEM via the <code>node_list</code> object.</p>
 <div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">node_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>W <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"whz"</span>, <span class="st">"tr"</span>, <span class="st">"momheight"</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,
-                  A <span class="op">=</span> <span class="st">"tr"</span>, Y <span class="op">=</span> <span class="st">"whz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">node_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  W <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">)</span><span class="op">[</span><span class="op">!</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">)</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"whz"</span>, <span class="st">"tr"</span>, <span class="st">"momheight"</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,
+  A <span class="op">=</span> <span class="st">"tr"</span>, Y <span class="op">=</span> <span class="st">"whz"</span>
+<span class="op">)</span></code></pre></div>
 <p>We pick few potential effect modifiers, including mother’s education, current
 living conditions (floor), and possession of material items including the refrigerator.
 We concentrate of these covariates as they might be indicative of the socio-economic status
 of individuals involved in the trial. We can explore the distribution of our <span class="math inline">\(V\)</span>, <span class="math inline">\(A\)</span> and <span class="math inline">\(Y\)</span>:</p>
 <div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#V1, V2 and V3:</span>
+<code class="sourceCode R"><span class="co"># V1, V2 and V3:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">$</span><span class="va">momedu</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">$</span><span class="va">floor</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">$</span><span class="va">asset_refrig</span><span class="op">)</span>
 
-<span class="co">#A:</span>
+<span class="co"># A:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">$</span><span class="va">tr</span><span class="op">)</span>
 
-<span class="co">#Y:</span>
+<span class="co"># Y:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">washb_data</span><span class="op">$</span><span class="va">whz</span><span class="op">)</span></code></pre></div>
 <p>We specify a simple library for the outcome regression, propensity score
 and the blip function. Since our treatment is categorical, we need to define a
@@ -1297,30 +1299,38 @@ multinomial learner for <span class="math inline">\(A\)</span> and multivariate 
 will define the <code>xgboost</code> over a grid of parameters, and initialize a mean learner.</p>
 <div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Initialize few of the learners:</span>
-<span class="va">grid_params</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>nrounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">500</span><span class="op">)</span>,
-                     eta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span>
-<span class="va">grid</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">grid_params</span>, KEEP.OUT.ATTRS <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="va">xgb_learners</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">grid</span>, MARGIN <span class="op">=</span> <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">params_tune</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">Lrnr_xgboost</span><span class="op">$</span><span class="va">new</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">params_tune</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span>
+<span class="va">grid_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  nrounds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">500</span><span class="op">)</span>,
+  eta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.1</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="va">grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">grid_params</span>, KEEP.OUT.ATTRS <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">xgb_learners</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">grid</span>, MARGIN <span class="op">=</span> <span class="fl">1</span>, <span class="kw">function</span><span class="op">(</span><span class="va">params_tune</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">Lrnr_xgboost</span><span class="op">$</span><span class="va">new</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">params_tune</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span>
 <span class="va">lrn_mean</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_mean.html">Lrnr_mean</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
 
 <span class="co">## Define the Q learner, which is just a regular learner:</span>
 <span class="va">Q_learner</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_sl.html">Lrnr_sl</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-  learners <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>,
-                  <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>, <span class="va">lrn_mean</span><span class="op">)</span>,
+  learners <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>,
+    <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>, <span class="va">lrn_mean</span>
+  <span class="op">)</span>,
   metalearner <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_nnls.html">Lrnr_nnls</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="co">## Define the g learner, which is a multinomial learner:</span>
-<span class="co">#specify the appropriate loss of the multinomial learner:</span>
-<span class="va">mn_metalearner</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_solnp</span>, loss_function <span class="op">=</span> <span class="va">loss_loglik_multinomial</span>,
-                               learner_function <span class="op">=</span> <span class="va">metalearner_linear_multinomial</span><span class="op">)</span>
+<span class="co"># specify the appropriate loss of the multinomial learner:</span>
+<span class="va">mn_metalearner</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_solnp</span>,
+  loss_function <span class="op">=</span> <span class="va">loss_loglik_multinomial</span>,
+  learner_function <span class="op">=</span> <span class="va">metalearner_linear_multinomial</span>
+<span class="op">)</span>
 <span class="va">g_learner</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_sl</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>, <span class="va">lrn_mean</span><span class="op">)</span>, <span class="va">mn_metalearner</span><span class="op">)</span>
 
 <span class="co">## Define the Blip learner, which is a multivariate learner:</span>
-<span class="va">learners</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>,
-                  <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>, <span class="va">lrn_mean</span><span class="op">)</span>
+<span class="va">learners</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>,
+  <span class="va">xgb_learners</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>, <span class="va">lrn_mean</span>
+<span class="op">)</span>
 <span class="va">b_learner</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tmle3mopttx/man/create_mv_learners.html">create_mv_learners</a></span><span class="op">(</span>learners <span class="op">=</span> <span class="va">learners</span><span class="op">)</span>
 
 <span class="va">learner_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="va">Q_learner</span>, A <span class="op">=</span> <span class="va">g_learner</span>, B <span class="op">=</span> <span class="va">b_learner</span><span class="op">)</span></code></pre></div>
@@ -1331,33 +1341,33 @@ as well since “Control” is a good reference category.</p>
 <div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Question 2:</span>
 
-<span class="co">#Initialize a tmle specification</span>
+<span class="co"># Initialize a tmle specification</span>
 <span class="va">tmle_spec_Q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tmle3mopttx/man/tmle3_mopttx_blip_revere.html">tmle3_mopttx_blip_revere</a></span><span class="op">(</span>
   V <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"momedu"</span>, <span class="st">"floor"</span>, <span class="st">"asset_refrig"</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"blip2"</span>,
   learners <span class="op">=</span> <span class="va">learner_list</span>, maximize <span class="op">=</span> <span class="cn">TRUE</span>, complex <span class="op">=</span> <span class="cn">TRUE</span>,
   realistic <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span>
 
-<span class="co">#Fit the TML estimator.</span>
-<span class="va">fit_Q</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span><span class="op">(</span><span class="va">tmle_spec_Q</span>, data<span class="op">=</span><span class="va">washb_data</span>, <span class="va">node_list</span>, <span class="va">learner_list</span><span class="op">)</span>
+<span class="co"># Fit the TML estimator.</span>
+<span class="va">fit_Q</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span><span class="op">(</span><span class="va">tmle_spec_Q</span>, data <span class="op">=</span> <span class="va">washb_data</span>, <span class="va">node_list</span>, <span class="va">learner_list</span><span class="op">)</span>
 <span class="va">fit_Q</span>
 
-<span class="co">#Which intervention is the most dominant? </span>
+<span class="co"># Which intervention is the most dominant?</span>
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">tmle_spec_Q</span><span class="op">$</span><span class="va">return_rule</span><span class="op">)</span></code></pre></div>
 <p>Using the same formulation as before, we estimate the realistic optimal ITR
 and the corresponding value of the realistic ITR:</p>
 <div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Question 3:</span>
 
-<span class="co">#Initialize a tmle specification with "realistic=TRUE":</span>
+<span class="co"># Initialize a tmle specification with "realistic=TRUE":</span>
 <span class="va">tmle_spec_Q_realistic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tmle3mopttx/man/tmle3_mopttx_blip_revere.html">tmle3_mopttx_blip_revere</a></span><span class="op">(</span>
   V <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"momedu"</span>, <span class="st">"floor"</span>, <span class="st">"asset_refrig"</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"blip2"</span>,
   learners <span class="op">=</span> <span class="va">learner_list</span>, maximize <span class="op">=</span> <span class="cn">TRUE</span>, complex <span class="op">=</span> <span class="cn">TRUE</span>,
   realistic <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
 
-<span class="co">#Fit the TML estimator.</span>
-<span class="va">fit_Q_realistic</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span><span class="op">(</span><span class="va">tmle_spec_Q_realistic</span>, data<span class="op">=</span><span class="va">washb_data</span>, <span class="va">node_list</span>, <span class="va">learner_list</span><span class="op">)</span>
+<span class="co"># Fit the TML estimator.</span>
+<span class="va">fit_Q_realistic</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span><span class="op">(</span><span class="va">tmle_spec_Q_realistic</span>, data <span class="op">=</span> <span class="va">washb_data</span>, <span class="va">node_list</span>, <span class="va">learner_list</span><span class="op">)</span>
 <span class="va">fit_Q_realistic</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">tmle_spec_Q_realistic</span><span class="op">$</span><span class="va">return_rule</span><span class="op">)</span></code></pre></div>

@@ -81,31 +81,23 @@ necessary. Familiarity with the `R` programming language will be essential.
 
 ## Outline {-}
 
-9–10: Intro talk by Mark and Alan
-10–11: sl3
-11–12: tmle3mopttx
-12-1: lunch
-1-2: tmle3shift
-2-2:30: coffee break
-2:30-3:30: tmle3mediate
-3:30-4: Q&A
-
-
 <!--* _Warm-up_: The Roadmap of Targeted Learning and [Why We Need A Statistical-->
   <!--Revolution](https://senseaboutscienceusa.org/super-learning-and-the-revolution-in-knowledge/)-->
   <!--with an *[introductory video lecture by Mark van der Laan and Alan-->
   <!--Hubbard](https://www.dropbox.com/s/7b6ru2ahycqq80v/ENAR2021-lecture.mp4?dl=0)*-->
   <!--(__Please watch this hour-long lecture before the workshop.__)-->
-* 09:00-10:00A: Introduction to Targeted Learning
-* 10:00-11:00A: Super learning with the [`sl3` `R`
+
+* 09:00-10:30A: Introduction to Targeted Learning
+* 10:30-11:30A: Super learning with the [`sl3` `R`
   package](https://github.com/tlverse/sl3)
-* 11:00-12:00P: Optimal treatment regimes with the [`tmle3mopttx` `R`
-  package](https://github.com/tlverse/tmle3mopttx)
+* 11:30-12:00P: Brief intro to the [`tmle3` `R`
+  package](https://github.com/tlverse/tmle3) 
 * 12:00-01:00P: Lunch Break
-* 1:00-02:00P: Stochastic treatment regimes with the [`tmle3shift` `R`
+* 1:00-02:00P: Optimal treatment regimes with the [`tmle3mopttx` `R`
+  package](https://github.com/tlverse/tmle3mopttx)
+* 2:00-03:00P Stochastic treatment regimes with the [`tmle3shift` `R`
   package](https://github.com/tlverse/tmle3shift)
-* 02:00-02:30P: Coffee Break
-* 02:30-03:15P: Causal mediation analysis with the [`tmle3mediate` `R`
+* 03:00-03:15P: Causal mediation analysis with the [`tmle3mediate` `R`
   package](https://github.com/tlverse/tmle3mediate)
 * 03:15-04:00P: Concluding remarks and discussion
 

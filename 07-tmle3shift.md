@@ -241,8 +241,10 @@ hese_learner_xgb_fglm <- make_learner(Lrnr_density_semiparametric,
 )
 # SL for the conditional treatment density
 sl_density_learner <- Lrnr_sl$new(
-  learners = list(haldensify_learner, hose_learner_xgb,
-                  hese_learner_xgb_fglm),
+  learners = list(
+    haldensify_learner, hose_learner_xgb,
+    hese_learner_xgb_fglm
+  ),
   metalearner = Lrnr_solnp_density$new()
 )
 ```
@@ -592,7 +594,7 @@ For this, we augment our initialized `tmle3_Spec` object like so
 
 ```r
 # initialize effect modification specification around previous specification
-washb_shift_strat_spec <-  tmle_stratified(washb_shift_spec)
+washb_shift_strat_spec <- tmle_stratified(washb_shift_spec)
 ```
 
 Prior to running our analysis, we'll modify the `learner_list` object we had
@@ -622,10 +624,12 @@ $\delta = 2$, stratified across levels of our variable of interest:
 ```r
 # fit stratified TMLE
 strat_node_list <- copy(node_list)
-strat_node_list$W <- setdiff(strat_node_list$W,"momedu")
+strat_node_list$W <- setdiff(strat_node_list$W, "momedu")
 strat_node_list$V <- "momedu"
-washb_shift_strat_fit <- tmle3(washb_shift_strat_spec, washb_data, strat_node_list,
-                               learner_list)
+washb_shift_strat_fit <- tmle3(
+  washb_shift_strat_spec, washb_data, strat_node_list,
+  learner_list
+)
 washb_shift_strat_fit
 A tmle3_Fit that took 1 step(s)
              type                             param init_est tmle_est       se
