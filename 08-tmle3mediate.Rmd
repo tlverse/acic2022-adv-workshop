@@ -7,37 +7,22 @@ package](https://github.com/tlverse/tmle3mediate).
 
 ## Learning Objectives
 
-1. Examine how the presence of post-treatment mediating variables can complicate
-   a causal analysis, and how direct and indirect effects can be defined to
-   resolve these complications.
-2. Describe the essential similarities and differences between direct and
-   indirect causal effects, including their definition in terms of stochastic
-   interventions.
-3. Differentiate the joint interventions required to define direct and indirect
-   effects from the static, dynamic, and stochastic interventions that yield
-   _total_ causal effects.
-4. Describe the assumptions needed for identification of the natural direct and
-   indirect effects, as well as the limitations of these effect definitions.
-5. Estimate the natural direct and indirect effects for a binary treatment using
-   the `tmle3mediate` `R` package.
-6. Differentiate the population intervention direct and indirect effects of
-   stochastic interventions from the natural direct and indirect effects,
-   including differences in the assumptions required for their identification.
-7. Estimate the population intervention direct effect of a binary treatment
-   using the `tmle3mediate` `R` package.
+1. Understand that you can estimate the natural direct and indirect effects for a binary treatment using the `tmle3mediate` `R` package.
+2. Know where to learn more about the `tmle3mediate` package.
 
 ## Causal Mediation Analysis
 
-In applications ranging from biology and epidemiology to economics and
-psychology, scientific inquires are often concerned with ascertaining the effect
-of a treatment on an outcome variable only through particular pathways between
-the two. In the presence of post-treatment intermediate variables affected by
+We only have time to briefly introduce these parameters. You can find more information in the relevant [handbook chapter](http://tlverse.org/tlverse-handbook/causal-mediation-analysis.html)
+
+In the presence of post-treatment intermediate variables affected by
 exposure (that is, _mediators_), path-specific effects allow for such complex,
 mechanistic relationships to be teased apart. These causal effects are of such
 wide interest that their definition and identification has been the object of
 study in statistics for nearly a century -- indeed, the earliest examples of
 modern causal mediation analysis can be traced back to work on path analysis
-[@wright1934method]. In recent decades, renewed interest has resulted in the
+[@wright1934method]. 
+
+In recent decades, renewed interest has resulted in the
 formulation of novel direct and indirect effects within both the potential
 outcomes and nonparametric structural equation modeling frameworks
 [@robins1986new; @pearl1995causal; @pearl2009causality; @spirtes2000causation;
@@ -48,20 +33,6 @@ both the effect of the treatment directly on the outcome _and_ its effect
 through all paths not explicitly involving the mediators. The mechanistic
 knowledge conveyed by the direct and indirect effects can be used to improve
 understanding of both _why_ and _how_ treatments may be efficacious.
-
-Modern approaches to causal inference have allowed for significant advances over
-the methodology of traditional path analysis, overcoming significant
-restrictions imposed by the use of parametric modeling approaches
-[@vanderweele2015explanation]. Using distinct frameworks,
-@robins1992identifiability and @pearl2001direct provided equivalent
-nonparametric decompositions of the average treatment effect into the _natural_
-direct and indirect effects. @vanderweele2015explanation provides a
-comprehensive overview of classical causal mediation analysis. We provide an
-alternative perspective, focusing instead on the construction of efficient
-estimators of these quantities, which have appeared  only recently
-[@tchetgen2012semiparametric; @zheng2012targeted], as well as on more flexible
-direct and indirect definitions based upon stochastic interventions
-[@diaz2020causal].
 
 ## Data Structure and Notation
 
@@ -140,26 +111,6 @@ given $W$, and $q_{0, W}$ is the marginal density of $W$. For convenience and
 consistency of notation, we will define $\overline{Q}_Y(Z, A, W) := \E[Y \mid Z,
 A, W]$ and $g(A \mid W) := \P(A \mid W)$ (i.e., the propensity score).
 
-We have explicitly excluded potential confounders of the mediator-outcome
-relationship affected by exposure (i.e., variables affected by $A$ and affecting
-both $Z$ and $Y$). Mediation analysis in the presence of such variables is
-challenging [@avin2005identifiability]; thus, most efforts to develop
-definitions of causal direct and indirect effects explicitly assume the absence
-of such confounders.  Without further assumptions, common mediation parameters
-(the natural direct and indirect effects) cannot be identified in the presence
-of such confounding, though @tchetgen2014identification discuss a monotonicity
-assumption that may be useful when justified by available scientific knowledge
-about the system under study.  The interested reader may wish to consult recent
-advances in the vast and quickly growing literature on causal mediation
-analysis, including _interventional_ direct and indirect effects
-[@didelez2006direct; @vanderweele2014effect; @lok2016defining;
-@vansteelandt2017interventional; @rudolph2017robust; @nguyen2019clarifying],
-whose identification is robust to this complex form of post-treatment
-confounding. Within this thread of the literature, @diaz2020nonparametric and
-@benkeser2020nonparametric provide considerations of nonparametric effect
-decompositions and efficiency theory, while @hejazi2021nonparametric formulate a
-novel class of effects utilizing stochastic interventions.
-
 ## Defining the Natural Direct and Indirect Effects
 
 ### Decomposing the Average Treatment Effect
@@ -173,84 +124,9 @@ The natural direct and indirect effects arise from a decomposition of the ATE:
 In particular, the natural indirect effect (NIE) measures the effect of the
 treatment $A \in \{0, 1\}$ on the outcome $Y$ through the mediators $Z$, while
 the natural direct effect (NDE) measures the effect of the treatment on the
-outcome _through all other pathways_. Identification of the natural direct and
-indirect effects requires the following non-testable causal assumptions. Note
-that the standard assumptions of consistency and no interference (i.e., SUTVA
-[@rubin1978bayesian; @rubin1980randomization]) hold owing to the fact that (1)
-the SCM we consider is restricted so as to give rise only to independent and
-identically distributed (iid) units; and (2) consistency is an implied property
-of the SCM, as counterfactuals are derived quantities (as opposed to primitive
-quantities in the potential outcomes framework); @pearl2010brief provides an
-illuminating discussion on this latter point.
+outcome _through all other pathways_.
 
-::: {.definition name="Exchangeability"}
-$Y(a, z) \indep (A, Z) \mid W$, which further implies that $\E\{Y(a, z) \mid
-A=a, W=w, Z=z\} \equiv \E\{Y(a, z) \mid W=w\}$. This is a special, more
-restrictive case of the standard assumption of no unmeasured counfounding in the
-presence of mediators. The analogous randomization assumption is simply the
-standard randomization assumption applied to a joint intervention on both the
-treatment $A$ and mediators $Z$.
-:::
-
-::: {.definition name="Treatment Positivity"}
-For any $a \in \mathcal{A}$ and $w \in \mathcal{W}$, the conditional probability
-of treatment $g(a \mid w)$ is bounded away from the limits of the unit interval
-by a small factor $\xi > 0$. More precisely, $\xi < g(a \mid w) < 1 - \xi$. This
-mirrors the standard positivity assumption required for static interventions,
-[discussed previously](#tmle3).
-:::
-
-::: {.definition name="Mediator Positivity"}
-For any $z \in \mathcal{Z}$, $a \in \mathcal{A}$, and $w \in \mathcal{W}$, the
-conditional mediator density must be bounded away from zero by a small factor
-$\epsilon > 0$, specifically, $\epsilon < q_{0,Z}(z \mid a, w)$. Essentially,
-this requires that the conditional mediator density be bounded away from zero
-for all $\{z, a, w\}$ in their joint support $\mathcal{Z} \times \mathcal{A}
-\times \mathcal{W}$, which is to say that it must be possible to observe any
-given mediator value across all strata defined by both treatment $A$ and
-baseline covariates $W$. A less restrictive form of this assumption is also
-possible -- specifically, that the ratio of the mediator densities under both
-treatment contrasts be bounded for the two realizations of the mediator density
-under differing treatment contrasts.
-:::
-
-::: {.definition name="Cross-world Counterfactual Independence"}
-For all $a \neq a'$, where $a, a' \in \mathcal{A}$, and $z \in \mathcal{Z}$,
-$Y(a', z)$ must be independent of $Z(a)$, given $W$. That is, the counterfactual
-outcome under the treatment contrast $a' \in \mathcal{A}$ and the counterfactual
-mediator value $Z(a) \in \mathcal{Z}$ (under the alternative contrast $a \in
-\mathcal{A}$) must both be _observable_. The term "cross-world" refers to the two
-counterfactuals $Z(a)$ and $Y(a', z)$ existing under two differing treatment
-contrasts. Though their joint distribution is well-defined, these
-counterfactuals can never be jointly realized.
-:::
-
-While the first three assumptions may be familiar based on their analogs in
-simpler settings, the cross-world independence requirement is unique to
-identification of the natural direct and indirect effects.  This assumption
-resolves a challenging complication to the identification of these path-specific
-effects, which has been termed the "recanting witness" by
-@avin2005identifiability, who introduce a graphical resolution equivalent to
-this assumption. This independence of counterfactuals indexed by distinct
-interventions is, in fact, a serious limitation to the scientific relevance of
-these effect definitions, as it results in the NDE and NIE being unidentifiable
-in randomized trials [@robins2010alternative], implying that corresponding
-scientific claims cannot be falsified through experimentation [@popper1934logic;
-@dawid2000causal] and, consequently, directly contradicting a foundational
-pillar of the scientific method.
-
-While many attempts have been made to weaken this last assumption
-[@petersen2006estimation; @imai2010identification; @vansteelandt2012imputation;
-@vansteelandt2012natural], these results either impose stringent modeling
-assumptions, propose alternative interpretations of the natural effects, or
-provide a limited degree of additional flexibility by developing conditions that
-may more easily be satisfied. For example, @petersen2006estimation weaken this
-assumption by requiring it only for conditional means (rather than distinct
-counterfactuals) and adopt a view of the natural direct effect as a weighted
-average of another type of direct effect, the controlled direct effect. The
-motivated reader may wish to further examine these details independently. We
-next review estimation of the NDE and NIE, which remain widely used in modern
-applications of causal mediation analysis.
+Identifiability results and necessary assumptions for these parameters are thoroughly covered in the handbook.
 
 ### Estimating the Natural Direct Effect
 
@@ -413,74 +289,6 @@ effects, and it is a direct consequence of using stochastic (rather than static)
 interventions.
 :::
 
-### Decomposing the Population Intervention Effect
-
-We may decompose the population intervention effect (PIE) in terms of the
-_population intervention direct effect_ (PIDE) and the _population
-intervention indirect effect_ (PIIE):
-\begin{equation*}
-  \mathbb{E}\{Y(A_\delta)\} - \mathbb{E}Y =
-    \overbrace{\mathbb{E}\{Y(A_\delta, Z(A_\delta))
-      - Y(A_\delta, Z)\}}^{\text{PIIE}} +
-    \overbrace{\mathbb{E}\{Y(A_\delta, Z) - Y(A, Z)\}}^{\text{PIDE}}.
-\end{equation*}
-
-This decomposition of the PIE as the sum of the population intervention direct
-and indirect effects has an interpretation analogous to the corresponding
-standard decomposition of the average treatment effect. In the sequel, we will
-compute each of the components of the direct and indirect effects above using
-appropriate estimators as follows
-
-* For $\E\{Y(A, Z)\}$, the sample mean $\frac{1}{n}\sum_{i=1}^n Y_i$ is
-  consistent;
-* for $\E\{Y(A_{\delta}, Z)\}$, a TML estimator for the effect of a joint
-  intervention altering the treatment mechanism but not the mediation mechanism,
-  based on the proposal in @diaz2020causal; and,
-* for $\E\{Y(A_{\delta}, Z_{A_{\delta}})\}$, an efficient estimator for the
-  effect of a joint intervention on both the treatment and mediation mechanisms,
-  as per @kennedy2019nonparametric.
-
-### Estimating the Effect Decomposition Term
-
-As described by @diaz2020causal, the statistical functional identifying the
-decomposition term that appears in both the PIDE and PIIE $\E\{Y(A_{\delta},
-Z)\}$, which corresponds to altering the treatment mechanism while keeping the
-mediation mechanism fixed, is
-\begin{equation*}
-  \psi_0(\delta) = \int \overline{Q}_{0,Y}(a, z, w)
-    g_{0,\delta}(a \mid w) p_0(z, w) d\nu(a, z, w),
-\end{equation*}
-for which a TML estimator is available. In the case of $A \in \{0, 1\}$, the
-_efficient influence function_ (EIF) with respect to the nonparametric
-statistical model $\mathcal{M}$ is $D_{\delta}(o) = D^Y_{\delta}(o)
-+ D^A_{\delta}(o) + D^{Z,W}_{\delta}(o) - \psi(\delta)$, where the
-orthogonal components of the EIF are defined as follows:
-
-* $D^Y_{\delta}(o) = \{g_{\delta}(a \mid w) / e(a \mid z, w)\} \{y -
-  \overline{Q}_{Y}(z,a,w)\}$,
-* $D^A_{\delta}(o) = \{\delta\phi(w) (a - g(1 \mid w))\} /
-  \{(\delta g(1 \mid w) + g(0 \mid w))^2\}$, and where $\phi(w) :=
-  \E\{\overline{Q}_{Y}(1, Z, W) - \overline{Q}_{Y}(0, Z, W) \mid W = w\}$,
-* $D^{Z,W}_{\delta}(o) = \int_{\mathcal{A}} \overline{Q}_{Y}(z, a, w)
-  g_{\delta}(a \mid w) d\kappa(a)$.
-
-The TML estimator may be computed by fluctuating initial estimates of the
-nuisance parameters so as to solve the EIF estimating equation. The resultant
-TML estimator is
-\begin{equation*}
-  \psi_{n}^{\star}(\delta) = \int_{\mathcal{A}} \frac{1}{n} \sum_{i=1}^n
-  \overline{Q}_{Y,n}^{\star}(Z_i, a, W_i)
-  g_{\delta, n}^{\star}(a \mid W_i) d\kappa(a),
-\end{equation*}
-where $g_{\delta,n}^{\star}(a \mid w)$ and $\overline{Q}_{Y,n}^{\star}(z,a,w)$
-are generated by \textit{targeting} regressions that fluctuate (or tilt) initial
-nuisance parameter estimates towards solutions of the score equations $n^{-1}
-\sum_{i=1}^n D^A_{\delta}(O_i) = 0$ and $n^{-1} \sum_{i=1}^n D^Y_{\delta}(O_i)
-= 0$, respectively. This TML estimator $\psi_{n}^{\star}(\delta)$ is implemented
-in `tmle3mediate` package. We demonstrate the use of `tmle3mediate` to obtain
-$\E\{Y(A_{\delta}, Z)\}$ via its TML estimator in the following worked code
-examples.
-
 ## Evaluating the Direct and Indirect Effects
 
 We now turn to estimating the natural direct and indirect effects, as well as
@@ -621,70 +429,6 @@ the natural direct and indirect effects approximately recover the _average
 treatment effect_, that is, based on these estimates of the NDE and NIE, the
 ATE is roughly
 `r round(washb_NDE$summary$tmle_est + washb_NIE$summary$tmle_est, 5)`.
-
-### Targeted Estimation of the Population Intervention Direct Effect
-
-As previously noted, the assumptions underlying the natural direct and indirect
-effects may be challenging to justify; moreover, the effect definitions
-themselves depend on the application of a static intervention to the treatment,
-sharply limiting their flexibility. When considering binary treatments,
-incremental propensity score shifts provide an alternative class of flexible,
-stochastic interventions. We'll now consider estimating the PIDE with an IPSI
-that modulates the odds of receiving treatment by $\delta = 3$.  Such an
-intervention may be interpreted (hypothetically) as the effect of a design that
-encourages study participants to opt in to receiving the treatment, thus
-increasing their relative odds of receiving said treatment. To exemplify our
-approach, we postulate a motivational intervention that _triples the odds_
-(i.e., $\delta = 3$) of receiving the treatment for each individual:
-
-```{r tmle3mediate-pide-decomp, eval=FALSE}
-# set the IPSI multiplicative shift
-delta_ipsi <- 3
-
-# instantiate tmle3 spec for stochastic mediation
-tmle_spec_pie_decomp <- tmle_medshift(
-  delta = delta_ipsi,
-  e_learners = Lrnr_cv$new(lasso_binary_learner, full_fit = TRUE),
-  phi_learners = Lrnr_cv$new(lasso_contin_learner, full_fit = TRUE)
-)
-
-# compute the TML estimate
-washb_pie_decomp <- tmle3(
-  tmle_spec_pie_decomp, washb_data, node_list, learner_list
-)
-washb_pie_decomp
-
-# get the PIDE
-washb_pie_decomp$summary$tmle_est - mean(washb_data[, get(node_list$Y)])
-```
-
-Recall that, based on the decomposition outlined previously, the PIDE may be
-denoted $\beta_{0,\text{PIDE}}(\delta) = \psi_0(\delta) - \E Y$. Thus,
-a TML estimator of the PIDE, $\beta_{n,\text{PIDE}}(\delta)$ may be expressed
-as a composition of estimators of its constituent parameters:
-\begin{equation*}
-  \beta_{n,\text{PIDE}}({\delta}) = \psi^{\star}_{n}(\delta) -
-  \frac{1}{n} \sum_{i = 1}^n Y_i.
-\end{equation*}
-
-<!--
-Based on the above, we may construct an estimator of the PIDE using the already
-estimated decomposition term and the empirical (marginal) mean of the outcome.
-Note that this is a straightforward application of the delta method and could
-equivalently be performed using the functionality exposed in the [`tmle3`
-package](https://github.com/tlverse/tmle3).
--->
-
-<!--
-```{r pide_delta, message=FALSE, warning=FALSE, eval=FALSE}
-tmle_task <- tmle_spec_pie_decomp$make_tmle_task(
-  weight_behavior_complete, node_list
-)
-initial_likelihood <- tmle_spec_pie_decomp$make_initial_likelihood(
-  tmle_task, learner_list
-)
-```
--->
 
 ## Exercises
 
