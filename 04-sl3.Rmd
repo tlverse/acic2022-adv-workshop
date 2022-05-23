@@ -1295,14 +1295,14 @@ informal sketch of this algorithm below.
    across bins. 
 
 A key element of this proposal is the flexibility to use any binary regression
-procedure or appropriate machine learning algorithm to estimate $\prob(Y \in
-[\alpha_{t-1}, \alpha_t) \mid X)$, facilitating the incorporation of flexible
-techniques like ensemble learning [@breiman1996stacked; @vdl2007super]. This 
-extreme degree of flexibility integrates perfectly with the underlying design 
-principles of `sl3`; however, we have not yet implemented this approach in its 
-full generality. A version of this CDE approach, which limits the original 
-proposal by replacing the use of arbitrary binary regression with the highly 
-adaptive lasso (HAL) algorithm [@benkeser2016hal] is supported in the
+procedure or appropriate machine learning algorithm to estimate $\mathbb{P}(Y 
+\in [\alpha_{t-1}, \alpha_t) \mid X)$, facilitating the incorporation of 
+flexibletechniques like ensemble learning [@breiman1996stacked; @vdl2007super]. 
+This extreme degree of flexibility integrates perfectly with the underlying 
+design principles of `sl3`; however, we have not yet implemented this approach 
+in its full generality. A version of this CDE approach, which limits the 
+original proposal by replacing the use of arbitrary binary regression with the 
+highly adaptive lasso (HAL) algorithm [@benkeser2016hal] is supported in the
 [`haldensify` package](https://github.com/nhejazi/haldensify)
 [@hejazi2020haldensify] (the HAL implementation in `haldensify` is provided the 
 [`hal9001` package](https://github.com tlverse/hal9001)
@@ -1403,47 +1403,52 @@ head(chspred)
       level that pertains to not receiving the treatment) for the treatment
       column in the data.
 - It's a worthwhile exercise to obtain the predicted counterfactual outcomes
-  and create these counterfactual `sl3` tasks. It's too biased; however, to
+  and create these counterfactual `sl3` tasks. It's too biased, however, to
   plug the SL fit into the target parameter mapping, (e.g., calling the result
   of `mean(sl_fit$predict(A1_task)) - mean(sl_fit$predict(A0_task))` the
   estimated ATE. We would end up with an estimator for the ATE that was
   optimized for estimation of the prediction function, and not the ATE!
-- At the end of the "analysis day", we want an estimator that is optimized for
-  our target estimand of interest. We ultimately care about doing a good job
-  estimating $\psi_0$. The SL is an essential step to help us get there. In
-  fact, we will use the counterfactual predicted outcomes that were explained
-  at length above. However, SL is not the end of the estimation procedure.
-  Specifically, the Super Learner would not be an asymptotically linear
-  estimator of the target estimand; and it is not an efficient substitution
-  estimator. This begs the question, why is it so important for an estimator to
-  possess these properties?
+- Ultimately, we want an estimator that is does the best job in approximating 
+  our question of interest. That is, we care about doing a the best job
+  possible estimating $\psi_0$. The SL is an essential step to help us get 
+  there: the counterfactual predicted outcome estimates (like those 
+  explained above), and other SL-derived estimates (like a propensity score) 
+  play a key role in estimating $\psi_0$. However, SL is not the end of the 
+  estimation procedure. Specifically, if we simply plugged in the SL estimates 
+  into the target parameter, we would not have an asymptotically linear
+  estimator of the target estimand; the SL is not an efficient substitution
+  estimator and does not admit statistical inference. Why does this matter?
 
-  + An asymptotically linear estimator converges to the estimand a
-    $\frac{1}{\sqrt{n}}$ rate, thereby permitting formal statistical inference
-    (i.e., confidence intervals and $p$-values) [ADD REF].
-  + Substitution, or plug-in, estimators of the estimand are desirable because
-    they respect both the local and global constraints of the statistical model
-    (e.g., bounds), and have they have better finite-sample properties[ADD REF].
+  + An asymptotically linear estimator is one that converges to the estimand a
+    $\frac{1}{\sqrt{n}}$ rate, thereby permitting formal statistical inference,
+    i.e., confidence intervals and $p$-values, (see Chapters 4--6 of 
+    @vdl2011targeted).
+  + Substitution, or plug-in, estimators are desirable because they respect 
+    both the local and global constraints of the statistical model, such as 
+    bounds on an outcome, and have they have better finite-sample properties 
+    (see Chapter 6 of @vdl2011targeted).
   + An efficient estimator is optimal in the sense that it has the lowest
     possible variance, and is thus the most precise. An estimator is efficient
     if and only if is asymptotically linear with influence curve equal to the
-    canonical gradient [ADD REF].
+    canonical gradient (see Chapter 6 of @vdl2011targeted).
 
       + The canonical gradient is a mathematical object that is specific to
         the target estimand, and it provides information on the level of
-        difficulty of the estimation problem [ADD REF]. Various canonical 
-        gradient are shown in the chapters that follow.
-      + Practitioner's do not need to know how to calculate a canonical
-        gradient in order to understand efficiency and use Targeted Maximum
-        Likelihood Estimation (TMLE). Metaphorically, you do not need to be
-        Yoda in order to be a Jedi.
+        difficulty of the estimation problem (Chapter 5 of @vdl2011targeted). 
+        Various canonical gradients are shown in the chapters that follow.
+      + Practitioners do not need to know how to calculate a canonical
+        gradient to explain properties that are desirable for an 
+        estimator to possess (like substitution/plug-in, admits valid inference, 
+        efficient, and ability to optimize finite sample performance).
+        These properties motivate the use TMLE, since TMLE satisfies them. 
 
 - TMLE is a general strategy that succeeds in constructing efficient and
-  asymptotically linear plug-in estimators.
-- SL is fantastic for pure prediction, and for obtaining an initial
-  estimate in the first step of TMLE, but we need the second step of TMLE to
-  have the desirable statistical properties mentioned above.
-- In the chapters that follow, we focus on the targeted maximum likelihood
+  asymptotically linear plug-in estimators that are robust in finite samples.
+- SL is fantastic for pure prediction, and for obtaining initial
+  estimates of components in the likelihood (the first step of TMLE), but we 
+  need the second, targeting/updating/fluctuation, step to have the desirable 
+  statistical properties mentioned above.
+- In the chapters that follow, we focus on various targeted maximum likelihood
   estimator and the targeted minimum loss-based estimator, both referred to as
   TMLE.
 
