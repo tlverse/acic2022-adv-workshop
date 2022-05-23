@@ -399,11 +399,9 @@ washb_NIE <- tmle3(
 )
 washb_NIE
 ```
-<!--
+
 Based on the output, we conclude that the indirect effect of the treatment
-through the mediators (`r node_list$Z`) is
-`r round(washb_NIE$summary$tmle_est, 5)`.
--->
+through the mediators `node_list$Z` is `washb_NIE$summary$tmle_est`.
 
 ### Targeted Estimation of the Natural Direct Effect
 
@@ -422,15 +420,15 @@ washb_NDE <- tmle3(
 )
 washb_NDE
 ```
-<!--
+
 From this, we can draw the conclusion that the direct effect of the treatment
-(through all paths not involving the mediators (`r node_list$Z`)) is
-`r round(washb_NDE$summary$tmle_est, 5)`. Note that, together, the estimates of
+(through all paths not involving the mediators, `node_list$Z`) is
+`washb_NDE$summary$tmle_est`. Note that, together, the estimates of
 the natural direct and indirect effects approximately recover the _average
 treatment effect_, that is, based on these estimates of the NDE and NIE, the
-ATE is roughly
-`r round(washb_NDE$summary$tmle_est + washb_NIE$summary$tmle_est, 5)`.
--->
+ATE is roughly the sum of `washb_NDE$summary$tmle_est` and 
+`washb_NIE$summary$tmle_est`.
+
 ## Exercises
 
 ::: {.exercise}
