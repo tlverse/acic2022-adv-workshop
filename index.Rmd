@@ -47,9 +47,8 @@ useful reference to accompany these workshop materials.
 
 ## Important links {-}
 
-* __Software installation__: Please install the relevant software before the
-  workshop using the [installation
-  script](https://github.com/tlverse/tlverse-workshops/blob/master/install.R).
+* __Load R environment__: Please set up the R virtual environment using the  
+ [instructions](https://github.com/tlverse/tlverse-workshops/blob/master/install.md).
 
 * You will probably exceed the GitHub API rate limit during this installation,
   which will throw an error. This issue and the solution are addressed
