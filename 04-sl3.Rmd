@@ -17,69 +17,68 @@ Updated: `r Sys.Date()`
 
 By the end of this chapter you will be able to:
 
-1. Select a performance metric that is optimized by the true prediction 
+1. Select a performance metric that is optimized by the true prediction
    function and aligns with the intended use of the analysis in the real world.
-2. Assemble a diverse set ("library") of learners to be considered in the super 
+2. Assemble a diverse set ("library") of learners to be considered in the super
    learner. In particular, you should be able to:
-   
+
      a. Customize a learner by modifying its tuning parameters.
-     b. Create variations of the same base learner with different tuning 
+     b. Create variations of the same base learner with different tuning
         parameter specifications.
      c. Couple screener(s) with learner(s) to create learners that consider as
         covariates a reduced, screener-selected subset of them.
-        
-3. Specify a meta-learner that optimizes the objective function of interest. 
-5. Justify the library and the meta-learner in terms of the prediction problem 
-   at hand, intended use of the analysis in the real world, statistical model, 
-   sample size, number of covariates, and outcome prevalence for discrete 
-   outcomes. 
-6. Interpret the fit for a super learner from the table of cross-validated risk 
+
+3. Specify a meta-learner that optimizes the objective function of interest.
+4. Justify the library and the meta-learner in terms of the prediction problem
+   at hand, intended use of the analysis in the real world, statistical model,
+   sample size, number of covariates, and outcome prevalence for discrete
+   outcomes.
+5. Interpret the fit for a super learner from the table of cross-validated risk
    estimates and the super learner coefficients.
 
 
 ## Super Learner (SL) Introduction
 
 A common task in data analysis is prediction, or using the observed data to
-learn a function that takes as input data on covariates/predictors and 
-outputs a predicted value. Occasionally, the scientific question of interest
-lends itself to causal effect estimation. Even in these scenarios, where 
-prediction is not in the forefront, prediction tasks are embedded in the 
-procedure. For instance, in targeted minimum loss-based estimation (TMLE), 
-predictive modeling is necessary for estimating outcome regressions and 
-propensity scores. 
+learn a function that takes as input data on covariates/predictors and outputs a
+predicted value. Occasionally, the scientific question of interest lends itself
+to causal effect estimation. Even in these scenarios, where prediction is not in
+the forefront, prediction tasks are embedded in the procedure. For instance, in
+targeted minimum loss-based estimation (TMLE), predictive modeling is necessary
+for estimating outcome regressions and propensity scores.
 
-There are various strategies that can be employed to model relationships 
-from data, which we refer to interchangeably as "estimators", "algorithms", and 
-"learners". For some data algorithms that can pick up on complex relationships 
-in the data are necessary to adequately model it, and for other data parametric 
-regression learners might fit the data reasonably well. It is generally 
-impossible to know in advance which approach will be the best for a given data 
-set and prediction problem. 
+There are various strategies that can be employed to model relationships from
+data, which we refer to interchangeably as "estimators", "algorithms", and
+"learners". For some data algorithms that can pick up on complex relationships
+in the data are necessary to adequately model it, and for other data parametric
+regression learners might fit the data reasonably well. It is generally
+impossible to know in advance which approach will be the best for a given data
+set and prediction problem.
 
-The super learner (SL) solves the issue of selecting an algorithm, as it can 
-consider many of them, from the simplest parametric regressions to the most 
-complex machine learning algorithms (e.g., neural nets, support vector machines, 
-etc.). Additionally, it is proven to perform as well as possible in large 
-samples, given the learners specified [@vdl2007super]. The SL represents an 
-entirely pre-specified, data-adaptive, and theoretically grounded approach for 
-predictive modeling. It has been shown to be adaptive and robust in a variety of 
-applications, and in even in very small samples. Detailed descriptions outlining 
+The Super Learner (SL) solves the issue of selecting an algorithm, as it can
+consider many of them, from the simplest parametric regressions to the most
+complex machine learning algorithms (e.g., neural nets, support vector machines,
+etc). Additionally, it is proven to perform as well as possible in large
+samples, given the learners specified [@vdl2007super]. The SL represents an
+entirely pre-specified, data-adaptive, and theoretically grounded approach for
+predictive modeling. It has been shown to be adaptive and robust in a variety of
+applications, and in even in very small samples. Detailed descriptions outlining
 the SL procedure are widely available [@polley2010super; @naimi2018stacked].
-Practical considerations for specifying the SL, including how to specify a rich 
-and diverse library of learners, choose a performance metric for the SL, and 
+Practical considerations for specifying the SL, including how to specify a rich
+and diverse library of learners, choose a performance metric for the SL, and
 specify a cross-validation (CV) scheme, are described in a pre-print article
 [@rvp2022super]. Here, we focus on introducing `sl3`, the standard `tlverse`
-software package for SL. 
+software package for SL.
 
 <!--
-Add more about sl3: how it's different from SuperLearner, supported features, 
+Add more about sl3: how it's different from SuperLearner, supported features,
 GitHub, filing issues, support, documentation, etc.
 -->
 
 ## How to fit a SL with `sl3`
 
-In this section, the core functionality for fitting any SL with `sl3` is 
-illustrated. In the sections that follow, additional `sl3` functionality is 
+In this section, the core functionality for fitting any SL with `sl3` is
+illustrated. In the sections that follow, additional `sl3` functionality is
 presented.
 
 Fitting any SL with `sl3` consists of the following three steps:
@@ -525,25 +524,27 @@ ggplot(cv_risk_table,
 
 <!--
 Column "se" in the CV risk table is the standard error across all losses for a learner, i.e., se = sd(loss)/sqrt(n), where loss is an n length vector of validation set predictions across all folds, and n is the number of validation set observations across all folds.
-Column "fold_sd" in the CV risk table is the standard deviation of the V-fold-specific risks, i.e., fold_sd = sd(risk), where risk is a V length vector of the mean loss across the folds. 
+Column "fold_sd" in the CV risk table is the standard deviation of the V-fold-specific risks, i.e., fold_sd = sd(risk), where risk is a V length vector of the mean loss across the folds.
 -->
 
 #### Cross-validated SL
 
-We can see from the CV risk table above that the SL is not contained. This is 
-because we do not have a CV risk for the SL unless we cross-validate it or 
-include it as a candidate in another SL; the latter is shown in the next 
-subsection. Below we show how to obtain a cross-validated risk estimate for the 
-SL using `cv_sl`. 
+We can see from the CV risk table above that the SL is not contained. This is
+because we do not have a CV risk for the SL unless we cross-validate it or
+include it as a candidate in another SL; the latter is shown in the next
+subsection. Below we show how to obtain a cross-validated risk estimate for the
+SL using `cv_sl`.
 
-```{r cvsl}
+```{r cvsl, eval = FALSE}
 set.seed(569)
 cv_sl_fit <- cv_sl(lrnr_sl = sl_fit, task = task, eval_fun = loss_squared_error)
 ```
+
 ```{r cvsl-risk-summary, eval = FALSE}
 cv_sl_fit$cv_risk[,c(1:3)]
 ```
-```{r cvsl-risk-summary-handbook, echo = FALSE}
+
+```{r cvsl-risk-summary-handbook, eval = FALSE, echo = FALSE}
 if (knitr::is_latex_output()) {
   cv_sl_fit$cv_risk[,c(1:3)] %>%
     kable(format = "latex")
@@ -557,11 +558,11 @@ if (knitr::is_latex_output()) {
 
 ### Discrete SL
 
-The discrete SL (dSL), is a SL that uses a winner-take-all meta-learner called 
-the cross-validated selector. The dSL is therefore identical to the candidate 
-with the best cross-validated performance; its predictions will be the same as 
-this candidate’s predictions. The dSL meta-learner specification can
-be invoked in `sl3` with `Lrnr_cv_selector`. 
+The discrete SL (dSL), is a SL that uses a winner-take-all meta-learner called
+the cross-validated selector. The dSL is therefore identical to the candidate
+with the best cross-validated performance; its predictions will be the same as
+this candidate’s predictions. The dSL meta-learner specification can be invoked
+in `sl3` with `Lrnr_cv_selector`.
 
 ```{r make-sl-discrete}
 cv_selector <- Lrnr_cv_selector$new(eval_function = loss_squared_error)
@@ -569,23 +570,23 @@ stack_with_sl <- Stack$new(stack, sl)
 dSL <- Lrnr_sl$new(learners = stack_with_sl, metalearner = cv_selector)
 ```
 
-We can examine the CV risk for an ensemble SL (eSL), or multiple eSLs, by 
-including it as a candidate in a dSL. An eSL is a SL that uses any parametric or 
-non-parametric algorithm as its meta-learner. Therefore, the eSL is defined by 
-a combination of multiple candidates; its predictions are defined by a 
-combination of multiple candidates’ predictions. The `sl` object defined in the 
-previous section, `sl`, is an eSL since it used NNLS as the meta-learner. 
+We can examine the CV risk for an ensemble SL (eSL), or multiple eSLs, by
+including it as a candidate in a dSL. An eSL is a SL that uses any parametric or
+non-parametric algorithm as its meta-learner. Therefore, the eSL is defined by a
+combination of multiple candidates; its predictions are defined by a combination
+of multiple candidates’ predictions. The `sl` object defined in the previous
+section, `sl`, is an eSL since it used NNLS as the meta-learner.
 
-When we include an eSL as a candidate in the dSL, this allows the eSL’s CV 
-performance to be compared to that from the other learners from which it was 
-constructed. This is similar to calling CV SL, `cv_sl`, above. The difference 
-between including the eSL in the dSL and calling `cv_sl` is that the former 
-automates a procedure for the final SL to be the learner that achieved the 
-best CV predictive performance, i.e., lowest CV risk. If the eSL performs 
-better than any other candidate, the dSL will end up selecting it. As mentioned 
-in @rvp2022super, "another advantage of this approach is that multiple eSLs 
-that use more flexible meta-learner methods (e.g., non-parametric machine 
-learning algorithms like HAL) can be evaluated simultaneously.
+When we include an eSL as a candidate in the dSL, this allows the eSL’s CV
+performance to be compared to that from the other learners from which it was
+constructed. This is similar to calling CV SL, `cv_sl`, above. The difference
+between including the eSL in the dSL and calling `cv_sl` is that the former
+automates a procedure for the final SL to be the learner that achieved the best
+CV predictive performance, i.e., lowest CV risk. If the eSL performs better than
+any other candidate, the dSL will end up selecting it. As mentioned in
+@rvp2022super, "another advantage of this approach is that multiple eSLs that
+use more flexible meta-learner methods (e.g., non-parametric machine learning
+algorithms like HAL) can be evaluated simultaneously.
 
 <!--
 In the plot below, we visualize the steps for executing the Super Learner in
@@ -658,7 +659,7 @@ First, let's examine the missingness in the data:
 colSums(is.na(washb_data))
 ```
 
-We can see that covariates `momage` and `momheight` have missing observations. 
+We can see that covariates `momage` and `momheight` have missing observations.
 Let's check out a few rows in the data with missing values:
 ```{r data-missing}
 some_rows_with_missingness <- which(!complete.cases(washb_data))[31:33]
@@ -666,45 +667,45 @@ some_rows_with_missingness <- which(!complete.cases(washb_data))[31:33]
 washb_data[some_rows_with_missingness, c("momage", "momheight")]
 ```
 
-When we called `make_sl3_Task` using `washb_data` with missing covariate values, 
-`momage` and `momheight` were imputed with their respective medians (since they 
-are continuous), and a missingness indicator (denoted by prefix "delta_") was 
+When we called `make_sl3_Task` using `washb_data` with missing covariate values,
+`momage` and `momheight` were imputed with their respective medians (since they
+are continuous), and a missingness indicator (denoted by prefix "delta_") was
 added for each of them. See below:
 
 ```{r task-data-imputed}
-task$data[some_rows_with_missingness, 
+task$data[some_rows_with_missingness,
           c("momage", "momheight", "delta_momage", "delta_momheight")]
 colSums(is.na(task$data))
 ```
 
-Indeed, we can see that `washb_task$data` has no missing values. The missingness 
-indicators take a value of 0 when the observation *was not* in the original 
-data and a value of 1 when the observation *was* in the original data. 
+Indeed, we can see that `washb_task$data` has no missing values. The missingness
+indicators take a value of 0 when the observation *was not* in the original data
+and a value of 1 when the observation *was* in the original data.
 
-If the data supplied to `make_sl3_Task` contains missing outcome values, then 
-an error will be thrown. Missing outcomes in the data can easily be dropped when 
-the task is created, by setting `drop_missing_outcome = TRUE`. In general, 
-we do not recommend dropping missing outcomes during data pre-processing, unless 
-the problem of interest is purely prediction. This is because complete case 
-analyses are generally biased; it is typically unrealistic to assume the 
-missingness is completely random and therefore unsafe to just drop the 
-observations with missing outcomes. For instance, in the estimation of 
-estimands that admit Targeted Minimum Loss-based Estimators (i.e., pathwise 
-differentiable estimands, including most parameters arising in causal inference 
-that do not violate positivity, and those reviewed in the following chapters), 
-the missingness that should be reflected in the expression of the question of 
-interest (e.g., what would have been the average effect of treatment with 
-Drug A compared to standard of care under no loss to follow-up) is also 
-incorporated in the estimation procedure. That is, the probability of loss to 
-follow-up is a prediction function that is approximated (e.g., with SL) and 
-incorporated that in the estimation of the target parameter and the inference /
-uncertainty quantification. 
+If the data supplied to `make_sl3_Task` contains missing outcome values, then an
+error will be thrown. Missing outcomes in the data can easily be dropped when
+the task is created, by setting `drop_missing_outcome = TRUE`. In general, we do
+not recommend dropping missing outcomes during data pre-processing, unless the
+problem of interest is purely prediction. This is because complete case analyses
+are generally biased; it is typically unrealistic to assume the missingness is
+completely random and therefore unsafe to just drop the observations with
+missing outcomes. For instance, in the estimation of estimands that admit
+Targeted Minimum Loss-based Estimators (i.e., pathwise differentiable estimands,
+including most parameters arising in causal inference that do not violate
+positivity, and those reviewed in the following chapters), the missingness that
+should be reflected in the expression of the question of interest (e.g., what
+would have been the average effect of treatment with Drug A compared to standard
+of care under no loss to follow-up) is also incorporated in the estimation
+procedure. That is, the probability of loss to follow-up is a prediction
+function that is approximated (e.g., with SL) and incorporated that in the
+estimation of the target parameter and the inference / uncertainty
+quantification.
 
 #### Character and categorical covariates
 
 First any character covariates are converted to factors. Then all factor
-covariates are one-hot encoded, i.e., the levels of a factor become a set of 
-binary indicators. For example, the factor `cats` and it's one-hot encoding are 
+covariates are one-hot encoded, i.e., the levels of a factor become a set of
+binary indicators. For example, the factor `cats` and it's one-hot encoding are
 shown below:
 
 ```{r fruit}
@@ -714,19 +715,20 @@ cats_onehot <- factor_to_indicators(cats)
 cats_onehot
 ```
 
-The second value for `cats` was "tabby" so the second row of `cats_onehot` 
-has value 1 under tabby. Every level of `cats` except for one is represented in 
-the `cats_onehot` table. The first and last `cats` are "calico" so the first 
-and last rows of `cats_onehot` are zero across all columns, to denote this level 
-that does not appear explicitly in the table. 
+The second value for `cats` was "tabby" so the second row of `cats_onehot` has
+value 1 under tabby. Every level of `cats` except for one is represented in the
+`cats_onehot` table. The first and last `cats` are "calico" so the first and
+last rows of `cats_onehot` are zero across all columns, to denote this level
+that does not appear explicitly in the table.
 
-The learners in `sl3` are trained to the object `X` in the task, or a sample 
-of `X` for learners that use cross-validation. Let's check out the first six 
-rows of our task's `X` object:
+The learners in `sl3` are trained to the object `X` in the task, or a sample of
+`X` for learners that use cross-validation. Let's check out the first six rows
+of our task's `X` object:
 
 ```{r show-X, eval = FALSE}
 head(task$X)
 ```
+
 ```{r show-X-handbook, echo = FALSE}
 if (knitr::is_latex_output()) {
   head(task$X) %>%
@@ -739,34 +741,34 @@ if (knitr::is_latex_output()) {
 }
 ```
 
-We can see that any character columns in the WASH Benefits dataset were 
-converted to factors and all factors (`tr`, `momedu`, `hfiacat` and `fracode`) 
-were one-hot encoded. We can also see that the missingness indicators reviewed 
-above are the last two columns in `task$X`: `delta_momage` and `delta_momage`. 
-The imputed `momage` and `momheight` are also in the task's `X` object. 
+We can see that any character columns in the WASH Benefits dataset were
+converted to factors and all factors (`tr`, `momedu`, `hfiacat` and `fracode`)
+were one-hot encoded. We can also see that the missingness indicators reviewed
+above are the last two columns in `task$X`: `delta_momage` and `delta_momage`.
+The imputed `momage` and `momheight` are also in the task's `X` object.
 
 ### Learner Documentation
 
-Documentation for the learners and some of their tuning parameters can be found 
-in the R session (e.g., to see `Lrnr_glmnet`'s parameters, one could type 
-"?Lrnr_glmnet" in RStudio's R console) or online at the [`sl3` Learners 
+Documentation for the learners and some of their tuning parameters can be found
+in the R session (e.g., to see `Lrnr_glmnet`'s parameters, one could type
+"?Lrnr_glmnet" in RStudio's R console) or online at the [`sl3` Learners
 Reference](https://tlverse.org/sl3/reference/index.html#section-sl-learners).
-All of the learners in `sl3` are simply wrappers around existing functions from 
-other software packages in R. For example, `sl3`'s `Lrnr_xgboost` is a learner 
-in `sl3` for fitting the XGBoost (eXtreme Gradient Boosting) algorithm. As 
-described in the `Lrnr_xgboost` documentation, "this learner provides fitting 
+All of the learners in `sl3` are simply wrappers around existing functions from
+other software packages in R. For example, `sl3`'s `Lrnr_xgboost` is a learner
+in `sl3` for fitting the XGBoost (eXtreme Gradient Boosting) algorithm. As
+described in the `Lrnr_xgboost` documentation, "this learner provides fitting
 procedures for `xgboost` models, using the `xgboost` package, via `xgb.train`".
-In general, the documentation in `sl3` for a learner refers the reader to the 
-original function and package that `sl3` has wrapped a learner around. With 
-that in mind, the `sl3` learner documentation is a good first place to look up 
-any learner, as it will show us exactly which package and function the learner 
-is based on. However, any thorough investigation of a learner (such as a 
-detailed explanation of all tuning parameters or how it models the data) 
-typically involves referencing the original package. Continuing the 
-example from above, this means that, while some information will be provided in 
-`Lrnr_xgboost` documentation, such as learning that `Lrnr_xgboost` uses the 
-`xgboost` package's `xgb.train` function, the deepest understanding of the 
-XGBoost algorithm available in `sl3`  will come from referencing the `xgboost` 
+In general, the documentation in `sl3` for a learner refers the reader to the
+original function and package that `sl3` has wrapped a learner around. With
+that in mind, the `sl3` learner documentation is a good first place to look up
+any learner, as it will show us exactly which package and function the learner
+is based on. However, any thorough investigation of a learner (such as a
+detailed explanation of all tuning parameters or how it models the data)
+typically involves referencing the original package. Continuing the
+example from above, this means that, while some information will be provided in
+`Lrnr_xgboost` documentation, such as learning that `Lrnr_xgboost` uses the
+`xgboost` package's `xgb.train` function, the deepest understanding of the
+XGBoost algorithm available in `sl3`  will come from referencing the `xgboost`
 R package and its `xgb.train` function.
 
 ### Naming learners
@@ -1208,8 +1210,6 @@ $f_{\mu}$ and the optional `var_learner` argument specifies $f_{\sigma}$. We
 demonstrate CDE with this approach below.
 
 ```{r cde_using_locscale, eval = FALSE}
-# TODO: fix code block and flesh out into demo
-
 # semiparametric density estimator with homoscedastic errors (HOSE)
 hose_hal_lrnr <- Lrnr_density_semiparametric$new(
   mean_learner = Lrnr_hal9001$new()
@@ -1310,8 +1310,6 @@ adaptive lasso (HAL) algorithm [@benkeser2016hal] is supported in the
 demonstrate below.
 
 ```{r cde_using_pooledhaz, eval = FALSE}
-# TODO: fix code block and flesh out into demo
-
 # learners used for conditional densities for (g_n)
 haldensify_lrnr <- Lrnr_haldensify$new(
   n_bins = c(5, 10)
