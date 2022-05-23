@@ -4,7 +4,7 @@ title: "[ACIC 2022] Targeted Learning in the `tlverse`"
 subtitle: "Causal Inference Meets Machine Learning"
 author: "Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana
   Malenica, Rachael Phillips"
-date: "updated: `r format(Sys.time(), '%B %d, %Y')`"
+date: "updated: May 23, 2022"
 documentclass: book
 site: bookdown::bookdown_site
 bibliography: [book.bib, packages.bib]
@@ -190,22 +190,38 @@ produce it.
 
 This book was written using [bookdown](http://bookdown.org/), and the complete
 source is available on [GitHub](https://github.com/tlverse/tlverse-handbook).
-This version of the book was built with `r R.version.string`,
-[pandoc](https://pandoc.org/) version `r rmarkdown::pandoc_version()`, and the
+This version of the book was built with R version 4.2.0 (2022-04-22),
+[pandoc](https://pandoc.org/) version 2.5, and the
 following packages:
 
-```{r pkg-list, echo = FALSE, results="asis"}
-# borrowed from https://github.com/tidymodels/TMwR/blob/master/index.Rmd
-deps <- desc::desc_get_deps()
-pkgs <- sort(deps$package[deps$type == "Imports"])
-pkgs <- sessioninfo::package_info(pkgs, dependencies = FALSE)
-df <- tibble::tibble(
-  package = pkgs$package,
-  version = pkgs$ondiskversion,
-  source = gsub("@", "\\\\@", pkgs$source)
-)
-knitr::kable(df, format = "markdown")
-```
+
+|package      |version |source                                 |
+|:------------|:-------|:--------------------------------------|
+|bookdown     |0.24.1  |Github (rstudio/bookdown\@84bde8e)     |
+|bslib        |0.3.1   |Github (rstudio/bslib\@efc475c)        |
+|data.table   |1.14.2  |CRAN (R 4.2.0)                         |
+|delayed      |0.4.0   |Github (tlverse/delayed\@bf7ca82)      |
+|devtools     |2.4.2   |CRAN (R 4.2.0)                         |
+|downlit      |0.2.1   |CRAN (R 4.2.0)                         |
+|dplyr        |1.0.9   |CRAN (R 4.2.0)                         |
+|ggplot2      |3.3.6   |CRAN (R 4.2.0)                         |
+|here         |1.0.1   |CRAN (R 4.2.0)                         |
+|kableExtra   |1.3.4   |CRAN (R 4.2.0)                         |
+|knitr        |1.36    |CRAN (R 4.2.0)                         |
+|mvtnorm      |1.1-2   |CRAN (R 4.2.0)                         |
+|origami      |1.0.5   |Github (tlverse/origami\@e1b8fe6)      |
+|readr        |2.0.2   |CRAN (R 4.2.0)                         |
+|rmarkdown    |2.11    |CRAN (R 4.2.0)                         |
+|skimr        |2.1.3   |CRAN (R 4.2.0)                         |
+|sl3          |1.4.5   |Github (tlverse/sl3\@fae6165)          |
+|stringr      |1.4.0   |CRAN (R 4.2.0)                         |
+|tibble       |3.1.7   |CRAN (R 4.2.0)                         |
+|tidyr        |1.2.0   |CRAN (R 4.2.0)                         |
+|tidyverse    |1.3.1   |CRAN (R 4.2.0)                         |
+|tmle3        |0.2.0   |Github (tlverse/tmle3\@425e21c)        |
+|tmle3mediate |0.0.3   |Github (tlverse/tmle3mediate\@70d1151) |
+|tmle3mopttx  |0.1.0   |Github (tlverse/tmle3mopttx\@9fb1a3b)  |
+|tmle3shift   |0.2.0   |Github (tlverse/tmle3shift\@43f6fc0)   |
 
 ## Setup instructions {#setup}
 

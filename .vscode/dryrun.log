@@ -1,0 +1,10 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/jrcoyle/Dropbox/tlverse/acic2022-adv-workshop'
+Rscript -e "styler::style_dir(filetype = 'rmd')"
+Rscript -e "bookdown::clean_book(TRUE)"
+Rscript -e "bookdown::render_book('index.Rmd', quiet=FALSE)"
+rm -f R_code/*.R
+R CMD BATCH purl.R
+rm purl.Rout .RData
+make: Leaving directory '/home/jrcoyle/Dropbox/tlverse/acic2022-adv-workshop'
+ 

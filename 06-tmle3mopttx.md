@@ -5,7 +5,7 @@ _Ivana Malenica_
 Based on the [`tmle3mopttx` `R` package](https://github.com/tlverse/tmle3mopttx)
 by _Ivana Malenica, Jeremy Coyle, and Mark van der Laan_.
 
-Updated: `r Sys.Date()`
+Updated: 2022-05-23
 
 ## Learning Objectives
 By the end of this lesson you will be able to:
@@ -62,9 +62,10 @@ To motivate these types of interventions, we turn to an actual randomized trial.
 
 <br>
 
-```{r, align='center', fig.cap="Illustration of a Dynamic Treatment Regime in a Clinical Setting", echo=FALSE, eval=TRUE, out.width='60%'}
-knitr::include_graphics(path = "img/png/DynamicA_Illustration.png")
-```
+<div class="figure" style="text-align: center">
+<img src="img/png/DynamicA_Illustration.png" alt="Illustration of a Dynamic Treatment Regime in a Clinical Setting" width="60%" />
+<p class="caption">(\#fig:unnamed-chunk-1)Illustration of a Dynamic Treatment Regime in a Clinical Setting</p>
+</div>
 
 
 <br>
@@ -472,7 +473,8 @@ our outcome. Our estimated rule is $d(V) = \text{argmax}_{a \in \mathcal{A}} \ba
 
 To start, let us load the packages we will use and set a seed for simulation:
 
-```{r setup-mopttx, message=FALSE, warning=FALSE}
+
+```r
 library(data.table)
 library(sl3)
 library(tmle3)
@@ -506,17 +508,20 @@ $$P(A=1|W) = \frac{1}{1+\exp^{(-0.8*W_1)}}$$
 
 <br>
 
-```{r load_data_bin, echo=FALSE}
-load(here("data", "tmle3mopttx_bin.RData"))
-```
 
-```{r load sim_bin_data, eval=FALSE, echo=FALSE}
-data("data_bin")
-data <- data_bin
-```
 
-```{r load sim_bin_data_head}
+
+
+
+```r
 head(data)
+          W1       W2       W3 A Y
+1: -0.591031 -0.40168  0.15008 1 0
+2:  0.026594 -0.37093  0.79472 0 0
+3: -1.516553 -0.42515  0.43203 1 0
+4: -1.362653  0.44115  0.34370 1 1
+5:  1.178489 -0.67275  0.38710 1 0
+6: -0.934151  0.41669 -0.78808 1 1
 ```
 
 * The above composes our observed data structure $O = (W, A, Y)$.
@@ -532,7 +537,8 @@ distribution.
 
 Next, we specify the role that each variable in the data set plays as the nodes in a DAG.
 
-```{r data_nodes2-mopttx}
+
+```r
 # organize data and nodes for tmle3
 node_list <- list(
   W = c("W1", "W2", "W3"),
@@ -540,6 +546,14 @@ node_list <- list(
   Y = "Y"
 )
 node_list
+$W
+[1] "W1" "W2" "W3"
+
+$A
+[1] "A"
+
+$Y
+[1] "Y"
 ```
 
 * We now have an observed data structure (`data`), and a specification of the role
@@ -561,7 +575,8 @@ We generate three different ensemble learners that must be fit.
 
 3. blip function.
 
-```{r mopttx_sl3_lrnrs2}
+
+```r
 # Define sl3 library and metalearners:
 lrn_mean <- Lrnr_mean$new()
 lrn_glm <- Lrnr_glm_fast$new()
@@ -590,10 +605,30 @@ b_learner <- Lrnr_sl$new(
 We make the above explicit with respect to standard
 notation by bundling the ensemble learners into a list object below:
 
-```{r mopttx_make_lrnr_list}
+
+```r
 # specify outcome and treatment regressions and create learner list
 learner_list <- list(Y = Q_learner, A = g_learner, B = b_learner)
 learner_list
+$Y
+[1] "Super learner:"
+List of 3
+ $ : chr "Lrnr_glmnet_NULL_deviance_10_1_100_TRUE"
+ $ : chr "Lrnr_mean"
+ $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
+
+$A
+[1] "Super learner:"
+List of 2
+ $ : chr "Lrnr_glmnet_NULL_deviance_10_1_100_TRUE"
+ $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
+
+$B
+[1] "Super learner:"
+List of 3
+ $ : chr "Lrnr_mean"
+ $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
+ $ : chr "Lrnr_glmnet_NULL_deviance_10_1_100_TRUE"
 ```
 
 <br>
@@ -616,7 +651,8 @@ the list of learners used.
 * In addition, we need to specify whether we want to maximize or minimize the
 mean outcome under the rule (`maximize=TRUE`).
 
-```{r mopttx_spec_init_complex, eval=FALSE}
+
+```r
 # initialize a tmle specification
 tmle_spec <- tmle3_mopttx_blip_revere(
   V = c("W1", "W2", "W3"), type = "blip1",
@@ -627,14 +663,21 @@ tmle_spec <- tmle3_mopttx_blip_revere(
 )
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_complex, eval=FALSE}
+
+```r
 # fit the TML estimator
 fit <- tmle3(tmle_spec, data, node_list, learner_list)
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_complex_res, eval=TRUE}
+
+```r
 # see the result
 fit
+A tmle3_Fit that took 1 step(s)
+   type         param init_est tmle_est       se   lower   upper
+1:  TSM E[Y_{A=NULL}]  0.35585  0.55755 0.025566 0.50744 0.60765
+   psi_transformed lower_transformed upper_transformed
+1:         0.55755           0.50744           0.60765
 ```
 
 <br>
@@ -649,14 +692,23 @@ fit
 
 We can also get the interpretable surrogate rule in terms of HAL:
 
-```{r mopttx_fit_tmle_auto_blip_revere_complex_HAL, eval=TRUE}
+
+```r
 # Interpretable rule
 head(tmle_spec$blip_fit_interpret$coef)
+[1]  0.368043  0.156435 -0.064386 -0.054062  0.042386  0.037879
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_complex_HAL2, eval=TRUE}
+
+```r
 # Interpretable rule
 head(tmle_spec$blip_fit_interpret$term)
+[1] "(Intercept)"                                                                                                  
+[2] "[ I(W1 >= 0.899)*(W1 - 0.899)^1 ] * [ I(W2 >= -3.861)*(W2 - -3.861)^1 ]"                                      
+[3] "[ I(W1 >= 0.074)*(W1 - 0.074)^1 ] * [ I(W2 >= -3.861)*(W2 - -3.861)^1 ] * [ I(W3 >= -2.945)*(W3 - -2.945)^1 ]"
+[4] "[ I(W1 >= -1.418)*(W1 - -1.418)^1 ] * [ I(W2 >= -3.861)*(W2 - -3.861)^1 ]"                                    
+[5] "[ I(W1 >= 0.856)*(W1 - 0.856)^1 ] * [ I(W2 >= -3.861)*(W2 - -3.861)^1 ] * [ I(W3 >= -1.292)*(W3 - -1.292)^1 ]"
+[6] "[ I(W1 >= -1.368)*(W1 - -1.368)^1 ] * [ I(W2 >= -3.861)*(W2 - -3.861)^1 ] * [ I(W3 >= 0.843)*(W3 - 0.843)^1 ]"
 ```
 
 <br>
@@ -679,7 +731,8 @@ individuals with blip higher than zero will get treatment.
 
 * If `resource=0`, none will get treatment. 
 
-```{r mopttx_spec_init_complex_resource, eval=FALSE}
+
+```r
 # initialize a tmle specification
 tmle_spec_resource <- tmle3_mopttx_blip_revere(
   V = c("W1", "W2", "W3"), type = "blip1",
@@ -689,14 +742,21 @@ tmle_spec_resource <- tmle3_mopttx_blip_revere(
 )
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_complex_resource, eval=FALSE}
+
+```r
 # fit the TML estimator
 fit_resource <- tmle3(tmle_spec_resource, data, node_list, learner_list)
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_complex_resource_res, eval=TRUE}
+
+```r
 # see the result
 fit_resource
+A tmle3_Fit that took 1 step(s)
+   type         param init_est tmle_est       se   lower   upper
+1:  TSM E[Y_{A=NULL}]  0.32947  0.53611 0.025833 0.48548 0.58674
+   psi_transformed lower_transformed upper_transformed
+1:         0.53611           0.48548           0.58674
 ```
 
 <br>
@@ -708,12 +768,19 @@ fit_resource
 We can compare the number of individuals that got treatment with and without the 
 resource constraint:
 
-```{r mopttx_compare_resource}
+
+```r
 # Number of individuals with A=1 (no resource constraint):
 table(tmle_spec$return_rule)
 
+  0   1 
+280 720 
+
 # Number of individuals with A=1 (resource constraint):
 table(tmle_spec_resource$return_rule)
+
+  0   1 
+422 578 
 ```
 
 <br>
@@ -724,7 +791,8 @@ table(tmle_spec_resource$return_rule)
 
 #### Empty V
 
-```{r mopttx_spec_init_complex_V_empty}
+
+```r
 # initialize a tmle specification
 tmle_spec_V_empty <- tmle3_mopttx_blip_revere(
   type = "blip1",
@@ -734,14 +802,21 @@ tmle_spec_V_empty <- tmle3_mopttx_blip_revere(
 )
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_complex_V_empty, eval=FALSE}
+
+```r
 # fit the TML estimator
 fit_V_empty <- tmle3(tmle_spec_V_empty, data, node_list, learner_list)
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_complex_V_empty_res, eval=TRUE}
+
+```r
 # see the result:
 fit_V_empty
+A tmle3_Fit that took 1 step(s)
+   type         param init_est tmle_est     se   lower   upper psi_transformed
+1:  TSM E[Y_{A=NULL}]  0.32699  0.53301 0.0104 0.51263 0.55339         0.53301
+   lower_transformed upper_transformed
+1:           0.51263           0.55339
 ```
 
 
@@ -819,16 +894,20 @@ $$P(Y|A,W)=0.5\text{logit}^{-1}[15I(A=1)(W_1-0.5) - 3I(A=2)(2W_1+0.5) \\
 
 We can just load the data available as part of the package as follows:
 
-```{r load_results, eval=TRUE, echo=FALSE}
-load(here("data", "tmle3mopttx_cat.RData"))
-```
 
-```{r load sim_cat_data, eval=FALSE, echo=FALSE}
-data("data_cat_realistic")
-```
 
-```{r load sim_cat_data_head, eval=TRUE}
+
+
+
+```r
 head(data)
+   W1       W2       W3       W4 A Y
+1:  2 -0.40168  0.15008  1.44274 2 1
+2:  3 -0.37093  0.79472  1.08879 3 0
+3:  1 -0.42515  0.43203  0.22471 2 1
+4:  1  0.44115  0.34370  1.55538 3 0
+5:  3 -0.67275  0.38710 -0.31411 2 0
+6:  1  0.41669 -0.78808 -0.28718 2 1
 ```
 
 * The above constructs our observed data structure $O = (W, A, Y)$. 
@@ -842,7 +921,8 @@ to estimate.
 
 <br>
 
-```{r data_nodes-mopttx}
+
+```r
 # organize data and nodes for tmle3
 data <- data_cat_realistic
 node_list <- list(
@@ -851,13 +931,25 @@ node_list <- list(
   Y = "Y"
 )
 node_list
+$W
+[1] "W1" "W2" "W3" "W4"
+
+$A
+[1] "A"
+
+$Y
+[1] "Y"
 ```
 
 We can see the number of observed categories of treatment below:
 
-```{r data_cats-mopttx}
+
+```r
 # organize data and nodes for tmle3
 table(data$A)
+
+  1   2   3 
+ 24 528 448 
 ```
 
 <br>
@@ -873,7 +965,8 @@ What is the dimension for the current example? How would we go about estimating 
 
 <br>
 
-```{r sl3_lrnrs-mopttx, eval=TRUE}
+
+```r
 # Initialize few of the learners:
 lrn_xgboost_50 <- Lrnr_xgboost$new(nrounds = 50)
 lrn_mean <- Lrnr_mean$new()
@@ -915,15 +1008,49 @@ available within the `sl3` package.
 In order to see which learners can
 be used to estimate $g_0(A|W)$ in `sl3`, we run the following:
 
-```{r cat_learners}
+
+```r
 # See which learners support multi-class classification:
 sl3_list_learners(c("categorical"))
+ [1] "Lrnr_bound"                "Lrnr_caret"               
+ [3] "Lrnr_cv_selector"          "Lrnr_ga"                  
+ [5] "Lrnr_glmnet"               "Lrnr_grf"                 
+ [7] "Lrnr_gru_keras"            "Lrnr_h2o_glm"             
+ [9] "Lrnr_h2o_grid"             "Lrnr_independent_binomial"
+[11] "Lrnr_lightgbm"             "Lrnr_lstm_keras"          
+[13] "Lrnr_mean"                 "Lrnr_multivariate"        
+[15] "Lrnr_nnet"                 "Lrnr_optim"               
+[17] "Lrnr_polspline"            "Lrnr_pooled_hazards"      
+[19] "Lrnr_randomForest"         "Lrnr_ranger"              
+[21] "Lrnr_rpart"                "Lrnr_screener_correlation"
+[23] "Lrnr_solnp"                "Lrnr_svm"                 
+[25] "Lrnr_xgboost"             
 ```
 
-```{r make_lrnr_list-mopttx}
+
+```r
 # specify outcome and treatment regressions and create learner list
 learner_list <- list(Y = Q_learner, A = g_learner, B = b_learner)
 learner_list
+$Y
+[1] "Super learner:"
+List of 3
+ $ : chr "Lrnr_xgboost_50_1"
+ $ : chr "Lrnr_mean"
+ $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
+
+$A
+[1] "Super learner:"
+List of 2
+ $ : chr "Lrnr_xgboost_50_1"
+ $ : chr "Lrnr_mean"
+
+$B
+[1] "Super learner:"
+List of 3
+ $ : chr "Lrnr_xgboost_50_1_multivariate"
+ $ : chr "Lrnr_mean_multivariate"
+ $ : chr "Lrnr_glm_fast_TRUE_Cholesky_multivariate"
 ```
 
 <br>
@@ -934,7 +1061,8 @@ learner_list
 
 #### Targeted Estimation
 
-```{r spec_init, eval=FALSE}
+
+```r
 # initialize a tmle specification
 tmle_spec_cat <- tmle3_mopttx_blip_revere(
   V = c("W1", "W2", "W3", "W4"), type = "blip2",
@@ -943,17 +1071,27 @@ tmle_spec_cat <- tmle3_mopttx_blip_revere(
 )
 ```
 
-```{r fit_tmle_auto, eval=FALSE}
+
+```r
 # fit the TML estimator
 fit_cat <- tmle3(tmle_spec_cat, data, node_list, learner_list)
 ```
 
-```{r fit_tmle_auto_res, eval=TRUE}
+
+```r
 # see the result:
 fit_cat
+A tmle3_Fit that took 1 step(s)
+   type         param init_est tmle_est       se   lower   upper
+1:  TSM E[Y_{A=NULL}]  0.54334  0.61973 0.063746 0.49479 0.74467
+   psi_transformed lower_transformed upper_transformed
+1:         0.61973           0.49479           0.74467
 
 # How many individuals got assigned each treatment?
 table(tmle_spec_cat$return_rule)
+
+  1   2   3 
+438 380 182 
 ```
 
 We can see that the confidence interval covers the truth.
@@ -996,7 +1134,8 @@ of $V$ covariates, with card($S$) $\leq$ card($V$) and $\emptyset \in S$.
 * This allows us to consider sub-optimal rules that are easier to estimate:
 we allow for statistical inference for the counterfactual mean outcome under the sub-optimal rule.
 
-```{r mopttx_spec_init_noncomplex, eval=FALSE}
+
+```r
 # initialize a tmle specification
 tmle_spec_cat_simple <- tmle3_mopttx_blip_revere(
   V = c("W4", "W3", "W2", "W1"), type = "blip2",
@@ -1005,14 +1144,21 @@ tmle_spec_cat_simple <- tmle3_mopttx_blip_revere(
 )
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_noncomplex, eval=FALSE}
+
+```r
 # fit the TML estimator
 fit_cat_simple <- tmle3(tmle_spec_cat_simple, data, node_list, learner_list)
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_noncomplex_res, eval=TRUE}
+
+```r
 # see the result:
 fit_cat_simple
+A tmle3_Fit that took 1 step(s)
+   type                param init_est tmle_est      se   lower   upper
+1:  TSM E[Y_{d(V=W3,W2,W1)}]  0.55423  0.62196 0.05204 0.51997 0.72396
+   psi_transformed lower_transformed upper_transformed
+1:         0.62196           0.51997           0.72396
 ```
 
 <br>
@@ -1046,7 +1192,8 @@ can never be implemented (or is highly unlikely).
 treatments that optimize the outcome in question while being
 supported by the data.
 
-```{r mopttx_spec_init_realistic, eval=FALSE}
+
+```r
 # initialize a tmle specification
 tmle_spec_cat_realistic <- tmle3_mopttx_blip_revere(
   V = c("W4", "W3", "W2", "W1"), type = "blip2",
@@ -1055,17 +1202,27 @@ tmle_spec_cat_realistic <- tmle3_mopttx_blip_revere(
 )
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_realistic, eval=FALSE}
+
+```r
 # fit the TML estimator
 fit_cat_realistic <- tmle3(tmle_spec_cat_realistic, data, node_list, learner_list)
 ```
 
-```{r mopttx_fit_tmle_auto_blip_revere_realistic_res, eval=TRUE}
+
+```r
 # see the result:
 fit_cat_realistic
+A tmle3_Fit that took 1 step(s)
+   type         param init_est tmle_est       se  lower   upper psi_transformed
+1:  TSM E[Y_{A=NULL}]   0.5546  0.57351 0.059035 0.4578 0.68921         0.57351
+   lower_transformed upper_transformed
+1:            0.4578           0.68921
 
 # How many individuals got assigned each treatment?
 table(tmle_spec_cat_realistic$return_rule)
+
+  1   2   3 
+  5 511 484 
 ```
 
 <br>
@@ -1092,7 +1249,8 @@ our outcome.
 
 <br>
 
-```{r data_nodes-add-missigness-mopttx, eval=FALSE}
+
+```r
 data_missing <- data_cat_realistic
 
 # Add some random missingless:
@@ -1100,9 +1258,12 @@ rr <- sample(nrow(data_missing), 100, replace = FALSE)
 data_missing[rr, "Y"] <- NA
 ```
 
-```{r data_nodes-add-missigness-mopttx_res, eval=TRUE}
+
+```r
 # look at the data again:
 summary(data_missing$Y)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+   0.00    0.00    0.00    0.47    1.00    1.00     100 
 ```
 
 <br>
@@ -1113,7 +1274,8 @@ ___
 
 To start, we must first add to our library.
 
-```{r sl3_lrnrs-add-mopttx}
+
+```r
 delta_learner <- Lrnr_sl$new(
   learners = list(lrn_mean, lrn_glm),
   metalearner = Lrnr_nnls$new()
@@ -1122,6 +1284,31 @@ delta_learner <- Lrnr_sl$new(
 # specify outcome and treatment regressions and create learner list
 learner_list <- list(Y = Q_learner, A = g_learner, B = b_learner, delta_Y = delta_learner)
 learner_list
+$Y
+[1] "Super learner:"
+List of 3
+ $ : chr "Lrnr_xgboost_50_1"
+ $ : chr "Lrnr_mean"
+ $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
+
+$A
+[1] "Super learner:"
+List of 2
+ $ : chr "Lrnr_xgboost_50_1"
+ $ : chr "Lrnr_mean"
+
+$B
+[1] "Super learner:"
+List of 3
+ $ : chr "Lrnr_xgboost_50_1_multivariate"
+ $ : chr "Lrnr_mean_multivariate"
+ $ : chr "Lrnr_glm_fast_TRUE_Cholesky_multivariate"
+
+$delta_Y
+[1] "Super learner:"
+List of 2
+ $ : chr "Lrnr_mean"
+ $ : chr "Lrnr_glm_fast_TRUE_Cholesky"
 ```
 
 Now `delta_Y` fits the missing outcome process.
@@ -1132,7 +1319,8 @@ ___
 
 <br>
 
-```{r spec_init_missingness, eval=FALSE}
+
+```r
 # initialize a tmle specification
 tmle_spec_cat_miss <- tmle3_mopttx_blip_revere(
   V = c("W1", "W2", "W3", "W4"), type = "blip2",
@@ -1141,13 +1329,20 @@ tmle_spec_cat_miss <- tmle3_mopttx_blip_revere(
 )
 ```
 
-```{r fit_tmle_auto2, eval=FALSE}
+
+```r
 # fit the TML estimator
 fit_cat_miss <- tmle3(tmle_spec_cat_miss, data_missing, node_list, learner_list)
 ```
 
-```{r fit_tmle_auto2_res, eval=TRUE}
+
+```r
 fit_cat_miss
+A tmle3_Fit that took 1 step(s)
+   type                    param init_est tmle_est       se   lower   upper
+1:  TSM E[Y_{A=NULL, delta_Y=1}]  0.55533  0.81095 0.017859 0.77595 0.84595
+   psi_transformed lower_transformed upper_transformed
+1:         0.81095           0.77595           0.84595
 ```
 
 <br>
@@ -1166,7 +1361,8 @@ need to considered covariates that are categorical variables.
 * For illustration purpose, we bin baseline covariates corresponding 
 to the data-generating distribution described in the previous section:
 
-```{r data_vim-nodes-mopttx}
+
+```r
 # bin baseline covariates to 3 categories:
 data$W1 <- ifelse(data$W1 < quantile(data$W1)[2], 1, ifelse(data$W1 < quantile(data$W1)[3], 2, 3))
 
@@ -1176,6 +1372,14 @@ node_list <- list(
   Y = "Y"
 )
 node_list
+$W
+[1] "W3" "W4" "W2"
+
+$A
+[1] "W1" "A" 
+
+$Y
+[1] "Y"
 ```
 
 * Note that our node list now includes $W_1$ as treatments as well!
@@ -1195,7 +1399,8 @@ We will initialize a specification for the TMLE of our parameter of
 interest (called a `tmle3_Spec` in the `tlverse` nomenclature) simply by calling
 `tmle3_mopttx_vim`.
 
-```{r mopttx_spec_init_vim, eval=FALSE}
+
+```r
 # initialize a tmle specification
 tmle_spec_vim <- tmle3_mopttx_vim(
   V = c("W2"),
@@ -1213,9 +1418,19 @@ vim_results <- tmle3_vim(tmle_spec_vim, data, node_list, learner_list,
 )
 ```
 
-```{r mopttx_fit_tmle_auto_vim, eval=TRUE}
+
+```r
 # see results:
 print(vim_results)
+   type                param   init_est  tmle_est       se      lower
+1:  ATE E[Y_{A=NULL}] - E[Y] -0.0128837 -0.051833 0.021934 -0.0948231
+2:  ATE E[Y_{A=NULL}] - E[Y] -0.0022747  0.036924 0.017144  0.0033228
+        upper psi_transformed lower_transformed upper_transformed  A
+1: -0.0088424       -0.051833        -0.0948231        -0.0088424 W1
+2:  0.0705248        0.036924         0.0033228         0.0705248  A
+             W  Z_stat      p_nz p_nz_corrected
+1:  W3,W4,W2,A -2.3631 0.0090615       0.015629
+2: W3,W4,W2,W1  2.1538 0.0156285       0.015629
 ```
 
 <br>
@@ -1297,7 +1512,8 @@ Questions:
 To start, let's load the data, convert all columns to be of class `numeric`,
 and take a quick look at it:
 
-```{r load-washb-data, message=FALSE, warning=FALSE, cache=FALSE, eval=FALSE}
+
+```r
 washb_data <- fread("https://raw.githubusercontent.com/tlverse/tlverse-data/master/wash-benefits/washb_data.csv", stringsAsFactors = TRUE)
 washb_data <- washb_data[!is.na(momage), lapply(.SD, as.numeric)]
 head(washb_data, 3)
@@ -1305,19 +1521,21 @@ head(washb_data, 3)
 
 As before, we specify the NPSEM via the `node_list` object.
 
-```{r washb-data-npsem-mopttx, message=FALSE, warning=FALSE, cache=FALSE, eval=FALSE}
+
+```r
 node_list <- list(
   W = names(washb_data)[!(names(washb_data) %in% c("whz", "tr", "momheight"))],
   A = "tr", Y = "whz"
 )
-``` 
+```
 
 We pick few potential effect modifiers, including mother's education, current
 living conditions (floor), and possession of material items including the refrigerator.
 We concentrate of these covariates as they might be indicative of the socio-economic status
 of individuals involved in the trial. We can explore the distribution of our $V$, $A$ and $Y$:
 
-```{r summary_WASH, eval=FALSE}
+
+```r
 # V1, V2 and V3:
 table(washb_data$momedu)
 table(washb_data$floor)
@@ -1335,7 +1553,8 @@ and the blip function. Since our treatment is categorical, we need to define a
 multinomial learner for $A$ and multivariate learner for $B$. We 
 will define the `xgboost` over a grid of parameters, and initialize a mean learner.
 
-```{r sl3_lrnrs-WASH-mopttx, eval=FALSE}
+
+```r
 # Initialize few of the learners:
 grid_params <- list(
   nrounds = c(100, 500),
@@ -1379,7 +1598,8 @@ answer Question 1. We want to maximize our outcome, with higher the weight-for-h
 the better. We will also use `blip2` as the blip type, but note that we could have used `blip1`
 as well since "Control" is a good reference category. 
 
-```{r spec_init_WASH, eval=FALSE}
+
+```r
 ## Question 2:
 
 # Initialize a tmle specification
@@ -1400,7 +1620,8 @@ table(tmle_spec_Q$return_rule)
 Using the same formulation as before, we estimate the realistic optimal ITR 
 and the corresponding value of the realistic ITR:
 
-```{r spec_init_WASH_simple_q3, eval=FALSE}
+
+```r
 ## Question 3:
 
 # Initialize a tmle specification with "realistic=TRUE":
