@@ -222,6 +222,14 @@
         "nnls"
       ]
     },
+    "TeachingDemos": {
+      "Package": "TeachingDemos",
+      "Version": "2.12",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "41e566d7eab7307a31b3dee3b203c7e0",
+      "Requirements": []
+    },
     "V8": {
       "Package": "V8",
       "Version": "4.1.0",
@@ -808,6 +816,18 @@
       "Requirements": [
         "class",
         "proxy"
+      ]
+    },
+    "earth": {
+      "Package": "earth",
+      "Version": "5.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "fccdc89d741234c23abeaa20f33c5c1e",
+      "Requirements": [
+        "Formula",
+        "TeachingDemos",
+        "plotmo"
       ]
     },
     "ellipsis": {
@@ -1898,6 +1918,26 @@
         "withr"
       ]
     },
+    "plotmo": {
+      "Package": "plotmo",
+      "Version": "3.6.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ec6e3b80a43a169b3a81e426e697b84a",
+      "Requirements": [
+        "Formula",
+        "TeachingDemos",
+        "plotrix"
+      ]
+    },
+    "plotrix": {
+      "Package": "plotrix",
+      "Version": "3.8-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2ebe8c2ec200da649738b0fc35a9b1a1",
+      "Requirements": []
+    },
     "plyr": {
       "Package": "plyr",
       "Version": "1.8.7",
@@ -2434,14 +2474,14 @@
       "Package": "sl3",
       "Version": "1.4.5",
       "Source": "GitHub",
-      "Remotes": "github::tlverse/origami, github::tlverse/hal9001@devel,\n        github::nhejazi/haldensify",
       "RemoteType": "github",
+      "Remotes": "github::tlverse/origami, github::tlverse/hal9001@devel,\n    github::nhejazi/haldensify",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "sl3",
       "RemoteUsername": "tlverse",
       "RemoteRef": "devel",
       "RemoteSha": "fae6165e68a6e3a11a9852b0dba3196290d8f2e8",
-      "Hash": "25722469866d3d5f2a3a3c8d8c5b4d0b",
+      "Hash": "197c754f442214e504e8eccf2d11909b",
       "Requirements": [
         "BBmisc",
         "R6",
