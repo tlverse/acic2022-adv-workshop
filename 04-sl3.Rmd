@@ -657,7 +657,7 @@ SL using `cv_sl`.
 (Note: we did not evaluate this part of the code, as it was 
 taking too long).
 -->
-```{r cvsl}
+```{r cvsl, eval=F}
 # we will also set a stopwatch so we can measure how long this takes
 start_time <- proc.time()
 
@@ -672,7 +672,7 @@ runtime_cv_sl_fit
 cv_sl_fit$cv_risk[,c(1:3)]
 ```
 
-```{r cvsl-risk-summary-handbook, echo = FALSE}
+```{r cvsl-risk-summary-handbook, echo = FALSE, eval=F}
 if (knitr::is_latex_output()) {
   cv_sl_fit$cv_risk[,c(1:3)] %>%
     kable(format = "latex")
@@ -692,7 +692,7 @@ are cross-validated but the meta-learner fit is not. The revere-based risk can
 be thought of as an approximate lower bound on the true CV risk estimate for 
 the SL when the meta-learner is a simple model, like NNLS. We can output the 
 revere-based risk estimate by setting `get_sl_revere_risk = TRUE` when we
-call `cv_risk`:
+call `cv_risk`.
 
 ```{r sl-revere-risk}
 cv_risk_table_revere <- sl_fit$cv_risk(
