@@ -4,7 +4,7 @@ title: "[ACIC 2022] Targeted Learning in the `tlverse`"
 subtitle: "Causal Inference Meets Machine Learning"
 author: "Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana
   Malenica, Rachael Phillips"
-date: "updated: May 23, 2022"
+date: "updated: June 05, 2022"
 documentclass: book
 site: bookdown::bookdown_site
 bibliography: [book.bib, packages.bib]
@@ -195,33 +195,33 @@ This version of the book was built with R version 4.2.0 (2022-04-22),
 following packages:
 
 
-|package      |version |source                                 |
-|:------------|:-------|:--------------------------------------|
-|bookdown     |0.24.1  |Github (rstudio/bookdown\@84bde8e)     |
-|bslib        |0.3.1   |Github (rstudio/bslib\@efc475c)        |
-|data.table   |1.14.2  |CRAN (R 4.2.0)                         |
-|delayed      |0.4.0   |Github (tlverse/delayed\@bf7ca82)      |
-|devtools     |2.4.2   |CRAN (R 4.2.0)                         |
-|downlit      |0.2.1   |CRAN (R 4.2.0)                         |
-|dplyr        |1.0.9   |CRAN (R 4.2.0)                         |
-|ggplot2      |3.3.6   |CRAN (R 4.2.0)                         |
-|here         |1.0.1   |CRAN (R 4.2.0)                         |
-|kableExtra   |1.3.4   |CRAN (R 4.2.0)                         |
-|knitr        |1.36    |CRAN (R 4.2.0)                         |
-|mvtnorm      |1.1-2   |CRAN (R 4.2.0)                         |
-|origami      |1.0.5   |Github (tlverse/origami\@e1b8fe6)      |
-|readr        |2.0.2   |CRAN (R 4.2.0)                         |
-|rmarkdown    |2.11    |CRAN (R 4.2.0)                         |
-|skimr        |2.1.3   |CRAN (R 4.2.0)                         |
-|sl3          |1.4.5   |Github (tlverse/sl3\@fae6165)          |
-|stringr      |1.4.0   |CRAN (R 4.2.0)                         |
-|tibble       |3.1.7   |CRAN (R 4.2.0)                         |
-|tidyr        |1.2.0   |CRAN (R 4.2.0)                         |
-|tidyverse    |1.3.1   |CRAN (R 4.2.0)                         |
-|tmle3        |0.2.0   |Github (tlverse/tmle3\@425e21c)        |
-|tmle3mediate |0.0.3   |Github (tlverse/tmle3mediate\@70d1151) |
-|tmle3mopttx  |0.1.0   |Github (tlverse/tmle3mopttx\@9fb1a3b)  |
-|tmle3shift   |0.2.0   |Github (tlverse/tmle3shift\@43f6fc0)   |
+|package      |version    |source                                                                  |
+|:------------|:----------|:-----------------------------------------------------------------------|
+|bookdown     |0.26.3     |Github (rstudio/bookdown\@169c43b6bb95213f2af63a95acd4e977a58a3e1f)     |
+|bslib        |0.3.1.9000 |Github (rstudio/bslib\@a4946a49499438e71dce29c810a41e2d05170376)        |
+|data.table   |1.14.2     |CRAN (R 4.2.0)                                                          |
+|delayed      |0.4.0      |Github (tlverse/delayed\@bf7ca82ff316f22e84706e9128e8d832be0785bc)      |
+|devtools     |2.4.3      |CRAN (R 4.2.0)                                                          |
+|downlit      |0.4.0      |CRAN (R 4.2.0)                                                          |
+|dplyr        |1.0.9      |CRAN (R 4.2.0)                                                          |
+|ggplot2      |3.3.6      |CRAN (R 4.2.0)                                                          |
+|here         |1.0.1      |CRAN (R 4.2.0)                                                          |
+|kableExtra   |1.3.4      |CRAN (R 4.2.0)                                                          |
+|knitr        |1.39       |CRAN (R 4.2.0)                                                          |
+|mvtnorm      |1.1-3      |CRAN (R 4.2.0)                                                          |
+|origami      |1.0.5      |Github (tlverse/origami\@e1b8fe6f5e75fff1d48eed115bb81475c9bd506e)      |
+|readr        |2.1.2      |CRAN (R 4.2.0)                                                          |
+|rmarkdown    |2.14       |CRAN (R 4.2.0)                                                          |
+|skimr        |2.1.4      |CRAN (R 4.2.0)                                                          |
+|sl3          |1.4.5      |Github (tlverse/sl3\@de445c210eefa5aa9dd4c0d1fab8126f0d7c5eeb)          |
+|stringr      |1.4.0      |CRAN (R 4.2.0)                                                          |
+|tibble       |3.1.7      |CRAN (R 4.2.0)                                                          |
+|tidyr        |1.2.0      |CRAN (R 4.2.0)                                                          |
+|tidyverse    |1.3.1      |CRAN (R 4.2.0)                                                          |
+|tmle3        |0.2.0      |Github (tlverse/tmle3\@ed72f8a20e64c914ab25ffe015d865f7a9963d27)        |
+|tmle3mediate |0.0.3      |Github (tlverse/tmle3mediate\@70d1151c4adb54d044f355d06d07bcaeb7f8ae07) |
+|tmle3mopttx  |1.0.0      |Github (tlverse/tmle3mopttx\@c8c675f051bc5ee6d51fa535fe6dc80791d4d1b7)  |
+|tmle3shift   |0.2.0      |Github (tlverse/tmle3shift\@4ed52b50af501a5fa2e6257b568d17fd485d3f42)   |
 
 ## Setup instructions {#setup}
 

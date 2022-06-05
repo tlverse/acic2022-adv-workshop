@@ -379,10 +379,16 @@ washb_NIE <- tmle3(
   tmle_spec_NIE, washb_data, node_list, learner_list
 )
 washb_NIE
+A tmle3_Fit that took 1 step(s)
+   type                  param  init_est  tmle_est       se     lower    upper
+1:  NIE NIE[Y_{A=1} - Y_{A=0}] 0.0028004 0.0025696 0.043356 -0.082407 0.087546
+   psi_transformed lower_transformed upper_transformed
+1:       0.0025696         -0.082407          0.087546
 ```
 
 Based on the output, we conclude that the indirect effect of the treatment
-through the mediators `node_list$Z` is `washb_NIE$summary$tmle_est`.
+through the mediators (sex, month, aged) is
+0.00257.
 
 ### Targeted Estimation of the Natural Direct Effect
 
@@ -401,15 +407,20 @@ washb_NDE <- tmle3(
   tmle_spec_NDE, washb_data, node_list, learner_list
 )
 washb_NDE
+A tmle3_Fit that took 1 step(s)
+   type                  param init_est tmle_est       se    lower   upper
+1:  NDE NDE[Y_{A=1} - Y_{A=0}] 0.017372 0.017372 0.085844 -0.15088 0.18562
+   psi_transformed lower_transformed upper_transformed
+1:        0.017372          -0.15088           0.18562
 ```
 
 From this, we can draw the conclusion that the direct effect of the treatment
-(through all paths not involving the mediators, `node_list$Z`) is
-`washb_NDE$summary$tmle_est`. Note that, together, the estimates of
+(through all paths not involving the mediators (sex, month, aged)) is
+0.01737. Note that, together, the estimates of
 the natural direct and indirect effects approximately recover the _average
 treatment effect_, that is, based on these estimates of the NDE and NIE, the
-ATE is roughly the sum of `washb_NDE$summary$tmle_est` and 
-`washb_NIE$summary$tmle_est`.
+ATE is roughly
+0.01994.
 
 ## Exercises
 

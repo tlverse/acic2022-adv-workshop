@@ -6,18 +6,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 3 Super Learning with sl3 | [ACIC 2022] Targeted Learning in the tlverse</title>
 <meta name="author" content="Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips">
-<meta name="description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-05-23 Learning Objectives By the end of this chapter...">
-<meta name="generator" content="bookdown 0.24.1 with bs4_book()">
+<meta name="description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-06-05 Learning Objectives By the end of this chapter...">
+<meta name="generator" content="bookdown 0.26.3 with bs4_book()">
 <meta property="og:title" content="Chapter 3 Super Learning with sl3 | [ACIC 2022] Targeted Learning in the tlverse">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://tlverse.org/tlverse-workshops/sl3.html">
-<meta property="og:description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-05-23 Learning Objectives By the end of this chapter...">
+<meta property="og:description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-06-05 Learning Objectives By the end of this chapter...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 3 Super Learning with sl3 | [ACIC 2022] Targeted Learning in the tlverse">
-<meta name="twitter:description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-05-23 Learning Objectives By the end of this chapter...">
+<meta name="twitter:description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-06-05 Learning Objectives By the end of this chapter...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1.9000/transition.js"></script><script src="libs/bs3compat-0.3.1.9000/tabs.js"></script><script src="libs/bs3compat-0.3.1.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
 <script src="libs/vis-9.1.0/vis-network.min.js"></script><script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 </head>
@@ -35,7 +35,11 @@
   \(\newcommand{\I}{\mathbb{I}}\)
   \(\newcommand{\1}{\mathbbm{1}}\)
   </span>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><div class="container-fluid">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<div class="container-fluid">
 <div class="row">
   <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
@@ -79,7 +83,7 @@
 <p><em>Rachael Phillips</em></p>
 <p>Based on the <a href="https://github.com/tlverse/sl3"><code>sl3</code> <code>R</code> package</a> by <em>Jeremy
 Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin</em>.</p>
-<p>Updated: 2022-05-23</p>
+<p>Updated: 2022-06-05</p>
 <div id="learning-objectives-2" class="section level2 unnumbered">
 <h2>Learning Objectives<a class="anchor" aria-label="anchor" href="#learning-objectives-2"><i class="fas fa-link"></i></a>
 </h2>
@@ -887,8 +891,8 @@ loading the <code>origami</code> R package and then inputting “?make_folds” 
 Console). For more details on <code>sl3_Task</code>, refer to its documentation (e.g., by inputting “?sl3_Task” in R).</p>
 <p><em>Tip:</em> If you type <code>task$</code> and then press the tab key (press tab twice if not in
 RStudio), you can view all of the active and public fields, and methods that
-can be accessed from the <code>task$</code> object. This <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> is like the key to access
-many internals of an object. In the next section, will see how we can use <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code>
+can be accessed from the <code>task$</code> object. This <code>$</code> is like the key to access
+many internals of an object. In the next section, will see how we can use <code>$</code>
 to dig into SL fit objects as well, to obtain predictions from an SL fit or candidate learners, examine an SL fit or its candidates, and summarize an
 SL fit.</p>
 </div>
@@ -995,7 +999,7 @@ that their predictions can be combined and/or compared.</p>
 <span id="cb15-7"><a href="sl3.html#cb15-7"></a> [<span class="dv">2</span>] <span class="st">"Lrnr_mean"</span>                              </span>
 <span id="cb15-8"><a href="sl3.html#cb15-8"></a> [<span class="dv">3</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_0_100_TRUE"</span></span>
 <span id="cb15-9"><a href="sl3.html#cb15-9"></a> [<span class="dv">4</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_1_100_TRUE"</span></span>
-<span id="cb15-10"><a href="sl3.html#cb15-10"></a> [<span class="dv">5</span>] <span class="st">"Lrnr_polspline_5"</span>                       </span>
+<span id="cb15-10"><a href="sl3.html#cb15-10"></a> [<span class="dv">5</span>] <span class="st">"Lrnr_polspline"</span>                         </span>
 <span id="cb15-11"><a href="sl3.html#cb15-11"></a> [<span class="dv">6</span>] <span class="st">"Lrnr_earth_2_3_backward_0_1_0_0"</span>        </span>
 <span id="cb15-12"><a href="sl3.html#cb15-12"></a> [<span class="dv">7</span>] <span class="st">"Lrnr_hal9001_2_1_c(3, 2)_5"</span>             </span>
 <span id="cb15-13"><a href="sl3.html#cb15-13"></a> [<span class="dv">8</span>] <span class="st">"Lrnr_ranger_500_TRUE_none_1"</span>            </span>
@@ -1210,7 +1214,7 @@ Lrnr_glmnet_NULL_deviance_10_0_100_TRUE
 Lrnr_glmnet_NULL_deviance_10_1_100_TRUE
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
-Lrnr_polspline_5
+Lrnr_polspline
 </th>
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
 Lrnr_earth_2_3_backward_0_1_0_0
@@ -1480,7 +1484,7 @@ combination, we can examine their coefficients.</p>
 <span id="cb26-3"><a href="sl3.html#cb26-3"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.000</span> </span>
 <span id="cb26-4"><a href="sl3.html#cb26-4"></a>Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">0</span>_<span class="dv">100</span>_TRUE Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">1</span>_<span class="dv">100</span>_TRUE </span>
 <span id="cb26-5"><a href="sl3.html#cb26-5"></a>                                  <span class="fl">0.076</span>                                   <span class="fl">0.000</span> </span>
-<span id="cb26-6"><a href="sl3.html#cb26-6"></a>                       Lrnr_polspline_<span class="dv">5</span>         Lrnr_earth_<span class="dv">2</span>_<span class="dv">3</span>_backward_<span class="dv">0</span>_<span class="dv">1</span>_<span class="dv">0</span>_<span class="dv">0</span> </span>
+<span id="cb26-6"><a href="sl3.html#cb26-6"></a>                         Lrnr_polspline         Lrnr_earth_<span class="dv">2</span>_<span class="dv">3</span>_backward_<span class="dv">0</span>_<span class="dv">1</span>_<span class="dv">0</span>_<span class="dv">0</span> </span>
 <span id="cb26-7"><a href="sl3.html#cb26-7"></a>                                  <span class="fl">0.164</span>                                   <span class="fl">0.389</span> </span>
 <span id="cb26-8"><a href="sl3.html#cb26-8"></a>             <span class="kw">Lrnr_hal9001_2_1_c</span>(<span class="dv">3</span>, <span class="dv">2</span>)_<span class="dv">5</span>             Lrnr_ranger_<span class="dv">500</span>_TRUE_none_<span class="dv">1</span> </span>
 <span id="cb26-9"><a href="sl3.html#cb26-9"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.372</span> </span>
@@ -1496,7 +1500,7 @@ fit object.</p>
 <span id="cb27-4"><a href="sl3.html#cb27-4"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.000</span> </span>
 <span id="cb27-5"><a href="sl3.html#cb27-5"></a>Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">0</span>_<span class="dv">100</span>_TRUE Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">1</span>_<span class="dv">100</span>_TRUE </span>
 <span id="cb27-6"><a href="sl3.html#cb27-6"></a>                                  <span class="fl">0.076</span>                                   <span class="fl">0.000</span> </span>
-<span id="cb27-7"><a href="sl3.html#cb27-7"></a>                       Lrnr_polspline_<span class="dv">5</span>         Lrnr_earth_<span class="dv">2</span>_<span class="dv">3</span>_backward_<span class="dv">0</span>_<span class="dv">1</span>_<span class="dv">0</span>_<span class="dv">0</span> </span>
+<span id="cb27-7"><a href="sl3.html#cb27-7"></a>                         Lrnr_polspline         Lrnr_earth_<span class="dv">2</span>_<span class="dv">3</span>_backward_<span class="dv">0</span>_<span class="dv">1</span>_<span class="dv">0</span>_<span class="dv">0</span> </span>
 <span id="cb27-8"><a href="sl3.html#cb27-8"></a>                                  <span class="fl">0.164</span>                                   <span class="fl">0.389</span> </span>
 <span id="cb27-9"><a href="sl3.html#cb27-9"></a>             <span class="kw">Lrnr_hal9001_2_1_c</span>(<span class="dv">3</span>, <span class="dv">2</span>)_<span class="dv">5</span>             Lrnr_ranger_<span class="dv">500</span>_TRUE_none_<span class="dv">1</span> </span>
 <span id="cb27-10"><a href="sl3.html#cb27-10"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.372</span> </span>
@@ -1583,7 +1587,7 @@ Lrnr_glmnet_NULL_deviance_10_1_100_TRUE
 </tr>
 <tr>
 <td style="text-align:left;">
-Lrnr_polspline_5
+Lrnr_polspline
 </td>
 <td style="text-align:right;">
 0.16359
@@ -1774,7 +1778,9 @@ task in order to examine the pre-processing of <code>washb_data</code>.</p>
 <span id="cb33-10"><a href="sl3.html#cb33-10"></a>                 <span class="st">"asset_mobile"</span>)</span>
 <span id="cb33-11"><a href="sl3.html#cb33-11"></a>)</span>
 <span id="cb33-12"><a href="sl3.html#cb33-12"></a>Warning <span class="cf">in</span> <span class="kw">process_data</span>(data, nodes, <span class="dt">column_names =</span> column_names, <span class="dt">flag =</span> flag, <span class="op">:</span></span>
-<span id="cb33-13"><a href="sl3.html#cb33-13"></a>Missing covariate data detected<span class="op">:</span><span class="st"> </span>imputing covariates.</span></code></pre></div>
+<span id="cb33-13"><a href="sl3.html#cb33-13"></a>Imputing missing values and adding missingness indicators <span class="cf">for</span> the following</span>
+<span id="cb33-14"><a href="sl3.html#cb33-14"></a>covariates with missing values<span class="op">:</span><span class="st"> </span>momage, momheight. See documentation of the</span>
+<span id="cb33-15"><a href="sl3.html#cb33-15"></a>process_data <span class="cf">function</span> <span class="cf">for</span> details.</span></code></pre></div>
 <div id="imputation-and-missingness-indicators" class="section level4 unnumbered">
 <h4>Imputation and missingness indicators<a class="anchor" aria-label="anchor" href="#imputation-and-missingness-indicators"><i class="fas fa-link"></i></a>
 </h4>
@@ -3108,7 +3114,7 @@ R package and its <code>xgb.train</code> function.</p>
 <span id="cb39-3"><a href="sl3.html#cb39-3"></a> [<span class="dv">2</span>] <span class="st">"Lrnr_mean"</span>                              </span>
 <span id="cb39-4"><a href="sl3.html#cb39-4"></a> [<span class="dv">3</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_0_100_TRUE"</span></span>
 <span id="cb39-5"><a href="sl3.html#cb39-5"></a> [<span class="dv">4</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_1_100_TRUE"</span></span>
-<span id="cb39-6"><a href="sl3.html#cb39-6"></a> [<span class="dv">5</span>] <span class="st">"Lrnr_polspline_5"</span>                       </span>
+<span id="cb39-6"><a href="sl3.html#cb39-6"></a> [<span class="dv">5</span>] <span class="st">"Lrnr_polspline"</span>                         </span>
 <span id="cb39-7"><a href="sl3.html#cb39-7"></a> [<span class="dv">6</span>] <span class="st">"Lrnr_earth_2_3_backward_0_1_0_0"</span>        </span>
 <span id="cb39-8"><a href="sl3.html#cb39-8"></a> [<span class="dv">7</span>] <span class="st">"Lrnr_hal9001_2_1_c(3, 2)_5"</span>             </span>
 <span id="cb39-9"><a href="sl3.html#cb39-9"></a> [<span class="dv">8</span>] <span class="st">"Lrnr_ranger_500_TRUE_none_1"</span>            </span>
@@ -4639,7 +4645,7 @@ Infarction with <code>sl3</code></a>.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>[ACIC 2022] Targeted Learning in the <code>tlverse</code></strong>: Causal Inference Meets Machine Learning" was written by Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on updated: May 23, 2022.</p>
+    <p>"<strong>[ACIC 2022] Targeted Learning in the <code>tlverse</code></strong>: Causal Inference Meets Machine Learning" was written by Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on updated: June 05, 2022.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

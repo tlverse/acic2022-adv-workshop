@@ -7,7 +7,7 @@
 <title>Chapter 7 Causal Mediation Analysis | [ACIC 2022] Targeted Learning in the tlverse</title>
 <meta name="author" content="Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips">
 <meta name="description" content="Nima Hejazi Based on the tmle3mediate R package.  7.1 Learning Objectives Understand that you can estimate the natural direct and indirect effects for a binary treatment using the tmle3mediate R...">
-<meta name="generator" content="bookdown 0.24.1 with bs4_book()">
+<meta name="generator" content="bookdown 0.26.3 with bs4_book()">
 <meta property="og:title" content="Chapter 7 Causal Mediation Analysis | [ACIC 2022] Targeted Learning in the tlverse">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://tlverse.org/tlverse-workshops/causal-mediation-analysis.html">
@@ -17,7 +17,7 @@
 <meta name="twitter:description" content="Nima Hejazi Based on the tmle3mediate R package.  7.1 Learning Objectives Understand that you can estimate the natural direct and indirect effects for a binary treatment using the tmle3mediate R...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1.9000/transition.js"></script><script src="libs/bs3compat-0.3.1.9000/tabs.js"></script><script src="libs/bs3compat-0.3.1.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
 <script src="libs/vis-9.1.0/vis-network.min.js"></script><script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 </head>
@@ -35,7 +35,11 @@
   \(\newcommand{\I}{\mathbb{I}}\)
   \(\newcommand{\1}{\mathbbm{1}}\)
   </span>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><div class="container-fluid">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<div class="container-fluid">
 <div class="row">
   <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
@@ -426,18 +430,23 @@ object that encodes exactly which learners to use for the nuisance parameters
 function, alongside the data, the node list (created above), and a learner list
 indicating which machine learning algorithms to use for estimating the nuisance
 parameters based on <span class="math inline">\(A\)</span> and <span class="math inline">\(Y\)</span>.</p>
-<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tmle_spec_NIE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/tmle3mediate/reference/tmle_NIE.html">tmle_NIE</a></span><span class="op">(</span>
-  e_learners <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_cv.html">Lrnr_cv</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lasso_binary_learner</span>, full_fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-  psi_Z_learners <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_cv.html">Lrnr_cv</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lasso_contin_learner</span>, full_fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-  max_iter <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span>
-<span class="va">washb_NIE</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span><span class="op">(</span>
-  <span class="va">tmle_spec_NIE</span>, <span class="va">washb_data</span>, <span class="va">node_list</span>, <span class="va">learner_list</span>
-<span class="op">)</span>
-<span class="va">washb_NIE</span></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="causal-mediation-analysis.html#cb140-1"></a>tmle_spec_NIE &lt;-<span class="st"> </span><span class="kw">tmle_NIE</span>(</span>
+<span id="cb140-2"><a href="causal-mediation-analysis.html#cb140-2"></a>  <span class="dt">e_learners =</span> Lrnr_cv<span class="op">$</span><span class="kw">new</span>(lasso_binary_learner, <span class="dt">full_fit =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb140-3"><a href="causal-mediation-analysis.html#cb140-3"></a>  <span class="dt">psi_Z_learners =</span> Lrnr_cv<span class="op">$</span><span class="kw">new</span>(lasso_contin_learner, <span class="dt">full_fit =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb140-4"><a href="causal-mediation-analysis.html#cb140-4"></a>  <span class="dt">max_iter =</span> <span class="dv">1</span></span>
+<span id="cb140-5"><a href="causal-mediation-analysis.html#cb140-5"></a>)</span>
+<span id="cb140-6"><a href="causal-mediation-analysis.html#cb140-6"></a>washb_NIE &lt;-<span class="st"> </span><span class="kw">tmle3</span>(</span>
+<span id="cb140-7"><a href="causal-mediation-analysis.html#cb140-7"></a>  tmle_spec_NIE, washb_data, node_list, learner_list</span>
+<span id="cb140-8"><a href="causal-mediation-analysis.html#cb140-8"></a>)</span>
+<span id="cb140-9"><a href="causal-mediation-analysis.html#cb140-9"></a>washb_NIE</span>
+<span id="cb140-10"><a href="causal-mediation-analysis.html#cb140-10"></a>A tmle3_Fit that took <span class="dv">1</span> <span class="kw">step</span>(s)</span>
+<span id="cb140-11"><a href="causal-mediation-analysis.html#cb140-11"></a>   type                  param  init_est  tmle_est       se     lower    upper</span>
+<span id="cb140-12"><a href="causal-mediation-analysis.html#cb140-12"></a><span class="dv">1</span><span class="op">:</span><span class="st">  </span>NIE NIE[Y_{A=<span class="dv">1</span>} <span class="op">-</span><span class="st"> </span>Y_{A=<span class="dv">0</span>}] <span class="fl">0.0028004</span> <span class="fl">0.0025696</span> <span class="fl">0.043356</span> <span class="fl">-0.082407</span> <span class="fl">0.087546</span></span>
+<span id="cb140-13"><a href="causal-mediation-analysis.html#cb140-13"></a>   psi_transformed lower_transformed upper_transformed</span>
+<span id="cb140-14"><a href="causal-mediation-analysis.html#cb140-14"></a><span class="dv">1</span><span class="op">:</span><span class="st">       </span><span class="fl">0.0025696</span>         <span class="fl">-0.082407</span>          <span class="fl">0.087546</span></span></code></pre></div>
 <p>Based on the output, we conclude that the indirect effect of the treatment
-through the mediators <code>node_list$Z</code> is <code>washb_NIE$summary$tmle_est</code>.</p>
+through the mediators (sex, month, aged) is
+0.00257.</p>
 </div>
 <div id="targeted-estimation-of-the-natural-direct-effect" class="section level3">
 <h3>
@@ -446,23 +455,27 @@ through the mediators <code>node_list$Z</code> is <code>washb_NIE$summary$tmle_e
 <p>An analogous procedure applies for estimation of the NDE, only replacing the
 Spec object for the NIE with <code>tmle_spec_NDE</code> to define learners for the NDE
 nuisance parameters:</p>
-<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tmle_spec_NDE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/tmle3mediate/reference/tmle_NDE.html">tmle_NDE</a></span><span class="op">(</span>
-  e_learners <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_cv.html">Lrnr_cv</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lasso_binary_learner</span>, full_fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-  psi_Z_learners <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_cv.html">Lrnr_cv</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lasso_contin_learner</span>, full_fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-  max_iter <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span>
-<span class="va">washb_NDE</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/tmle3.html">tmle3</a></span><span class="op">(</span>
-  <span class="va">tmle_spec_NDE</span>, <span class="va">washb_data</span>, <span class="va">node_list</span>, <span class="va">learner_list</span>
-<span class="op">)</span>
-<span class="va">washb_NDE</span></code></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="causal-mediation-analysis.html#cb141-1"></a>tmle_spec_NDE &lt;-<span class="st"> </span><span class="kw">tmle_NDE</span>(</span>
+<span id="cb141-2"><a href="causal-mediation-analysis.html#cb141-2"></a>  <span class="dt">e_learners =</span> Lrnr_cv<span class="op">$</span><span class="kw">new</span>(lasso_binary_learner, <span class="dt">full_fit =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb141-3"><a href="causal-mediation-analysis.html#cb141-3"></a>  <span class="dt">psi_Z_learners =</span> Lrnr_cv<span class="op">$</span><span class="kw">new</span>(lasso_contin_learner, <span class="dt">full_fit =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb141-4"><a href="causal-mediation-analysis.html#cb141-4"></a>  <span class="dt">max_iter =</span> <span class="dv">1</span></span>
+<span id="cb141-5"><a href="causal-mediation-analysis.html#cb141-5"></a>)</span>
+<span id="cb141-6"><a href="causal-mediation-analysis.html#cb141-6"></a>washb_NDE &lt;-<span class="st"> </span><span class="kw">tmle3</span>(</span>
+<span id="cb141-7"><a href="causal-mediation-analysis.html#cb141-7"></a>  tmle_spec_NDE, washb_data, node_list, learner_list</span>
+<span id="cb141-8"><a href="causal-mediation-analysis.html#cb141-8"></a>)</span>
+<span id="cb141-9"><a href="causal-mediation-analysis.html#cb141-9"></a>washb_NDE</span>
+<span id="cb141-10"><a href="causal-mediation-analysis.html#cb141-10"></a>A tmle3_Fit that took <span class="dv">1</span> <span class="kw">step</span>(s)</span>
+<span id="cb141-11"><a href="causal-mediation-analysis.html#cb141-11"></a>   type                  param init_est tmle_est       se    lower   upper</span>
+<span id="cb141-12"><a href="causal-mediation-analysis.html#cb141-12"></a><span class="dv">1</span><span class="op">:</span><span class="st">  </span>NDE NDE[Y_{A=<span class="dv">1</span>} <span class="op">-</span><span class="st"> </span>Y_{A=<span class="dv">0</span>}] <span class="fl">0.017372</span> <span class="fl">0.017372</span> <span class="fl">0.085844</span> <span class="fl">-0.15088</span> <span class="fl">0.18562</span></span>
+<span id="cb141-13"><a href="causal-mediation-analysis.html#cb141-13"></a>   psi_transformed lower_transformed upper_transformed</span>
+<span id="cb141-14"><a href="causal-mediation-analysis.html#cb141-14"></a><span class="dv">1</span><span class="op">:</span><span class="st">        </span><span class="fl">0.017372</span>          <span class="fl">-0.15088</span>           <span class="fl">0.18562</span></span></code></pre></div>
 <p>From this, we can draw the conclusion that the direct effect of the treatment
-(through all paths not involving the mediators, <code>node_list$Z</code>) is
-<code>washb_NDE$summary$tmle_est</code>. Note that, together, the estimates of
+(through all paths not involving the mediators (sex, month, aged)) is
+0.01737. Note that, together, the estimates of
 the natural direct and indirect effects approximately recover the <em>average
 treatment effect</em>, that is, based on these estimates of the NDE and NIE, the
-ATE is roughly the sum of <code>washb_NDE$summary$tmle_est</code> and
-<code>washb_NIE$summary$tmle_est</code>.</p>
+ATE is roughly
+0.01994.</p>
 </div>
 </div>
 <div id="exercises-1" class="section level2">
@@ -531,7 +544,7 @@ treatment and mediator positivity.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>[ACIC 2022] Targeted Learning in the <code>tlverse</code></strong>: Causal Inference Meets Machine Learning" was written by Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on updated: May 23, 2022.</p>
+    <p>"<strong>[ACIC 2022] Targeted Learning in the <code>tlverse</code></strong>: Causal Inference Meets Machine Learning" was written by Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on updated: June 05, 2022.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
