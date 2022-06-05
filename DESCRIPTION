@@ -27,7 +27,8 @@ Imports:
   tmle3 (>= 0.2.0),
   tmle3mopttx (>= 1.0.0),
   tmle3shift (>= 0.2.0),
-  tmle3mediate (>= 0.0.3)
+  tmle3mediate (>= 0.0.3),
+  future
 Suggests:
   nnls,
   Rsolnp,
