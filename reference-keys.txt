@@ -47,6 +47,7 @@ additional-sl3-topics
 obtaining-predictions
 summarizing-sl-fits
 discrete-sl
+parallel-processing
 default-data-pre-processing
 learner-documentation
 naming-learners

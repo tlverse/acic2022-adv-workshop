@@ -204,6 +204,7 @@ following packages:
 |devtools     |2.4.3      |CRAN (R 4.2.0)                                                          |
 |downlit      |0.4.0      |CRAN (R 4.2.0)                                                          |
 |dplyr        |1.0.9      |CRAN (R 4.2.0)                                                          |
+|future       |1.26.1     |CRAN (R 4.2.0)                                                          |
 |ggplot2      |3.3.6      |CRAN (R 4.2.0)                                                          |
 |here         |1.0.1      |CRAN (R 4.2.0)                                                          |
 |kableExtra   |1.3.4      |CRAN (R 4.2.0)                                                          |
