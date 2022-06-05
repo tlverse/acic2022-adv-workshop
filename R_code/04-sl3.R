@@ -32,7 +32,7 @@ if (knitr::is_latex_output()) {
 
 ## ----install-sl3, eval = FALSE------------------------------------------------
 ## library(devtools)
-## install_github("tlverse/sl3")
+## install_github("tlverse/sl3@devel")
 
 
 ## ----load-sl3-----------------------------------------------------------------
@@ -106,17 +106,23 @@ sl <- Lrnr_sl$new(learners = stack, metalearner = Lrnr_nnls$new())
 
 
 ## ----train-sl-----------------------------------------------------------------
+# we will also set a stopwatch so we can measure how long this takes
+start_time <- proc.time()
+
 set.seed(4197)
-sl_fit <- sl$train(task)
+sl_fit <- sl$train(task = task)
+
+runtime_sl_fit <- proc.time() - start_time
+runtime_sl_fit
 
 
 ## ----sl-predictions-----------------------------------------------------------
-sl_preds <- sl_fit$predict(task)
+sl_preds <- sl_fit$predict(task = task)
 head(sl_preds)
 
 
 ## ----lrnr-predictions---------------------------------------------------------
-glm_preds <- sl_fit$learner_fits$Lrnr_glm_TRUE$predict(task)
+glm_preds <- sl_fit$learner_fits$Lrnr_glm_TRUE$predict(task = task)
 head(glm_preds)
 
 
@@ -160,10 +166,19 @@ ggplot(df_plot_melted, aes(id, value, color = variable)) +
 
 
 ## ----cv-predictions-----------------------------------------------------------
-cv_preds <- sl_fit$fit_object$cv_fit$predict_fold(task, "validation")
+# one way to obtain the CV predictions for the candidate learners
+cv_preds_option1 <- sl_fit$fit_object$cv_fit$predict_fold(
+  task = task, fold_number = "validation"
+)
+# another way to obtain the CV predictions for the candidate learners
+cv_preds_option2 <- sl_fit$fit_object$cv_fit$predict(task = task)
+
+# we can check that they are identical
+identical(cv_preds_option1, cv_preds_option2)
+
 
 ## ----cv-predictions-head, eval = FALSE----------------------------------------
-## head(cv_preds)
+## head(cv_preds_option1)
 
 ## ----cv-predictions-head-handbook, echo = FALSE-------------------------------
 if (knitr::is_latex_output()) {
@@ -177,12 +192,51 @@ if (knitr::is_latex_output()) {
 }
 
 
+## ----cv-predictions-long------------------------------------------------------
+##### CV predictions "by hand" #####
+# for each fold, i, we obtain validation set predictions:
+cv_preds_list <- lapply(seq_along(task$folds), function(i){
+  
+  # get validation dataset for fold i:
+  v_data <- task$data[task$folds[[i]]$validation_set, ]
+  
+  # get observed outcomes in fold i's validation dataset:
+  v_outcomes <- v_data[["whz"]]
+
+  # make task (for prediction) using fold i's validation dataset as data, 
+  # and keeping all else the same:
+  v_task <- make_sl3_Task(covariates = task$nodes$covariates, data = v_data)
+  
+  # get predicted outcomes for fold i's validation dataset, using candidates 
+  # trained to fold i's training dataset
+  v_preds <- sl_fit$fit_object$cv_fit$fit_object$fold_fits[[i]]$predict(
+    task = v_task
+  )
+  # note: v_preds is a matrix of candidate learner predictions, where the 
+  # number of rows is the number of observations in fold i's validation dataset 
+  # and the number of columns is the number of candidate learners (excluding 
+  # any that might have failed)
+  
+  # we will also return the row indices for fold i's validation set, so we 
+  # can later reorder the CV predictions and make sure they are equal to what 
+  # we obtained above
+  return(list("v_preds" = v_preds, "v_index" = task$folds[[i]]$validation_set))
+})
+
+# extract the validation set predictions across all folds
+cv_preds_byhand <- do.call(rbind, lapply(cv_preds_list, "[[", "v_preds"))
+
+# extract the indices of validation set observations across all folds
+# then reorder cv_preds_byhand to correspond to the ordering in the data
+row_index_in_data <- unlist(lapply(cv_preds_list, "[[", "v_index"))
+cv_preds_byhand_ordered <- cv_preds_byhand[order(row_index_in_data), ]
+# now we can check that they are identical
+identical(cv_preds_option1, cv_preds_byhand_ordered)
+
+
 ## ----predictions-new-task, eval = FALSE---------------------------------------
-## washb_data_new$whz <- rep(NA, nrow(washb_data_new)) # create a fake outcome
-## pred_task <- make_sl3_Task(
-##   data = washb_data_new,
-##   outcome = "whz",
-##   outcome_type = "continuous",
+## prediction_task <- make_sl3_Task(
+##   data = new_data, # assuming we have some new data for predictions
 ##   covariates = c("tr", "fracode", "month", "aged", "sex", "momage", "momedu",
 ##                  "momheight", "hfiacat", "Nlt18", "Ncomp", "watmin", "elec",
 ##                  "floor", "walls", "roof", "asset_wardrobe", "asset_table",
@@ -190,7 +244,7 @@ if (knitr::is_latex_output()) {
 ##                  "asset_refrig", "asset_bike", "asset_moto", "asset_sewmach",
 ##                  "asset_mobile")
 ## )
-## sl_preds_new_task <- sl_fit$predict(pred_task)
+## sl_preds_new_task <- sl_fit$predict(task = prediction_task)
 
 
 ## ----sl-coefs-simple----------------------------------------------------------
@@ -220,6 +274,47 @@ if (knitr::is_latex_output()) {
 }
 
 
+## ----cv-risk-byhand-----------------------------------------------------------
+##### CV risk "by hand" #####
+# for each fold, i, we obtain predictive performance/risk for each candidate:
+cv_risks_list <- lapply(seq_along(task$folds), function(i){
+  
+  # get validation dataset for fold i:
+  v_data <- task$data[task$folds[[i]]$validation_set, ]
+  
+  # get observed outcomes in fold i's validation dataset:
+  v_outcomes <- v_data[["whz"]]
+
+  # make task (for prediction) using fold i's validation dataset as data, 
+  # and keeping all else the same:
+  v_task <- make_sl3_Task(covariates = task$nodes$covariates, data = v_data)
+  
+  # get predicted outcomes for fold i's validation dataset, using candidates 
+  # trained to fold i's training dataset
+  v_preds <- sl_fit$fit_object$cv_fit$fit_object$fold_fits[[i]]$predict(v_task)
+  # note: v_preds is a matrix of candidate learner predictions, where the 
+  # number of rows is the number of observations in fold i's validation dataset 
+  # and the number of columns is the number of candidate learners (excluding 
+  # any that might have failed)
+  
+  # calculate predictive performance for fold i for each candidate
+  eval_function <- loss_squared_error # valid for estimation of conditional mean
+  v_losses <- apply(v_preds, 2, eval_function, v_outcomes)
+  cv_risks <- colMeans(v_losses)
+  return(cv_risks)
+})
+# average the predictive performance across all folds for each candidate
+cv_risks_byhand <- colMeans(do.call(rbind, cv_risks_list))
+cv_risk_table_byhand <- data.table(
+  learner = names(cv_risks_byhand), MSE = cv_risks_byhand
+)
+# check that the CV risks are identical when calculated by hand and function
+# (ignoring small differences by rounding to the fourth decimal place)
+identical(
+  round(cv_risk_table_byhand$MSE,4), round(as.numeric(cv_risk_table$MSE),4)
+)
+
+
 ## ----sl-summary-plot, eval = F------------------------------------------------
 ## 
 ## # Column "se" in the CV risk table is the standard error across all losses for
@@ -238,11 +333,19 @@ if (knitr::is_latex_output()) {
 
 
 ## ----cvsl---------------------------------------------------------------------
+# we will also set a stopwatch so we can measure how long this takes
+start_time <- proc.time()
+
 set.seed(569)
 cv_sl_fit <- cv_sl(lrnr_sl = sl_fit, task = task, eval_fun = loss_squared_error)
 
+runtime_cv_sl_fit <- proc.time() - start_time
+runtime_cv_sl_fit
+
+
 ## ----cvsl-risk-summary, eval = FALSE------------------------------------------
 ## cv_sl_fit$cv_risk[,c(1:3)]
+
 
 ## ----cvsl-risk-summary-handbook, echo = FALSE---------------------------------
 if (knitr::is_latex_output()) {
@@ -256,10 +359,131 @@ if (knitr::is_latex_output()) {
 }
 
 
-## ----make-sl-discrete---------------------------------------------------------
+## ----sl-revere-risk-----------------------------------------------------------
+cv_risk_table_revere <- sl_fit$cv_risk(
+  eval_fun = loss_squared_error, get_sl_revere_risk = TRUE
+)
+
+
+## ----sl-revere-risk-summary, eval = FALSE-------------------------------------
+## cv_risk_table_revere[,c(1:3)]
+
+
+## ----sl-revere-risk-handbook, eval = FALSE, echo = FALSE----------------------
+## if (knitr::is_latex_output()) {
+##   cv_risk_table_revere[,c(1:3)] %>%
+##     kable(format = "latex")
+## } else if (knitr::is_html_output()) {
+##   cv_risk_table_revere[,c(1:3)] %>%
+##     kable() %>%
+##     kableExtra:::kable_styling(fixed_thead = TRUE) %>%
+##     scroll_box(width = "100%", height = "300px")
+## }
+
+
+## ----sl-revere-risk-byhand----------------------------------------------------
+##### revere-based risk "by hand" #####
+# for each fold, i, we obtain predictive performance/risk for the SL
+sl_revere_risk_list <- lapply(seq_along(task$folds), function(i){
+  # get validation dataset for fold i:
+  v_data <- task$data[task$folds[[i]]$validation_set, ]
+  
+  # get observed outcomes in fold i's validation dataset:
+  v_outcomes <- v_data[["whz"]]
+  
+  # make task (for prediction) using fold i's validation dataset as data, 
+  # and keeping all else the same:
+  v_task <- make_sl3_Task(
+    covariates = task$nodes$covariates, data = v_data
+  )
+  
+  # get predicted outcomes for fold i's validation dataset, using candidates 
+  # trained to fold i's training dataset
+  v_preds <- sl_fit$fit_object$cv_fit$fit_object$fold_fits[[i]]$predict(v_task)
+
+  # make a metalevel task (for prediction with sl):
+  v_meta_task <- make_sl3_Task(
+    covariates = sl_fit$fit_object$cv_meta_task$nodes$covariates,
+    data = v_preds
+  )
+  
+  # get predicted outcomes for fold i's metalevel dataset, using the fitted
+  # metalearner, cv_meta_fit 
+  sl_revere_v_preds <- sl_fit$fit_object$cv_meta_fit$predict(task = v_meta_task)
+  # note: cv_meta_fit was trained on the metalevel dataset, which contains the
+  # candidates' cv predictions and validation dataset outcomes across ALL folds, 
+  # so cv_meta_fit has already seen fold i's validation dataset outcomes.
+  
+  # calculate predictive performance for fold i for the SL
+    eval_function <- loss_squared_error # valid for estimation of conditional mean
+  # note: by evaluating the predictive performance of the SL using outcomes 
+  # that were already seen by the metalearner, this is not a cross-validated 
+  # measure of predictive performance for the SL. 
+  sl_revere_v_loss <- eval_function(
+    pred = sl_revere_v_preds, observed = v_outcomes
+  )
+  sl_revere_v_risk <- mean(sl_revere_v_loss)
+  return(sl_revere_v_risk)
+})
+# average the predictive performance across all folds for the SL
+sl_revere_risk_byhand <- mean(unlist(sl_revere_risk_list))
+sl_revere_risk_byhand
+
+# check that our calculation by hand equals what is output in cv_risk_table_revere
+sl_revere_risk <- as.numeric(cv_risk_table_revere[learner == "SuperLearner", "MSE"])
+identical(sl_revere_risk_byhand, sl_revere_risk)
+
+
+## ----make-Lrnr_cv_selector----------------------------------------------------
 cv_selector <- Lrnr_cv_selector$new(eval_function = loss_squared_error)
-stack_with_sl <- Stack$new(stack, sl)
-dSL <- Lrnr_sl$new(learners = stack_with_sl, metalearner = cv_selector)
+
+
+## ----make-dSL-----------------------------------------------------------------
+# recall we defined "sl" as
+# sl <- Lrnr_sl$new(learners = stack, metalearner = Lrnr_nnls$new())
+# let's rename it to clarify that this is an eSL that uses NNLS as meta-learner
+eSL_metaNNLS <- sl
+
+# first we add eSL (that we named "sl") to existing stack (that we named "stack")
+# to create new stack that includes the original candidate learners and the eSL
+stack_with_eSL <- Stack$new(stack, eSL_metaNNLS)
+
+# now we define the meta-learner for dSL, and then instantiate Lrnr_sl as a dSL
+cv_selector <- Lrnr_cv_selector$new(eval_function = loss_squared_error)
+dSL <- Lrnr_sl$new(learners = stack_with_eSL, metalearner = cv_selector)
+
+
+## ----make-sl-discrete-multi-esl-----------------------------------------------
+eSL_metaNNLSconvex <- Lrnr_sl$new(
+  learners = stack, metalearner = Lrnr_nnls$new(convex = TRUE)
+)
+eSL_metaLasso <- Lrnr_sl$new(learners = stack, metalearner = lrn_lasso)
+eSL_metaEarth <- Lrnr_sl$new(learners = stack, metalearner = lrn_earth)
+eSL_metaRanger <- Lrnr_sl$new(learners = stack, metalearner = lrn_ranger)
+eSL_metaHAL <- Lrnr_sl$new(learners = stack, metalearner = lrn_hal)
+# now we can create the stack by adding the eSLs to the existing stack
+stack_with_eSLs <- Stack$new(
+  stack, eSL_metaNNLS, eSL_metaNNLSconvex, eSL_metaLasso, eSL_metaEarth, 
+  eSL_metaRanger, eSL_metaHAL
+)
+dSL <- Lrnr_sl$new(learners = stack_with_eSLs, metalearner = cv_selector)
+
+
+## ----fit-sl-parallel----------------------------------------------------------
+# let's load the future package and set n-1 cores for parallel processing
+library(future)
+ncores <- availableCores()-1
+ncores
+plan(multicore, workers = ncores)
+# now, let's re-train sl in parallel for demonstrative purposes
+# we will also set a stopwatch so we can see how long this takes
+start_time <- proc.time()
+
+set.seed(4197)
+sl_fit_parallel <- sl$train(task)
+
+runtime_sl_fit_parallel <- proc.time() - start_time
+runtime_sl_fit_parallel
 
 
 ## ----task-with-warning, warning=TRUE------------------------------------------
@@ -288,7 +512,7 @@ washb_data[some_rows_with_missingness, c("momage", "momheight")]
 
 
 ## ----task-data-imputed--------------------------------------------------------
-task$data[some_rows_with_missingness, 
+task$data[some_rows_with_missingness,
           c("momage", "momheight", "delta_momage", "delta_momheight")]
 colSums(is.na(task$data))
 
@@ -302,6 +526,7 @@ cats_onehot
 
 ## ----show-X, eval = FALSE-----------------------------------------------------
 ## head(task$X)
+
 
 ## ----show-X-handbook, echo = FALSE--------------------------------------------
 if (knitr::is_latex_output()) {
@@ -451,8 +676,6 @@ importance_plot(x = washb_varimp)
 
 
 ## ----cde_using_locscale, eval = FALSE-----------------------------------------
-## # TODO: fix code block and flesh out into demo
-## 
 ## # semiparametric density estimator with homoscedastic errors (HOSE)
 ## hose_hal_lrnr <- Lrnr_density_semiparametric$new(
 ##   mean_learner = Lrnr_hal9001$new()
@@ -471,8 +694,6 @@ importance_plot(x = washb_varimp)
 
 
 ## ----cde_using_pooledhaz, eval = FALSE----------------------------------------
-## # TODO: fix code block and flesh out into demo
-## 
 ## # learners used for conditional densities for (g_n)
 ## haldensify_lrnr <- Lrnr_haldensify$new(
 ##   n_bins = c(5, 10)
@@ -481,6 +702,7 @@ importance_plot(x = washb_varimp)
 
 ## ----ex-setup-----------------------------------------------------------------
 # load the data set
+library(readr)
 db_data <- url(
   paste0(
     "https://raw.githubusercontent.com/benkeser/sllecture/master/",

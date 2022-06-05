@@ -37,10 +37,10 @@ node_list
 
 ## ----mopttx_sl3_lrnrs2--------------------------------------------------------
 # Define sl3 library and metalearners:
-lrn_mean  <- Lrnr_mean$new()
-lrn_glm   <- Lrnr_glm_fast$new()
+lrn_mean <- Lrnr_mean$new()
+lrn_glm <- Lrnr_glm_fast$new()
 lrn_lasso <- Lrnr_glmnet$new()
-lrnr_hal  <- Lrnr_hal9001$new(reduce_basis=1/sqrt(nrow(data)) )
+lrnr_hal <- Lrnr_hal9001$new(reduce_basis = 1 / sqrt(nrow(data)))
 
 ## Define the Q learner:
 Q_learner <- Lrnr_sl$new(
@@ -74,7 +74,7 @@ learner_list
 ##   learners = learner_list,
 ##   maximize = TRUE, complex = TRUE,
 ##   realistic = FALSE, resource = 1,
-##   interpret=TRUE
+##   interpret = TRUE
 ## )
 
 
@@ -276,9 +276,9 @@ table(tmle_spec_cat_realistic$return_rule)
 ## ----data_nodes-add-missigness-mopttx, eval=FALSE-----------------------------
 ## data_missing <- data_cat_realistic
 ## 
-## #Add some random missingless:
+## # Add some random missingless:
 ## rr <- sample(nrow(data_missing), 100, replace = FALSE)
-## data_missing[rr,"Y"]<-NA
+## data_missing[rr, "Y"] <- NA
 
 
 ## ----data_nodes-add-missigness-mopttx_res, eval=TRUE--------------------------
@@ -293,7 +293,7 @@ delta_learner <- Lrnr_sl$new(
 )
 
 # specify outcome and treatment regressions and create learner list
-learner_list <- list(Y = Q_learner, A = g_learner, B = b_learner, delta_Y=delta_learner)
+learner_list <- list(Y = Q_learner, A = g_learner, B = b_learner, delta_Y = delta_learner)
 learner_list
 
 
@@ -317,7 +317,7 @@ fit_cat_miss
 
 ## ----data_vim-nodes-mopttx----------------------------------------------------
 # bin baseline covariates to 3 categories:
-data$W1<-ifelse(data$W1<quantile(data$W1)[2],1,ifelse(data$W1<quantile(data$W1)[3],2,3))
+data$W1 <- ifelse(data$W1 < quantile(data$W1)[2], 1, ifelse(data$W1 < quantile(data$W1)[3], 2, 3))
 
 node_list <- list(
   W = c("W3", "W4", "W2"),
@@ -330,7 +330,7 @@ node_list
 ## ----mopttx_spec_init_vim, eval=FALSE-----------------------------------------
 ## # initialize a tmle specification
 ## tmle_spec_vim <- tmle3_mopttx_vim(
-##   V=c("W2"),
+##   V = c("W2"),
 ##   type = "blip2",
 ##   learners = learner_list,
 ##   maximize = FALSE,
@@ -357,49 +357,59 @@ print(vim_results)
 
 
 ## ----washb-data-npsem-mopttx, message=FALSE, warning=FALSE, cache=FALSE, eval=FALSE----
-## node_list <- list(W = names(washb_data)[!(names(washb_data) %in% c("whz", "tr", "momheight"))],
-##                   A = "tr", Y = "whz")
+## node_list <- list(
+##   W = names(washb_data)[!(names(washb_data) %in% c("whz", "tr", "momheight"))],
+##   A = "tr", Y = "whz"
+## )
 
 
 ## ----summary_WASH, eval=FALSE-------------------------------------------------
-## #V1, V2 and V3:
+## # V1, V2 and V3:
 ## table(washb_data$momedu)
 ## table(washb_data$floor)
 ## table(washb_data$asset_refrig)
 ## 
-## #A:
+## # A:
 ## table(washb_data$tr)
 ## 
-## #Y:
+## # Y:
 ## summary(washb_data$whz)
 
 
 ## ----sl3_lrnrs-WASH-mopttx, eval=FALSE----------------------------------------
 ## # Initialize few of the learners:
-## grid_params = list(nrounds = c(100, 500),
-##                      eta = c(0.01, 0.1))
-## grid = expand.grid(grid_params, KEEP.OUT.ATTRS = FALSE)
-## xgb_learners = apply(grid, MARGIN = 1, function(params_tune) {
-##     do.call(Lrnr_xgboost$new, c(as.list(params_tune)))
-##   })
+## grid_params <- list(
+##   nrounds = c(100, 500),
+##   eta = c(0.01, 0.1)
+## )
+## grid <- expand.grid(grid_params, KEEP.OUT.ATTRS = FALSE)
+## xgb_learners <- apply(grid, MARGIN = 1, function(params_tune) {
+##   do.call(Lrnr_xgboost$new, c(as.list(params_tune)))
+## })
 ## lrn_mean <- Lrnr_mean$new()
 ## 
 ## ## Define the Q learner, which is just a regular learner:
 ## Q_learner <- Lrnr_sl$new(
-##   learners = list(xgb_learners[[1]], xgb_learners[[2]], xgb_learners[[3]],
-##                   xgb_learners[[4]], lrn_mean),
+##   learners = list(
+##     xgb_learners[[1]], xgb_learners[[2]], xgb_learners[[3]],
+##     xgb_learners[[4]], lrn_mean
+##   ),
 ##   metalearner = Lrnr_nnls$new()
 ## )
 ## 
 ## ## Define the g learner, which is a multinomial learner:
-## #specify the appropriate loss of the multinomial learner:
-## mn_metalearner <- make_learner(Lrnr_solnp, loss_function = loss_loglik_multinomial,
-##                                learner_function = metalearner_linear_multinomial)
+## # specify the appropriate loss of the multinomial learner:
+## mn_metalearner <- make_learner(Lrnr_solnp,
+##   eval_function = loss_loglik_multinomial,
+##   learner_function = metalearner_linear_multinomial
+## )
 ## g_learner <- make_learner(Lrnr_sl, list(xgb_learners[[4]], lrn_mean), mn_metalearner)
 ## 
 ## ## Define the Blip learner, which is a multivariate learner:
-## learners <- list(xgb_learners[[1]], xgb_learners[[2]], xgb_learners[[3]],
-##                   xgb_learners[[4]], lrn_mean)
+## learners <- list(
+##   xgb_learners[[1]], xgb_learners[[2]], xgb_learners[[3]],
+##   xgb_learners[[4]], lrn_mean
+## )
 ## b_learner <- create_mv_learners(learners = learners)
 ## 
 ## learner_list <- list(Y = Q_learner, A = g_learner, B = b_learner)
@@ -408,33 +418,33 @@ print(vim_results)
 ## ----spec_init_WASH, eval=FALSE-----------------------------------------------
 ## ## Question 2:
 ## 
-## #Initialize a tmle specification
+## # Initialize a tmle specification
 ## tmle_spec_Q <- tmle3_mopttx_blip_revere(
 ##   V = c("momedu", "floor", "asset_refrig"), type = "blip2",
 ##   learners = learner_list, maximize = TRUE, complex = TRUE,
 ##   realistic = FALSE
 ## )
 ## 
-## #Fit the TML estimator.
-## fit_Q <- tmle3(tmle_spec_Q, data=washb_data, node_list, learner_list)
+## # Fit the TML estimator.
+## fit_Q <- tmle3(tmle_spec_Q, data = washb_data, node_list, learner_list)
 ## fit_Q
 ## 
-## #Which intervention is the most dominant?
+## # Which intervention is the most dominant?
 ## table(tmle_spec_Q$return_rule)
 
 
 ## ----spec_init_WASH_simple_q3, eval=FALSE-------------------------------------
 ## ## Question 3:
 ## 
-## #Initialize a tmle specification with "realistic=TRUE":
+## # Initialize a tmle specification with "realistic=TRUE":
 ## tmle_spec_Q_realistic <- tmle3_mopttx_blip_revere(
 ##   V = c("momedu", "floor", "asset_refrig"), type = "blip2",
 ##   learners = learner_list, maximize = TRUE, complex = TRUE,
 ##   realistic = TRUE
 ## )
 ## 
-## #Fit the TML estimator.
-## fit_Q_realistic <- tmle3(tmle_spec_Q_realistic, data=washb_data, node_list, learner_list)
+## # Fit the TML estimator.
+## fit_Q_realistic <- tmle3(tmle_spec_Q_realistic, data = washb_data, node_list, learner_list)
 ## fit_Q_realistic
 ## 
 ## table(tmle_spec_Q_realistic$return_rule)

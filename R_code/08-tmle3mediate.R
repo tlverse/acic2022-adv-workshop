@@ -120,33 +120,3 @@ washb_NDE <- tmle3(
 )
 washb_NDE
 
-
-## ----tmle3mediate-pide-decomp, eval=FALSE-------------------------------------
-## # set the IPSI multiplicative shift
-## delta_ipsi <- 3
-## 
-## # instantiate tmle3 spec for stochastic mediation
-## tmle_spec_pie_decomp <- tmle_medshift(
-##   delta = delta_ipsi,
-##   e_learners = Lrnr_cv$new(lasso_binary_learner, full_fit = TRUE),
-##   phi_learners = Lrnr_cv$new(lasso_contin_learner, full_fit = TRUE)
-## )
-## 
-## # compute the TML estimate
-## washb_pie_decomp <- tmle3(
-##   tmle_spec_pie_decomp, washb_data, node_list, learner_list
-## )
-## washb_pie_decomp
-## 
-## # get the PIDE
-## washb_pie_decomp$summary$tmle_est - mean(washb_data[, get(node_list$Y)])
-
-
-## ----pide_delta, message=FALSE, warning=FALSE, eval=FALSE---------------------
-## tmle_task <- tmle_spec_pie_decomp$make_tmle_task(
-##   weight_behavior_complete, node_list
-## )
-## initial_likelihood <- tmle_spec_pie_decomp$make_initial_likelihood(
-##   tmle_task, learner_list
-## )
-
