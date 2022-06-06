@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 3 Super Learning with sl3 | [ACIC 2022] Targeted Learning in the tlverse</title>
 <meta name="author" content="Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips">
-<meta name="description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-06-05 Learning Objectives By the end of this chapter...">
+<meta name="description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-06-06 Learning Objectives By the end of this chapter...">
 <meta name="generator" content="bookdown 0.26.3 with bs4_book()">
 <meta property="og:title" content="Chapter 3 Super Learning with sl3 | [ACIC 2022] Targeted Learning in the tlverse">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://tlverse.org/tlverse-workshops/sl3.html">
-<meta property="og:description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-06-05 Learning Objectives By the end of this chapter...">
+<meta property="og:description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-06-06 Learning Objectives By the end of this chapter...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 3 Super Learning with sl3 | [ACIC 2022] Targeted Learning in the tlverse">
-<meta name="twitter:description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-06-05 Learning Objectives By the end of this chapter...">
+<meta name="twitter:description" content="Rachael Phillips Based on the sl3 R package by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin. Updated: 2022-06-06 Learning Objectives By the end of this chapter...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1.9000/transition.js"></script><script src="libs/bs3compat-0.3.1.9000/tabs.js"></script><script src="libs/bs3compat-0.3.1.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -83,7 +83,7 @@
 <p><em>Rachael Phillips</em></p>
 <p>Based on the <a href="https://github.com/tlverse/sl3"><code>sl3</code> <code>R</code> package</a> by <em>Jeremy
 Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips, and Oleg Sofrygin</em>.</p>
-<p>Updated: 2022-06-05</p>
+<p>Updated: 2022-06-06</p>
 <div id="learning-objectives-2" class="section level2 unnumbered">
 <h2>Learning Objectives<a class="anchor" aria-label="anchor" href="#learning-objectives-2"><i class="fas fa-link"></i></a>
 </h2>
@@ -1025,18 +1025,19 @@ outcomes, and we will still go ahead and specify it for illustrative purposes.</
 <h3>3. Fit the SL to the task with <code>train</code><a class="anchor" aria-label="anchor" href="#fit-the-sl-to-the-task-with-train"><i class="fas fa-link"></i></a>
 </h3>
 <p>The last step for fitting the SL to the prediction task is to call <code>train</code> and
-supply the task. We will also set a random number generator before calling
-train so the results are reproducible.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="sl3.html#cb17-1"></a><span class="co"># we will also set a stopwatch so we can measure how long this takes</span></span>
-<span id="cb17-2"><a href="sl3.html#cb17-2"></a>start_time &lt;-<span class="st"> </span><span class="kw">proc.time</span>()</span>
-<span id="cb17-3"><a href="sl3.html#cb17-3"></a></span>
-<span id="cb17-4"><a href="sl3.html#cb17-4"></a><span class="kw">set.seed</span>(<span class="dv">4197</span>)</span>
-<span id="cb17-5"><a href="sl3.html#cb17-5"></a>sl_fit &lt;-<span class="st"> </span>sl<span class="op">$</span><span class="kw">train</span>(<span class="dt">task =</span> task)</span>
-<span id="cb17-6"><a href="sl3.html#cb17-6"></a></span>
-<span id="cb17-7"><a href="sl3.html#cb17-7"></a>runtime_sl_fit &lt;-<span class="st"> </span><span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>start_time</span>
-<span id="cb17-8"><a href="sl3.html#cb17-8"></a>runtime_sl_fit</span>
-<span id="cb17-9"><a href="sl3.html#cb17-9"></a>   user  system elapsed </span>
-<span id="cb17-10"><a href="sl3.html#cb17-10"></a><span class="fl">278.532</span>   <span class="fl">1.627</span> <span class="fl">279.766</span> </span></code></pre></div>
+supply the task. Before we call <code>train</code>, we will set a random number generator
+so the results are reproducible, and we will also time it.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="sl3.html#cb17-1"></a>start_time &lt;-<span class="st"> </span><span class="kw">proc.time</span>() <span class="co"># start time</span></span>
+<span id="cb17-2"><a href="sl3.html#cb17-2"></a></span>
+<span id="cb17-3"><a href="sl3.html#cb17-3"></a><span class="kw">set.seed</span>(<span class="dv">4197</span>)</span>
+<span id="cb17-4"><a href="sl3.html#cb17-4"></a>sl_fit &lt;-<span class="st"> </span>sl<span class="op">$</span><span class="kw">train</span>(<span class="dt">task =</span> task)</span>
+<span id="cb17-5"><a href="sl3.html#cb17-5"></a></span>
+<span id="cb17-6"><a href="sl3.html#cb17-6"></a>runtime_sl_fit &lt;-<span class="st"> </span><span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>start_time <span class="co"># end time - start time = run time</span></span>
+<span id="cb17-7"><a href="sl3.html#cb17-7"></a>runtime_sl_fit</span>
+<span id="cb17-8"><a href="sl3.html#cb17-8"></a>   user  system elapsed </span>
+<span id="cb17-9"><a href="sl3.html#cb17-9"></a><span class="fl">267.479</span>   <span class="fl">1.515</span> <span class="fl">268.658</span> </span></code></pre></div>
+<p>It took 268.7 seconds, 4.5 minutes, to fit the SL
+prediction function.</p>
 </div>
 <div id="summary" class="section level3 unnumbered">
 <h3>Summary<a class="anchor" aria-label="anchor" href="#summary"><i class="fas fa-link"></i></a>
@@ -1074,16 +1075,30 @@ we obtain predictions for the GLM learner.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="sl3.html#cb19-1"></a>glm_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>learner_fits<span class="op">$</span>Lrnr_glm_TRUE<span class="op">$</span><span class="kw">predict</span>(<span class="dt">task =</span> task)</span>
 <span id="cb19-2"><a href="sl3.html#cb19-2"></a><span class="kw">head</span>(glm_preds)</span>
 <span id="cb19-3"><a href="sl3.html#cb19-3"></a>[<span class="dv">1</span>] <span class="fl">-0.72617</span> <span class="fl">-0.93615</span> <span class="fl">-0.70850</span> <span class="fl">-0.64918</span> <span class="fl">-0.70132</span> <span class="fl">-0.84618</span></span></code></pre></div>
+<p>Note that the predicted values for the SL correspond to so-called “full fits”
+of the candidate learners, in which the candidates are fit to the entire
+analytic dataset, i.e., all of the data supplied as <code>data</code> to <code>sl3_Task</code>.
+Figure 2 in <span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span> provides a visual overview of the SL fitting
+procedure.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="sl3.html#cb20-1"></a><span class="co"># we can also access the candidate learner full fits directly and obtain</span></span>
+<span id="cb20-2"><a href="sl3.html#cb20-2"></a><span class="co"># the same "full fit" candidate predictions from there </span></span>
+<span id="cb20-3"><a href="sl3.html#cb20-3"></a><span class="co"># (we split this into two lines to avoid overflow)</span></span>
+<span id="cb20-4"><a href="sl3.html#cb20-4"></a>stack_full_fits &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>full_fit<span class="op">$</span>learner_fits<span class="op">$</span>Stack<span class="op">$</span>learner_fits</span>
+<span id="cb20-5"><a href="sl3.html#cb20-5"></a>glm_preds_full_fit &lt;-<span class="st"> </span>stack_full_fits<span class="op">$</span>Lrnr_glm_TRUE<span class="op">$</span><span class="kw">predict</span>(task)</span>
+<span id="cb20-6"><a href="sl3.html#cb20-6"></a></span>
+<span id="cb20-7"><a href="sl3.html#cb20-7"></a><span class="co"># check that they are identical</span></span>
+<span id="cb20-8"><a href="sl3.html#cb20-8"></a><span class="kw">identical</span>(glm_preds, glm_preds_full_fit)</span>
+<span id="cb20-9"><a href="sl3.html#cb20-9"></a>[<span class="dv">1</span>] <span class="ot">TRUE</span></span></code></pre></div>
 <p>Below we visualize the observed values for <code>whz</code> and predicted <code>whz</code> values for
 SL, GLM and the mean.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># table of observed and predicted outcome values and arrange by observed values</span>
 <span class="va">df_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/data.table.html">data.table</a></span><span class="op">(</span>
   Obs <span class="op">=</span> <span class="va">washb_data</span><span class="op">[[</span><span class="st">"whz"</span><span class="op">]</span><span class="op">]</span>, SL_Pred <span class="op">=</span> <span class="va">sl_preds</span>, GLM_Pred <span class="op">=</span> <span class="va">glm_preds</span>,
   Mean_Pred <span class="op">=</span> <span class="va">sl_fit</span><span class="op">$</span><span class="va">learner_fits</span><span class="op">$</span><span class="va">Lrnr_mean</span><span class="op">$</span><span class="fu">predict</span><span class="op">(</span><span class="va">task</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="va">df_plot</span> <span class="op">&lt;-</span> <span class="va">df_plot</span><span class="op">[</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setorder.html">order</a></span><span class="op">(</span><span class="va">df_plot</span><span class="op">$</span><span class="va">Obs</span><span class="op">)</span>, <span class="op">]</span> </code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df_plot</span><span class="op">)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
@@ -1189,7 +1204,7 @@ Mean_Pred
 </tbody>
 </table></div>
 </div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># melt the table so we can plot observed and predicted values</span>
 <span class="va">df_plot</span><span class="op">$</span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df_plot</span><span class="op">)</span><span class="op">)</span>
 <span class="va">df_plot_melted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html">melt</a></span><span class="op">(</span>
@@ -1204,24 +1219,24 @@ Mean_Pred
        y <span class="op">=</span> <span class="st">"Weight-for-height z-score (whz)"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span>, legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
         axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>, axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="04-sl3_files/figure-html/predobs-plot-1.png" width="80%" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="04-sl3_files/figure-html/predobs-plot-1.png" width="60%" style="display: block; margin: auto;"></div>
 </div>
 <div id="cross-validated-predictions" class="section level4 unnumbered">
 <h4>Cross-validated predictions<a class="anchor" aria-label="anchor" href="#cross-validated-predictions"><i class="fas fa-link"></i></a>
 </h4>
 <p>We can also obtain the cross-validated (CV) predictions for the candidate
-learners in a few ways:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="sl3.html#cb23-1"></a><span class="co"># one way to obtain the CV predictions for the candidate learners</span></span>
-<span id="cb23-2"><a href="sl3.html#cb23-2"></a>cv_preds_option1 &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span><span class="kw">predict_fold</span>(</span>
-<span id="cb23-3"><a href="sl3.html#cb23-3"></a>  <span class="dt">task =</span> task, <span class="dt">fold_number =</span> <span class="st">"validation"</span></span>
-<span id="cb23-4"><a href="sl3.html#cb23-4"></a>)</span>
-<span id="cb23-5"><a href="sl3.html#cb23-5"></a><span class="co"># another way to obtain the CV predictions for the candidate learners</span></span>
-<span id="cb23-6"><a href="sl3.html#cb23-6"></a>cv_preds_option2 &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span><span class="kw">predict</span>(<span class="dt">task =</span> task)</span>
-<span id="cb23-7"><a href="sl3.html#cb23-7"></a></span>
-<span id="cb23-8"><a href="sl3.html#cb23-8"></a><span class="co"># we can check that they are identical</span></span>
-<span id="cb23-9"><a href="sl3.html#cb23-9"></a><span class="kw">identical</span>(cv_preds_option1, cv_preds_option2)</span>
-<span id="cb23-10"><a href="sl3.html#cb23-10"></a>[<span class="dv">1</span>] <span class="ot">TRUE</span></span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+learners. We can do this is a few different ways.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="sl3.html#cb24-1"></a><span class="co"># one way to obtain the CV predictions for the candidate learners</span></span>
+<span id="cb24-2"><a href="sl3.html#cb24-2"></a>cv_preds_option1 &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span><span class="kw">predict_fold</span>(</span>
+<span id="cb24-3"><a href="sl3.html#cb24-3"></a>  <span class="dt">task =</span> task, <span class="dt">fold_number =</span> <span class="st">"validation"</span></span>
+<span id="cb24-4"><a href="sl3.html#cb24-4"></a>)</span>
+<span id="cb24-5"><a href="sl3.html#cb24-5"></a><span class="co"># another way to obtain the CV predictions for the candidate learners</span></span>
+<span id="cb24-6"><a href="sl3.html#cb24-6"></a>cv_preds_option2 &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span><span class="kw">predict</span>(<span class="dt">task =</span> task)</span>
+<span id="cb24-7"><a href="sl3.html#cb24-7"></a></span>
+<span id="cb24-8"><a href="sl3.html#cb24-8"></a><span class="co"># we can check that they are identical</span></span>
+<span id="cb24-9"><a href="sl3.html#cb24-9"></a><span class="kw">identical</span>(cv_preds_option1, cv_preds_option2)</span>
+<span id="cb24-10"><a href="sl3.html#cb24-10"></a>[<span class="dv">1</span>] <span class="ot">TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cv_preds_option1</span><span class="op">)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
@@ -1474,50 +1489,76 @@ Lrnr_bayesglm_TRUE
 </tbody>
 </table></div>
 </div>
-<p>We can also get the CV predictions “by hand”, by tapping into each of the folds,
-and then using the fitted candidate learners (which were trained to the training
-set for each fold) to predict validation set outcomes (which were not seen in
-training).</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="sl3.html#cb25-1"></a><span class="co">##### CV predictions "by hand" #####</span></span>
-<span id="cb25-2"><a href="sl3.html#cb25-2"></a><span class="co"># for each fold, i, we obtain validation set predictions:</span></span>
-<span id="cb25-3"><a href="sl3.html#cb25-3"></a>cv_preds_list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">seq_along</span>(task<span class="op">$</span>folds), <span class="cf">function</span>(i){</span>
-<span id="cb25-4"><a href="sl3.html#cb25-4"></a>  </span>
-<span id="cb25-5"><a href="sl3.html#cb25-5"></a>  <span class="co"># get validation dataset for fold i:</span></span>
-<span id="cb25-6"><a href="sl3.html#cb25-6"></a>  v_data &lt;-<span class="st"> </span>task<span class="op">$</span>data[task<span class="op">$</span>folds[[i]]<span class="op">$</span>validation_set, ]</span>
-<span id="cb25-7"><a href="sl3.html#cb25-7"></a>  </span>
-<span id="cb25-8"><a href="sl3.html#cb25-8"></a>  <span class="co"># get observed outcomes in fold i's validation dataset:</span></span>
-<span id="cb25-9"><a href="sl3.html#cb25-9"></a>  v_outcomes &lt;-<span class="st"> </span>v_data[[<span class="st">"whz"</span>]]</span>
-<span id="cb25-10"><a href="sl3.html#cb25-10"></a></span>
-<span id="cb25-11"><a href="sl3.html#cb25-11"></a>  <span class="co"># make task (for prediction) using fold i's validation dataset as data, </span></span>
-<span id="cb25-12"><a href="sl3.html#cb25-12"></a>  <span class="co"># and keeping all else the same:</span></span>
-<span id="cb25-13"><a href="sl3.html#cb25-13"></a>  v_task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(<span class="dt">covariates =</span> task<span class="op">$</span>nodes<span class="op">$</span>covariates, <span class="dt">data =</span> v_data)</span>
-<span id="cb25-14"><a href="sl3.html#cb25-14"></a>  </span>
-<span id="cb25-15"><a href="sl3.html#cb25-15"></a>  <span class="co"># get predicted outcomes for fold i's validation dataset, using candidates </span></span>
-<span id="cb25-16"><a href="sl3.html#cb25-16"></a>  <span class="co"># trained to fold i's training dataset</span></span>
-<span id="cb25-17"><a href="sl3.html#cb25-17"></a>  v_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span>fit_object<span class="op">$</span>fold_fits[[i]]<span class="op">$</span><span class="kw">predict</span>(</span>
-<span id="cb25-18"><a href="sl3.html#cb25-18"></a>    <span class="dt">task =</span> v_task</span>
-<span id="cb25-19"><a href="sl3.html#cb25-19"></a>  )</span>
-<span id="cb25-20"><a href="sl3.html#cb25-20"></a>  <span class="co"># note: v_preds is a matrix of candidate learner predictions, where the </span></span>
-<span id="cb25-21"><a href="sl3.html#cb25-21"></a>  <span class="co"># number of rows is the number of observations in fold i's validation dataset </span></span>
-<span id="cb25-22"><a href="sl3.html#cb25-22"></a>  <span class="co"># and the number of columns is the number of candidate learners (excluding </span></span>
-<span id="cb25-23"><a href="sl3.html#cb25-23"></a>  <span class="co"># any that might have failed)</span></span>
-<span id="cb25-24"><a href="sl3.html#cb25-24"></a>  </span>
-<span id="cb25-25"><a href="sl3.html#cb25-25"></a>  <span class="co"># we will also return the row indices for fold i's validation set, so we </span></span>
-<span id="cb25-26"><a href="sl3.html#cb25-26"></a>  <span class="co"># can later reorder the CV predictions and make sure they are equal to what </span></span>
-<span id="cb25-27"><a href="sl3.html#cb25-27"></a>  <span class="co"># we obtained above</span></span>
-<span id="cb25-28"><a href="sl3.html#cb25-28"></a>  <span class="kw">return</span>(<span class="kw">list</span>(<span class="st">"v_preds"</span> =<span class="st"> </span>v_preds, <span class="st">"v_index"</span> =<span class="st"> </span>task<span class="op">$</span>folds[[i]]<span class="op">$</span>validation_set))</span>
-<span id="cb25-29"><a href="sl3.html#cb25-29"></a>})</span>
-<span id="cb25-30"><a href="sl3.html#cb25-30"></a></span>
-<span id="cb25-31"><a href="sl3.html#cb25-31"></a><span class="co"># extract the validation set predictions across all folds</span></span>
-<span id="cb25-32"><a href="sl3.html#cb25-32"></a>cv_preds_byhand &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(cv_preds_list, <span class="st">"[["</span>, <span class="st">"v_preds"</span>))</span>
-<span id="cb25-33"><a href="sl3.html#cb25-33"></a></span>
-<span id="cb25-34"><a href="sl3.html#cb25-34"></a><span class="co"># extract the indices of validation set observations across all folds</span></span>
-<span id="cb25-35"><a href="sl3.html#cb25-35"></a><span class="co"># then reorder cv_preds_byhand to correspond to the ordering in the data</span></span>
-<span id="cb25-36"><a href="sl3.html#cb25-36"></a>row_index_in_data &lt;-<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">lapply</span>(cv_preds_list, <span class="st">"[["</span>, <span class="st">"v_index"</span>))</span>
-<span id="cb25-37"><a href="sl3.html#cb25-37"></a>cv_preds_byhand_ordered &lt;-<span class="st"> </span>cv_preds_byhand[<span class="kw">order</span>(row_index_in_data), ]</span>
-<span id="cb25-38"><a href="sl3.html#cb25-38"></a><span class="co"># now we can check that they are identical</span></span>
-<span id="cb25-39"><a href="sl3.html#cb25-39"></a><span class="kw">identical</span>(cv_preds_option1, cv_preds_byhand_ordered)</span>
-<span id="cb25-40"><a href="sl3.html#cb25-40"></a>[<span class="dv">1</span>] <span class="ot">TRUE</span></span></code></pre></div>
+<p><strong><code>predict_fold</code></strong>: The first option to obtain CV predictions,
+<code>cv_preds_option1</code>, used the <code>predict_fold</code> function to obtain validation set
+predictions across all folds. This function only exists for learner fits that
+are cross-validated, like those in <code>Lrnr_sl</code>. In addition to supplying
+<code>fold_number = "validation"</code> in <code>predict_fold</code>, we can set
+<code>fold_number = "full"</code> to obtain predictions from learners fit to the entire
+dataset (i.e., all of the data supplied to <code>sl3_Task</code>). For instance, below we
+show that <code>glm_preds</code> we calculated above can also be obtained by setting
+<code>fold_number = "full"</code>.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="sl3.html#cb26-1"></a>full_fit_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span><span class="kw">predict_fold</span>(</span>
+<span id="cb26-2"><a href="sl3.html#cb26-2"></a>  <span class="dt">task =</span> task, <span class="dt">fold_number =</span> <span class="st">"full"</span></span>
+<span id="cb26-3"><a href="sl3.html#cb26-3"></a>)</span>
+<span id="cb26-4"><a href="sl3.html#cb26-4"></a>glm_full_fit_preds &lt;-<span class="st"> </span>full_fit_preds<span class="op">$</span>Lrnr_glm_TRUE</span>
+<span id="cb26-5"><a href="sl3.html#cb26-5"></a></span>
+<span id="cb26-6"><a href="sl3.html#cb26-6"></a><span class="co"># check that they are identical</span></span>
+<span id="cb26-7"><a href="sl3.html#cb26-7"></a><span class="kw">identical</span>(glm_preds, glm_full_fit_preds)</span>
+<span id="cb26-8"><a href="sl3.html#cb26-8"></a>[<span class="dv">1</span>] <span class="ot">TRUE</span></span></code></pre></div>
+<p>We can also supply a specific an integer between 1 and the number of CV folds
+to the <code>fold_number</code> argument in <code>predict_fold</code>, and an example of this
+functionality is shown in the next part.</p>
+<p><strong>CV predictions “by hand”</strong>: We can get the CV predictions by hand, by tapping
+into each of the folds, and then using the fitted candidate learners (which
+were trained to the training set for each fold) to predict validation set
+outcomes (which were not seen in training).</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="sl3.html#cb27-1"></a><span class="co">##### CV predictions "by hand" #####</span></span>
+<span id="cb27-2"><a href="sl3.html#cb27-2"></a><span class="co"># for each fold, i, we obtain validation set predictions:</span></span>
+<span id="cb27-3"><a href="sl3.html#cb27-3"></a>cv_preds_list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">seq_along</span>(task<span class="op">$</span>folds), <span class="cf">function</span>(i){</span>
+<span id="cb27-4"><a href="sl3.html#cb27-4"></a>  </span>
+<span id="cb27-5"><a href="sl3.html#cb27-5"></a>  <span class="co"># get validation dataset for fold i:</span></span>
+<span id="cb27-6"><a href="sl3.html#cb27-6"></a>  v_data &lt;-<span class="st"> </span>task<span class="op">$</span>data[task<span class="op">$</span>folds[[i]]<span class="op">$</span>validation_set, ]</span>
+<span id="cb27-7"><a href="sl3.html#cb27-7"></a>  </span>
+<span id="cb27-8"><a href="sl3.html#cb27-8"></a>  <span class="co"># get observed outcomes in fold i's validation dataset:</span></span>
+<span id="cb27-9"><a href="sl3.html#cb27-9"></a>  v_outcomes &lt;-<span class="st"> </span>v_data[[<span class="st">"whz"</span>]]</span>
+<span id="cb27-10"><a href="sl3.html#cb27-10"></a></span>
+<span id="cb27-11"><a href="sl3.html#cb27-11"></a>  <span class="co"># make task (for prediction) using fold i's validation dataset as data, </span></span>
+<span id="cb27-12"><a href="sl3.html#cb27-12"></a>  <span class="co"># and keeping all else the same:</span></span>
+<span id="cb27-13"><a href="sl3.html#cb27-13"></a>  v_task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(<span class="dt">covariates =</span> task<span class="op">$</span>nodes<span class="op">$</span>covariates, <span class="dt">data =</span> v_data)</span>
+<span id="cb27-14"><a href="sl3.html#cb27-14"></a>  </span>
+<span id="cb27-15"><a href="sl3.html#cb27-15"></a>  <span class="co"># get predicted outcomes for fold i's validation dataset, using candidates </span></span>
+<span id="cb27-16"><a href="sl3.html#cb27-16"></a>  <span class="co"># trained to fold i's training dataset</span></span>
+<span id="cb27-17"><a href="sl3.html#cb27-17"></a>  v_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span><span class="kw">predict_fold</span>(</span>
+<span id="cb27-18"><a href="sl3.html#cb27-18"></a>    <span class="dt">task =</span> v_task, <span class="dt">fold_number =</span> i</span>
+<span id="cb27-19"><a href="sl3.html#cb27-19"></a>  )</span>
+<span id="cb27-20"><a href="sl3.html#cb27-20"></a>  <span class="co"># note: v_preds is a matrix of candidate learner predictions, where the </span></span>
+<span id="cb27-21"><a href="sl3.html#cb27-21"></a>  <span class="co"># number of rows is the number of observations in fold i's validation dataset </span></span>
+<span id="cb27-22"><a href="sl3.html#cb27-22"></a>  <span class="co"># and the number of columns is the number of candidate learners (excluding </span></span>
+<span id="cb27-23"><a href="sl3.html#cb27-23"></a>  <span class="co"># any that might have failed)</span></span>
+<span id="cb27-24"><a href="sl3.html#cb27-24"></a>  </span>
+<span id="cb27-25"><a href="sl3.html#cb27-25"></a>  <span class="co"># an identical way to get v_preds, which is used when we calculate the </span></span>
+<span id="cb27-26"><a href="sl3.html#cb27-26"></a>  <span class="co"># cv risk by hand in a later part of this chapter:</span></span>
+<span id="cb27-27"><a href="sl3.html#cb27-27"></a>  <span class="co"># v_preds &lt;- sl_fit$fit_object$cv_fit$fit_object$fold_fits[[i]]$predict(</span></span>
+<span id="cb27-28"><a href="sl3.html#cb27-28"></a>  <span class="co">#   task = v_task</span></span>
+<span id="cb27-29"><a href="sl3.html#cb27-29"></a>  <span class="co"># )</span></span>
+<span id="cb27-30"><a href="sl3.html#cb27-30"></a>  </span>
+<span id="cb27-31"><a href="sl3.html#cb27-31"></a>  <span class="co"># we will also return the row indices for fold i's validation set, so we </span></span>
+<span id="cb27-32"><a href="sl3.html#cb27-32"></a>  <span class="co"># can later reorder the CV predictions and make sure they are equal to what </span></span>
+<span id="cb27-33"><a href="sl3.html#cb27-33"></a>  <span class="co"># we obtained above</span></span>
+<span id="cb27-34"><a href="sl3.html#cb27-34"></a>  <span class="kw">return</span>(<span class="kw">list</span>(<span class="st">"v_preds"</span> =<span class="st"> </span>v_preds, <span class="st">"v_index"</span> =<span class="st"> </span>task<span class="op">$</span>folds[[i]]<span class="op">$</span>validation_set))</span>
+<span id="cb27-35"><a href="sl3.html#cb27-35"></a>})</span>
+<span id="cb27-36"><a href="sl3.html#cb27-36"></a></span>
+<span id="cb27-37"><a href="sl3.html#cb27-37"></a><span class="co"># extract the validation set predictions across all folds</span></span>
+<span id="cb27-38"><a href="sl3.html#cb27-38"></a>cv_preds_byhand &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(cv_preds_list, <span class="st">"[["</span>, <span class="st">"v_preds"</span>))</span>
+<span id="cb27-39"><a href="sl3.html#cb27-39"></a></span>
+<span id="cb27-40"><a href="sl3.html#cb27-40"></a><span class="co"># extract the indices of validation set observations across all folds</span></span>
+<span id="cb27-41"><a href="sl3.html#cb27-41"></a><span class="co"># then reorder cv_preds_byhand to correspond to the ordering in the data</span></span>
+<span id="cb27-42"><a href="sl3.html#cb27-42"></a>row_index_in_data &lt;-<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">lapply</span>(cv_preds_list, <span class="st">"[["</span>, <span class="st">"v_index"</span>))</span>
+<span id="cb27-43"><a href="sl3.html#cb27-43"></a>cv_preds_byhand_ordered &lt;-<span class="st"> </span>cv_preds_byhand[<span class="kw">order</span>(row_index_in_data), ]</span>
+<span id="cb27-44"><a href="sl3.html#cb27-44"></a><span class="co"># now we can check that they are identical</span></span>
+<span id="cb27-45"><a href="sl3.html#cb27-45"></a><span class="kw">identical</span>(cv_preds_option1, cv_preds_byhand_ordered)</span>
+<span id="cb27-46"><a href="sl3.html#cb27-46"></a>[<span class="dv">1</span>] <span class="ot">TRUE</span></span></code></pre></div>
 </div>
 <div id="predictions-with-new-data" class="section level4 unnumbered">
 <h4>Predictions with new data<a class="anchor" aria-label="anchor" href="#predictions-with-new-data"><i class="fas fa-link"></i></a>
@@ -1525,10 +1566,11 @@ training).</p>
 <p>If we wanted to obtain predicted values for new data then we would need to
 create a new task from the new data. Also, the covariates in this new task
 must be identical to the covariates in the task for training. As an example,
-let’s assume we have data <code>washb_data_new</code> for which we want to SL predictions.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+let’s assume we have data <code>washb_data_new</code> for which we want to SL predictions.
+(We do not evaluate the code chunk below, as <code>washb_data_new</code> does not exist)</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">prediction_task</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/sl3_Task.html">make_sl3_Task</a></span><span class="op">(</span>
-  data <span class="op">=</span> <span class="va">new_data</span>, <span class="co"># assuming we have some new data for predictions</span>
+  data <span class="op">=</span> <span class="va">washb_data_new</span>, <span class="co"># assuming we have some new data for predictions</span>
   covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"tr"</span>, <span class="st">"fracode"</span>, <span class="st">"month"</span>, <span class="st">"aged"</span>, <span class="st">"sex"</span>, <span class="st">"momage"</span>, <span class="st">"momedu"</span>, 
                  <span class="st">"momheight"</span>, <span class="st">"hfiacat"</span>, <span class="st">"Nlt18"</span>, <span class="st">"Ncomp"</span>, <span class="st">"watmin"</span>, <span class="st">"elec"</span>, 
                  <span class="st">"floor"</span>, <span class="st">"walls"</span>, <span class="st">"roof"</span>, <span class="st">"asset_wardrobe"</span>, <span class="st">"asset_table"</span>, 
@@ -1550,35 +1592,35 @@ let’s assume we have data <code>washb_data_new</code> for which we want to SL 
 ways. In our illustrative example, we considered the default, NNLS meta-learner
 for continuous outcomes. For meta-learners that simply learn a weighted
 combination, we can examine their coefficients.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="sl3.html#cb27-1"></a><span class="kw">round</span>(sl_fit<span class="op">$</span>coefficients, <span class="dv">3</span>)</span>
-<span id="cb27-2"><a href="sl3.html#cb27-2"></a>                          Lrnr_glm_TRUE                               Lrnr_mean </span>
-<span id="cb27-3"><a href="sl3.html#cb27-3"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.000</span> </span>
-<span id="cb27-4"><a href="sl3.html#cb27-4"></a>Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">0</span>_<span class="dv">100</span>_TRUE Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">1</span>_<span class="dv">100</span>_TRUE </span>
-<span id="cb27-5"><a href="sl3.html#cb27-5"></a>                                  <span class="fl">0.076</span>                                   <span class="fl">0.000</span> </span>
-<span id="cb27-6"><a href="sl3.html#cb27-6"></a>                         Lrnr_polspline         Lrnr_earth_<span class="dv">2</span>_<span class="dv">3</span>_backward_<span class="dv">0</span>_<span class="dv">1</span>_<span class="dv">0</span>_<span class="dv">0</span> </span>
-<span id="cb27-7"><a href="sl3.html#cb27-7"></a>                                  <span class="fl">0.164</span>                                   <span class="fl">0.389</span> </span>
-<span id="cb27-8"><a href="sl3.html#cb27-8"></a>             <span class="kw">Lrnr_hal9001_2_1_c</span>(<span class="dv">3</span>, <span class="dv">2</span>)_<span class="dv">5</span>             Lrnr_ranger_<span class="dv">500</span>_TRUE_none_<span class="dv">1</span> </span>
-<span id="cb27-9"><a href="sl3.html#cb27-9"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.372</span> </span>
-<span id="cb27-10"><a href="sl3.html#cb27-10"></a>                      Lrnr_xgboost_<span class="dv">20</span>_<span class="dv">1</span>               Lrnr_gam_NULL_NULL_GCV.Cp </span>
-<span id="cb27-11"><a href="sl3.html#cb27-11"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.000</span> </span>
-<span id="cb27-12"><a href="sl3.html#cb27-12"></a>                     Lrnr_bayesglm_TRUE </span>
-<span id="cb27-13"><a href="sl3.html#cb27-13"></a>                                  <span class="fl">0.000</span> </span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="sl3.html#cb29-1"></a><span class="kw">round</span>(sl_fit<span class="op">$</span>coefficients, <span class="dv">3</span>)</span>
+<span id="cb29-2"><a href="sl3.html#cb29-2"></a>                          Lrnr_glm_TRUE                               Lrnr_mean </span>
+<span id="cb29-3"><a href="sl3.html#cb29-3"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.000</span> </span>
+<span id="cb29-4"><a href="sl3.html#cb29-4"></a>Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">0</span>_<span class="dv">100</span>_TRUE Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">1</span>_<span class="dv">100</span>_TRUE </span>
+<span id="cb29-5"><a href="sl3.html#cb29-5"></a>                                  <span class="fl">0.076</span>                                   <span class="fl">0.000</span> </span>
+<span id="cb29-6"><a href="sl3.html#cb29-6"></a>                         Lrnr_polspline         Lrnr_earth_<span class="dv">2</span>_<span class="dv">3</span>_backward_<span class="dv">0</span>_<span class="dv">1</span>_<span class="dv">0</span>_<span class="dv">0</span> </span>
+<span id="cb29-7"><a href="sl3.html#cb29-7"></a>                                  <span class="fl">0.164</span>                                   <span class="fl">0.389</span> </span>
+<span id="cb29-8"><a href="sl3.html#cb29-8"></a>             <span class="kw">Lrnr_hal9001_2_1_c</span>(<span class="dv">3</span>, <span class="dv">2</span>)_<span class="dv">5</span>             Lrnr_ranger_<span class="dv">500</span>_TRUE_none_<span class="dv">1</span> </span>
+<span id="cb29-9"><a href="sl3.html#cb29-9"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.372</span> </span>
+<span id="cb29-10"><a href="sl3.html#cb29-10"></a>                      Lrnr_xgboost_<span class="dv">20</span>_<span class="dv">1</span>               Lrnr_gam_NULL_NULL_GCV.Cp </span>
+<span id="cb29-11"><a href="sl3.html#cb29-11"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.000</span> </span>
+<span id="cb29-12"><a href="sl3.html#cb29-12"></a>                     Lrnr_bayesglm_TRUE </span>
+<span id="cb29-13"><a href="sl3.html#cb29-13"></a>                                  <span class="fl">0.000</span> </span></code></pre></div>
 <p>We can also examine the coefficients by directly accessing the meta-learner’s
 fit object.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="sl3.html#cb28-1"></a>metalrnr_fit &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_meta_fit<span class="op">$</span>fit_object</span>
-<span id="cb28-2"><a href="sl3.html#cb28-2"></a><span class="kw">round</span>(metalrnr_fit<span class="op">$</span>coefficients, <span class="dv">3</span>)</span>
-<span id="cb28-3"><a href="sl3.html#cb28-3"></a>                          Lrnr_glm_TRUE                               Lrnr_mean </span>
-<span id="cb28-4"><a href="sl3.html#cb28-4"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.000</span> </span>
-<span id="cb28-5"><a href="sl3.html#cb28-5"></a>Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">0</span>_<span class="dv">100</span>_TRUE Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">1</span>_<span class="dv">100</span>_TRUE </span>
-<span id="cb28-6"><a href="sl3.html#cb28-6"></a>                                  <span class="fl">0.076</span>                                   <span class="fl">0.000</span> </span>
-<span id="cb28-7"><a href="sl3.html#cb28-7"></a>                         Lrnr_polspline         Lrnr_earth_<span class="dv">2</span>_<span class="dv">3</span>_backward_<span class="dv">0</span>_<span class="dv">1</span>_<span class="dv">0</span>_<span class="dv">0</span> </span>
-<span id="cb28-8"><a href="sl3.html#cb28-8"></a>                                  <span class="fl">0.164</span>                                   <span class="fl">0.389</span> </span>
-<span id="cb28-9"><a href="sl3.html#cb28-9"></a>             <span class="kw">Lrnr_hal9001_2_1_c</span>(<span class="dv">3</span>, <span class="dv">2</span>)_<span class="dv">5</span>             Lrnr_ranger_<span class="dv">500</span>_TRUE_none_<span class="dv">1</span> </span>
-<span id="cb28-10"><a href="sl3.html#cb28-10"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.372</span> </span>
-<span id="cb28-11"><a href="sl3.html#cb28-11"></a>                      Lrnr_xgboost_<span class="dv">20</span>_<span class="dv">1</span>               Lrnr_gam_NULL_NULL_GCV.Cp </span>
-<span id="cb28-12"><a href="sl3.html#cb28-12"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.000</span> </span>
-<span id="cb28-13"><a href="sl3.html#cb28-13"></a>                     Lrnr_bayesglm_TRUE </span>
-<span id="cb28-14"><a href="sl3.html#cb28-14"></a>                                  <span class="fl">0.000</span> </span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="sl3.html#cb30-1"></a>metalrnr_fit &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_meta_fit<span class="op">$</span>fit_object</span>
+<span id="cb30-2"><a href="sl3.html#cb30-2"></a><span class="kw">round</span>(metalrnr_fit<span class="op">$</span>coefficients, <span class="dv">3</span>)</span>
+<span id="cb30-3"><a href="sl3.html#cb30-3"></a>                          Lrnr_glm_TRUE                               Lrnr_mean </span>
+<span id="cb30-4"><a href="sl3.html#cb30-4"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.000</span> </span>
+<span id="cb30-5"><a href="sl3.html#cb30-5"></a>Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">0</span>_<span class="dv">100</span>_TRUE Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">1</span>_<span class="dv">100</span>_TRUE </span>
+<span id="cb30-6"><a href="sl3.html#cb30-6"></a>                                  <span class="fl">0.076</span>                                   <span class="fl">0.000</span> </span>
+<span id="cb30-7"><a href="sl3.html#cb30-7"></a>                         Lrnr_polspline         Lrnr_earth_<span class="dv">2</span>_<span class="dv">3</span>_backward_<span class="dv">0</span>_<span class="dv">1</span>_<span class="dv">0</span>_<span class="dv">0</span> </span>
+<span id="cb30-8"><a href="sl3.html#cb30-8"></a>                                  <span class="fl">0.164</span>                                   <span class="fl">0.389</span> </span>
+<span id="cb30-9"><a href="sl3.html#cb30-9"></a>             <span class="kw">Lrnr_hal9001_2_1_c</span>(<span class="dv">3</span>, <span class="dv">2</span>)_<span class="dv">5</span>             Lrnr_ranger_<span class="dv">500</span>_TRUE_none_<span class="dv">1</span> </span>
+<span id="cb30-10"><a href="sl3.html#cb30-10"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.372</span> </span>
+<span id="cb30-11"><a href="sl3.html#cb30-11"></a>                      Lrnr_xgboost_<span class="dv">20</span>_<span class="dv">1</span>               Lrnr_gam_NULL_NULL_GCV.Cp </span>
+<span id="cb30-12"><a href="sl3.html#cb30-12"></a>                                  <span class="fl">0.000</span>                                   <span class="fl">0.000</span> </span>
+<span id="cb30-13"><a href="sl3.html#cb30-13"></a>                     Lrnr_bayesglm_TRUE </span>
+<span id="cb30-14"><a href="sl3.html#cb30-14"></a>                                  <span class="fl">0.000</span> </span></code></pre></div>
 <p>Direct access to the meta-learner fit object is also handy for more
 complex meta-learners (e.g., non-parametric meta-learners) that are not defined
 by a simple set of main terms regression coefficients.</p>
@@ -1594,9 +1636,9 @@ reason why we use the MSE is because it is a valid metric for estimating the
 conditional mean, which is what we’re learning the prediction function for in
 the WASH Benefits example. For more information on selecting an appropriate
 performance metric, see <span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span>.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cv_risk_table</span> <span class="op">&lt;-</span> <span class="va">sl_fit</span><span class="op">$</span><span class="fu">cv_risk</span><span class="op">(</span>eval_fun <span class="op">=</span> <span class="va">loss_squared_error</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cv_risk_table</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
@@ -1736,54 +1778,55 @@ Lrnr_bayesglm_TRUE
 </tbody>
 </table></div>
 </div>
-<p>Similar to how we got the CV predictions “by hand”, we can also calculate the
-CV risk. Specifically, this is done by tapping into each of the folds, and then
-using the fitted candidate learners (which were trained to the training set for
+<p><strong>CV risk “by hand”</strong>: Similar to how we got the CV predictions by hand, we
+can also calculate the CV risk in a way that exposes the procedure.
+Specifically, this is done by tapping into each of the folds, and then using the
+fitted candidate learners (which were trained to the training set for
 each fold) to predict validation set outcomes (which were not seen in training)
 and then measure the predictive performance (i.e., risk). Each candidate
 learner’s fold-specific risk is then averaged across all folds to obtain the
 CV risk. The function <code>cv_risk</code> does all of this internally and we show how
-to do it “by hand” below, which can be helpful for understanding the CV risk
+to do it by hand below, which can be helpful for understanding the CV risk
 and how it is calculated.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="sl3.html#cb31-1"></a><span class="co">##### CV risk "by hand" #####</span></span>
-<span id="cb31-2"><a href="sl3.html#cb31-2"></a><span class="co"># for each fold, i, we obtain predictive performance/risk for each candidate:</span></span>
-<span id="cb31-3"><a href="sl3.html#cb31-3"></a>cv_risks_list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">seq_along</span>(task<span class="op">$</span>folds), <span class="cf">function</span>(i){</span>
-<span id="cb31-4"><a href="sl3.html#cb31-4"></a>  </span>
-<span id="cb31-5"><a href="sl3.html#cb31-5"></a>  <span class="co"># get validation dataset for fold i:</span></span>
-<span id="cb31-6"><a href="sl3.html#cb31-6"></a>  v_data &lt;-<span class="st"> </span>task<span class="op">$</span>data[task<span class="op">$</span>folds[[i]]<span class="op">$</span>validation_set, ]</span>
-<span id="cb31-7"><a href="sl3.html#cb31-7"></a>  </span>
-<span id="cb31-8"><a href="sl3.html#cb31-8"></a>  <span class="co"># get observed outcomes in fold i's validation dataset:</span></span>
-<span id="cb31-9"><a href="sl3.html#cb31-9"></a>  v_outcomes &lt;-<span class="st"> </span>v_data[[<span class="st">"whz"</span>]]</span>
-<span id="cb31-10"><a href="sl3.html#cb31-10"></a></span>
-<span id="cb31-11"><a href="sl3.html#cb31-11"></a>  <span class="co"># make task (for prediction) using fold i's validation dataset as data, </span></span>
-<span id="cb31-12"><a href="sl3.html#cb31-12"></a>  <span class="co"># and keeping all else the same:</span></span>
-<span id="cb31-13"><a href="sl3.html#cb31-13"></a>  v_task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(<span class="dt">covariates =</span> task<span class="op">$</span>nodes<span class="op">$</span>covariates, <span class="dt">data =</span> v_data)</span>
-<span id="cb31-14"><a href="sl3.html#cb31-14"></a>  </span>
-<span id="cb31-15"><a href="sl3.html#cb31-15"></a>  <span class="co"># get predicted outcomes for fold i's validation dataset, using candidates </span></span>
-<span id="cb31-16"><a href="sl3.html#cb31-16"></a>  <span class="co"># trained to fold i's training dataset</span></span>
-<span id="cb31-17"><a href="sl3.html#cb31-17"></a>  v_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span>fit_object<span class="op">$</span>fold_fits[[i]]<span class="op">$</span><span class="kw">predict</span>(v_task)</span>
-<span id="cb31-18"><a href="sl3.html#cb31-18"></a>  <span class="co"># note: v_preds is a matrix of candidate learner predictions, where the </span></span>
-<span id="cb31-19"><a href="sl3.html#cb31-19"></a>  <span class="co"># number of rows is the number of observations in fold i's validation dataset </span></span>
-<span id="cb31-20"><a href="sl3.html#cb31-20"></a>  <span class="co"># and the number of columns is the number of candidate learners (excluding </span></span>
-<span id="cb31-21"><a href="sl3.html#cb31-21"></a>  <span class="co"># any that might have failed)</span></span>
-<span id="cb31-22"><a href="sl3.html#cb31-22"></a>  </span>
-<span id="cb31-23"><a href="sl3.html#cb31-23"></a>  <span class="co"># calculate predictive performance for fold i for each candidate</span></span>
-<span id="cb31-24"><a href="sl3.html#cb31-24"></a>  eval_function &lt;-<span class="st"> </span>loss_squared_error <span class="co"># valid for estimation of conditional mean</span></span>
-<span id="cb31-25"><a href="sl3.html#cb31-25"></a>  v_losses &lt;-<span class="st"> </span><span class="kw">apply</span>(v_preds, <span class="dv">2</span>, eval_function, v_outcomes)</span>
-<span id="cb31-26"><a href="sl3.html#cb31-26"></a>  cv_risks &lt;-<span class="st"> </span><span class="kw">colMeans</span>(v_losses)</span>
-<span id="cb31-27"><a href="sl3.html#cb31-27"></a>  <span class="kw">return</span>(cv_risks)</span>
-<span id="cb31-28"><a href="sl3.html#cb31-28"></a>})</span>
-<span id="cb31-29"><a href="sl3.html#cb31-29"></a><span class="co"># average the predictive performance across all folds for each candidate</span></span>
-<span id="cb31-30"><a href="sl3.html#cb31-30"></a>cv_risks_byhand &lt;-<span class="st"> </span><span class="kw">colMeans</span>(<span class="kw">do.call</span>(rbind, cv_risks_list))</span>
-<span id="cb31-31"><a href="sl3.html#cb31-31"></a>cv_risk_table_byhand &lt;-<span class="st"> </span><span class="kw">data.table</span>(</span>
-<span id="cb31-32"><a href="sl3.html#cb31-32"></a>  <span class="dt">learner =</span> <span class="kw">names</span>(cv_risks_byhand), <span class="dt">MSE =</span> cv_risks_byhand</span>
-<span id="cb31-33"><a href="sl3.html#cb31-33"></a>)</span>
-<span id="cb31-34"><a href="sl3.html#cb31-34"></a><span class="co"># check that the CV risks are identical when calculated by hand and function</span></span>
-<span id="cb31-35"><a href="sl3.html#cb31-35"></a><span class="co"># (ignoring small differences by rounding to the fourth decimal place)</span></span>
-<span id="cb31-36"><a href="sl3.html#cb31-36"></a><span class="kw">identical</span>(</span>
-<span id="cb31-37"><a href="sl3.html#cb31-37"></a>  <span class="kw">round</span>(cv_risk_table_byhand<span class="op">$</span>MSE,<span class="dv">4</span>), <span class="kw">round</span>(<span class="kw">as.numeric</span>(cv_risk_table<span class="op">$</span>MSE),<span class="dv">4</span>)</span>
-<span id="cb31-38"><a href="sl3.html#cb31-38"></a>)</span>
-<span id="cb31-39"><a href="sl3.html#cb31-39"></a>[<span class="dv">1</span>] <span class="ot">TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="sl3.html#cb33-1"></a><span class="co">##### CV risk "by hand" #####</span></span>
+<span id="cb33-2"><a href="sl3.html#cb33-2"></a><span class="co"># for each fold, i, we obtain predictive performance/risk for each candidate:</span></span>
+<span id="cb33-3"><a href="sl3.html#cb33-3"></a>cv_risks_list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">seq_along</span>(task<span class="op">$</span>folds), <span class="cf">function</span>(i){</span>
+<span id="cb33-4"><a href="sl3.html#cb33-4"></a>  </span>
+<span id="cb33-5"><a href="sl3.html#cb33-5"></a>  <span class="co"># get validation dataset for fold i:</span></span>
+<span id="cb33-6"><a href="sl3.html#cb33-6"></a>  v_data &lt;-<span class="st"> </span>task<span class="op">$</span>data[task<span class="op">$</span>folds[[i]]<span class="op">$</span>validation_set, ]</span>
+<span id="cb33-7"><a href="sl3.html#cb33-7"></a>  </span>
+<span id="cb33-8"><a href="sl3.html#cb33-8"></a>  <span class="co"># get observed outcomes in fold i's validation dataset:</span></span>
+<span id="cb33-9"><a href="sl3.html#cb33-9"></a>  v_outcomes &lt;-<span class="st"> </span>v_data[[<span class="st">"whz"</span>]]</span>
+<span id="cb33-10"><a href="sl3.html#cb33-10"></a></span>
+<span id="cb33-11"><a href="sl3.html#cb33-11"></a>  <span class="co"># make task (for prediction) using fold i's validation dataset as data, </span></span>
+<span id="cb33-12"><a href="sl3.html#cb33-12"></a>  <span class="co"># and keeping all else the same:</span></span>
+<span id="cb33-13"><a href="sl3.html#cb33-13"></a>  v_task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(<span class="dt">covariates =</span> task<span class="op">$</span>nodes<span class="op">$</span>covariates, <span class="dt">data =</span> v_data)</span>
+<span id="cb33-14"><a href="sl3.html#cb33-14"></a>  </span>
+<span id="cb33-15"><a href="sl3.html#cb33-15"></a>  <span class="co"># get predicted outcomes for fold i's validation dataset, using candidates </span></span>
+<span id="cb33-16"><a href="sl3.html#cb33-16"></a>  <span class="co"># trained to fold i's training dataset</span></span>
+<span id="cb33-17"><a href="sl3.html#cb33-17"></a>  v_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span>fit_object<span class="op">$</span>fold_fits[[i]]<span class="op">$</span><span class="kw">predict</span>(v_task)</span>
+<span id="cb33-18"><a href="sl3.html#cb33-18"></a>  <span class="co"># note: v_preds is a matrix of candidate learner predictions, where the </span></span>
+<span id="cb33-19"><a href="sl3.html#cb33-19"></a>  <span class="co"># number of rows is the number of observations in fold i's validation dataset </span></span>
+<span id="cb33-20"><a href="sl3.html#cb33-20"></a>  <span class="co"># and the number of columns is the number of candidate learners (excluding </span></span>
+<span id="cb33-21"><a href="sl3.html#cb33-21"></a>  <span class="co"># any that might have failed)</span></span>
+<span id="cb33-22"><a href="sl3.html#cb33-22"></a>  </span>
+<span id="cb33-23"><a href="sl3.html#cb33-23"></a>  <span class="co"># calculate predictive performance for fold i for each candidate</span></span>
+<span id="cb33-24"><a href="sl3.html#cb33-24"></a>  eval_function &lt;-<span class="st"> </span>loss_squared_error <span class="co"># valid for estimation of conditional mean</span></span>
+<span id="cb33-25"><a href="sl3.html#cb33-25"></a>  v_losses &lt;-<span class="st"> </span><span class="kw">apply</span>(v_preds, <span class="dv">2</span>, eval_function, v_outcomes)</span>
+<span id="cb33-26"><a href="sl3.html#cb33-26"></a>  cv_risks &lt;-<span class="st"> </span><span class="kw">colMeans</span>(v_losses)</span>
+<span id="cb33-27"><a href="sl3.html#cb33-27"></a>  <span class="kw">return</span>(cv_risks)</span>
+<span id="cb33-28"><a href="sl3.html#cb33-28"></a>})</span>
+<span id="cb33-29"><a href="sl3.html#cb33-29"></a><span class="co"># average the predictive performance across all folds for each candidate</span></span>
+<span id="cb33-30"><a href="sl3.html#cb33-30"></a>cv_risks_byhand &lt;-<span class="st"> </span><span class="kw">colMeans</span>(<span class="kw">do.call</span>(rbind, cv_risks_list))</span>
+<span id="cb33-31"><a href="sl3.html#cb33-31"></a>cv_risk_table_byhand &lt;-<span class="st"> </span><span class="kw">data.table</span>(</span>
+<span id="cb33-32"><a href="sl3.html#cb33-32"></a>  <span class="dt">learner =</span> <span class="kw">names</span>(cv_risks_byhand), <span class="dt">MSE =</span> cv_risks_byhand</span>
+<span id="cb33-33"><a href="sl3.html#cb33-33"></a>)</span>
+<span id="cb33-34"><a href="sl3.html#cb33-34"></a><span class="co"># check that the CV risks are identical when calculated by hand and function</span></span>
+<span id="cb33-35"><a href="sl3.html#cb33-35"></a><span class="co"># (ignoring small differences by rounding to the fourth decimal place)</span></span>
+<span id="cb33-36"><a href="sl3.html#cb33-36"></a><span class="kw">identical</span>(</span>
+<span id="cb33-37"><a href="sl3.html#cb33-37"></a>  <span class="kw">round</span>(cv_risk_table_byhand<span class="op">$</span>MSE,<span class="dv">4</span>), <span class="kw">round</span>(<span class="kw">as.numeric</span>(cv_risk_table<span class="op">$</span>MSE),<span class="dv">4</span>)</span>
+<span id="cb33-38"><a href="sl3.html#cb33-38"></a>)</span>
+<span id="cb33-39"><a href="sl3.html#cb33-39"></a>[<span class="dv">1</span>] <span class="ot">TRUE</span></span></code></pre></div>
 <!--
 We can plot the CV risks as well. 
 
@@ -1816,105 +1859,280 @@ Column "fold_sd" in the CV risk table is the standard deviation of the V-fold-sp
 because we do not have a CV risk for the SL unless we cross-validate it or
 include it as a candidate in another SL; the latter is shown in the next
 subsection. Below we show how to obtain a cross-validated risk estimate for the
-SL using <code>cv_sl</code>.</p>
+SL using <code>cv_sl</code>. Like before we called <code>sl$train</code>, we will set a random number
+generator so the results are reproducible, and we will also time this.</p>
 <!--
 (Note: we did not evaluate this part of the code, as it was 
 taking too long).
 -->
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># we will also set a stopwatch so we can measure how long this takes</span>
-<span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">569</span><span class="op">)</span>
 <span class="va">cv_sl_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/cv_sl.html">cv_sl</a></span><span class="op">(</span>lrnr_sl <span class="op">=</span> <span class="va">sl_fit</span>, task <span class="op">=</span> <span class="va">task</span>, eval_fun <span class="op">=</span> <span class="va">loss_squared_error</span><span class="op">)</span>
 
 <span class="va">runtime_cv_sl_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start_time</span>
 <span class="va">runtime_cv_sl_fit</span></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cv_sl_fit</span><span class="op">$</span><span class="va">cv_risk</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<pre><code>   user  system elapsed 
+2792.55  159.65 3051.41 </code></pre>
+<p>It took 3051.4 seconds, 50.9 minutes, to fit the SL
+prediction function.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="sl3.html#cb36-1"></a>cv_sl_fit<span class="op">$</span>cv_risk[,<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)]</span>
+<span id="cb36-2"><a href="sl3.html#cb36-2"></a>                                    learner    MSE       se</span>
+<span id="cb36-3"><a href="sl3.html#cb36-3"></a> <span class="dv">1</span><span class="op">:</span><span class="st">                           </span>Lrnr_glm_TRUE <span class="fl">1.0224</span> <span class="fl">0.023982</span></span>
+<span id="cb36-4"><a href="sl3.html#cb36-4"></a> <span class="dv">2</span><span class="op">:</span><span class="st">                               </span>Lrnr_mean <span class="fl">1.0654</span> <span class="fl">0.025028</span></span>
+<span id="cb36-5"><a href="sl3.html#cb36-5"></a> <span class="dv">3</span><span class="op">:</span><span class="st"> </span>Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">0</span>_<span class="dv">100</span>_TRUE <span class="fl">1.0166</span> <span class="fl">0.023738</span></span>
+<span id="cb36-6"><a href="sl3.html#cb36-6"></a> <span class="dv">4</span><span class="op">:</span><span class="st"> </span>Lrnr_glmnet_NULL_deviance_<span class="dv">10</span>_<span class="dv">1</span>_<span class="dv">100</span>_TRUE <span class="fl">1.0141</span> <span class="fl">0.023624</span></span>
+<span id="cb36-7"><a href="sl3.html#cb36-7"></a> <span class="dv">5</span><span class="op">:</span><span class="st">                          </span>Lrnr_polspline <span class="fl">1.0163</span> <span class="fl">0.023654</span></span>
+<span id="cb36-8"><a href="sl3.html#cb36-8"></a> <span class="dv">6</span><span class="op">:</span><span class="st">         </span>Lrnr_earth_<span class="dv">2</span>_<span class="dv">3</span>_backward_<span class="dv">0</span>_<span class="dv">1</span>_<span class="dv">0</span>_<span class="dv">0</span> <span class="fl">1.0131</span> <span class="fl">0.023522</span></span>
+<span id="cb36-9"><a href="sl3.html#cb36-9"></a> <span class="dv">7</span><span class="op">:</span><span class="st">              </span><span class="kw">Lrnr_hal9001_2_1_c</span>(<span class="dv">3</span>, <span class="dv">2</span>)_<span class="dv">5</span> <span class="fl">1.0175</span> <span class="fl">0.023693</span></span>
+<span id="cb36-10"><a href="sl3.html#cb36-10"></a> <span class="dv">8</span><span class="op">:</span><span class="st">             </span>Lrnr_ranger_<span class="dv">500</span>_TRUE_none_<span class="dv">1</span> <span class="fl">1.0142</span> <span class="fl">0.023556</span></span>
+<span id="cb36-11"><a href="sl3.html#cb36-11"></a> <span class="dv">9</span><span class="op">:</span><span class="st">                       </span>Lrnr_xgboost_<span class="dv">20</span>_<span class="dv">1</span> <span class="fl">1.0793</span> <span class="fl">0.024793</span></span>
+<span id="cb36-12"><a href="sl3.html#cb36-12"></a><span class="dv">10</span><span class="op">:</span><span class="st">               </span>Lrnr_gam_NULL_NULL_GCV.Cp <span class="fl">1.0235</span> <span class="fl">0.023942</span></span>
+<span id="cb36-13"><a href="sl3.html#cb36-13"></a><span class="dv">11</span><span class="op">:</span><span class="st">                      </span>Lrnr_bayesglm_TRUE <span class="fl">1.0224</span> <span class="fl">0.023982</span></span>
+<span id="cb36-14"><a href="sl3.html#cb36-14"></a><span class="dv">12</span><span class="op">:</span><span class="st">                            </span>SuperLearner <span class="fl">1.0067</span> <span class="fl">0.023429</span></span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
+<thead><tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+learner
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+MSE
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;position: sticky; top:0; background-color: #FFFFFF;">
+se
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Lrnr_glm_TRUE
+</td>
+<td style="text-align:right;">
+1.0224
+</td>
+<td style="text-align:right;">
+0.02398
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrnr_mean
+</td>
+<td style="text-align:right;">
+1.0654
+</td>
+<td style="text-align:right;">
+0.02503
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrnr_glmnet_NULL_deviance_10_0_100_TRUE
+</td>
+<td style="text-align:right;">
+1.0166
+</td>
+<td style="text-align:right;">
+0.02374
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrnr_glmnet_NULL_deviance_10_1_100_TRUE
+</td>
+<td style="text-align:right;">
+1.0142
+</td>
+<td style="text-align:right;">
+0.02362
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrnr_polspline
+</td>
+<td style="text-align:right;">
+1.0163
+</td>
+<td style="text-align:right;">
+0.02365
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrnr_earth_2_3_backward_0_1_0_0
+</td>
+<td style="text-align:right;">
+1.0131
+</td>
+<td style="text-align:right;">
+0.02352
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrnr_hal9001_2_1_c(3, 2)_5
+</td>
+<td style="text-align:right;">
+1.0175
+</td>
+<td style="text-align:right;">
+0.02369
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrnr_ranger_500_TRUE_none_1
+</td>
+<td style="text-align:right;">
+1.0142
+</td>
+<td style="text-align:right;">
+0.02356
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrnr_xgboost_20_1
+</td>
+<td style="text-align:right;">
+1.0793
+</td>
+<td style="text-align:right;">
+0.02479
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrnr_gam_NULL_NULL_GCV.Cp
+</td>
+<td style="text-align:right;">
+1.0235
+</td>
+<td style="text-align:right;">
+0.02394
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lrnr_bayesglm_TRUE
+</td>
+<td style="text-align:right;">
+1.0224
+</td>
+<td style="text-align:right;">
+0.02398
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SuperLearner
+</td>
+<td style="text-align:right;">
+1.0068
+</td>
+<td style="text-align:right;">
+0.02343
+</td>
+</tr>
+</tbody>
+</table></div>
 </div>
-<div id="revere-based-predictive-performance-for-sl" class="section level4 unnumbered">
-<h4>Revere-based predictive performance for SL<a class="anchor" aria-label="anchor" href="#revere-based-predictive-performance-for-sl"><i class="fas fa-link"></i></a>
+<p>The CV risk of the SL is
+0.0234, which is lower
+than all of the candidates’ CV risks.</p>
+</div>
+<div id="revere-cv-predictive-performance-for-sl" class="section level4 unnumbered">
+<h4>Revere-CV predictive performance for SL<a class="anchor" aria-label="anchor" href="#revere-cv-predictive-performance-for-sl"><i class="fas fa-link"></i></a>
 </h4>
-<p>We can also obtain the so-called “revere”-based predictive performance for the
+<p>We can also obtain the so-called “revere”-CV predictive performance for the
 SL, which is a partial CV risk for the SL, where the SL candidate learner fits
-are cross-validated but the meta-learner fit is not. The revere-based risk can
-be thought of as an approximate lower bound on the true CV risk estimate for
-the SL when the meta-learner is a simple model, like NNLS. We can output the
+are cross-validated but the meta-learner fit is not. It takes
+essentially no extra time to calculate a revere-based risk estimate of the SL,
+since we already have the cross-validated fits of the candidates. This
+isn’t to say that revere-CV SL can replace actual CV SL, but that it can be
+used to quickly examine an approximate lower bound on the SL’s CV risk
+<em>when the meta-learner is a simple model</em>, like NNLS. We can output the
 revere-based risk estimate by setting <code>get_sl_revere_risk = TRUE</code> when we
 call <code>cv_risk</code>.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cv_risk_table_revere</span> <span class="op">&lt;-</span> <span class="va">sl_fit</span><span class="op">$</span><span class="fu">cv_risk</span><span class="op">(</span>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cv_risk_w_sl_revere</span> <span class="op">&lt;-</span> <span class="va">sl_fit</span><span class="op">$</span><span class="fu">cv_risk</span><span class="op">(</span>
   eval_fun <span class="op">=</span> <span class="va">loss_squared_error</span>, get_sl_revere_risk <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cv_risk_table_revere</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="sl3.html#cb36-1"></a><span class="co">##### revere-based risk "by hand" #####</span></span>
-<span id="cb36-2"><a href="sl3.html#cb36-2"></a><span class="co"># for each fold, i, we obtain predictive performance/risk for the SL</span></span>
-<span id="cb36-3"><a href="sl3.html#cb36-3"></a>sl_revere_risk_list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">seq_along</span>(task<span class="op">$</span>folds), <span class="cf">function</span>(i){</span>
-<span id="cb36-4"><a href="sl3.html#cb36-4"></a>  <span class="co"># get validation dataset for fold i:</span></span>
-<span id="cb36-5"><a href="sl3.html#cb36-5"></a>  v_data &lt;-<span class="st"> </span>task<span class="op">$</span>data[task<span class="op">$</span>folds[[i]]<span class="op">$</span>validation_set, ]</span>
-<span id="cb36-6"><a href="sl3.html#cb36-6"></a>  </span>
-<span id="cb36-7"><a href="sl3.html#cb36-7"></a>  <span class="co"># get observed outcomes in fold i's validation dataset:</span></span>
-<span id="cb36-8"><a href="sl3.html#cb36-8"></a>  v_outcomes &lt;-<span class="st"> </span>v_data[[<span class="st">"whz"</span>]]</span>
-<span id="cb36-9"><a href="sl3.html#cb36-9"></a>  </span>
-<span id="cb36-10"><a href="sl3.html#cb36-10"></a>  <span class="co"># make task (for prediction) using fold i's validation dataset as data, </span></span>
-<span id="cb36-11"><a href="sl3.html#cb36-11"></a>  <span class="co"># and keeping all else the same:</span></span>
-<span id="cb36-12"><a href="sl3.html#cb36-12"></a>  v_task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(</span>
-<span id="cb36-13"><a href="sl3.html#cb36-13"></a>    <span class="dt">covariates =</span> task<span class="op">$</span>nodes<span class="op">$</span>covariates, <span class="dt">data =</span> v_data</span>
-<span id="cb36-14"><a href="sl3.html#cb36-14"></a>  )</span>
-<span id="cb36-15"><a href="sl3.html#cb36-15"></a>  </span>
-<span id="cb36-16"><a href="sl3.html#cb36-16"></a>  <span class="co"># get predicted outcomes for fold i's validation dataset, using candidates </span></span>
-<span id="cb36-17"><a href="sl3.html#cb36-17"></a>  <span class="co"># trained to fold i's training dataset</span></span>
-<span id="cb36-18"><a href="sl3.html#cb36-18"></a>  v_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span>fit_object<span class="op">$</span>fold_fits[[i]]<span class="op">$</span><span class="kw">predict</span>(v_task)</span>
-<span id="cb36-19"><a href="sl3.html#cb36-19"></a></span>
-<span id="cb36-20"><a href="sl3.html#cb36-20"></a>  <span class="co"># make a metalevel task (for prediction with sl):</span></span>
-<span id="cb36-21"><a href="sl3.html#cb36-21"></a>  v_meta_task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(</span>
-<span id="cb36-22"><a href="sl3.html#cb36-22"></a>    <span class="dt">covariates =</span> sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_meta_task<span class="op">$</span>nodes<span class="op">$</span>covariates,</span>
-<span id="cb36-23"><a href="sl3.html#cb36-23"></a>    <span class="dt">data =</span> v_preds</span>
-<span id="cb36-24"><a href="sl3.html#cb36-24"></a>  )</span>
-<span id="cb36-25"><a href="sl3.html#cb36-25"></a>  </span>
-<span id="cb36-26"><a href="sl3.html#cb36-26"></a>  <span class="co"># get predicted outcomes for fold i's metalevel dataset, using the fitted</span></span>
-<span id="cb36-27"><a href="sl3.html#cb36-27"></a>  <span class="co"># metalearner, cv_meta_fit </span></span>
-<span id="cb36-28"><a href="sl3.html#cb36-28"></a>  sl_revere_v_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_meta_fit<span class="op">$</span><span class="kw">predict</span>(<span class="dt">task =</span> v_meta_task)</span>
-<span id="cb36-29"><a href="sl3.html#cb36-29"></a>  <span class="co"># note: cv_meta_fit was trained on the metalevel dataset, which contains the</span></span>
-<span id="cb36-30"><a href="sl3.html#cb36-30"></a>  <span class="co"># candidates' cv predictions and validation dataset outcomes across ALL folds, </span></span>
-<span id="cb36-31"><a href="sl3.html#cb36-31"></a>  <span class="co"># so cv_meta_fit has already seen fold i's validation dataset outcomes.</span></span>
-<span id="cb36-32"><a href="sl3.html#cb36-32"></a>  </span>
-<span id="cb36-33"><a href="sl3.html#cb36-33"></a>  <span class="co"># calculate predictive performance for fold i for the SL</span></span>
-<span id="cb36-34"><a href="sl3.html#cb36-34"></a>    eval_function &lt;-<span class="st"> </span>loss_squared_error <span class="co"># valid for estimation of conditional mean</span></span>
-<span id="cb36-35"><a href="sl3.html#cb36-35"></a>  <span class="co"># note: by evaluating the predictive performance of the SL using outcomes </span></span>
-<span id="cb36-36"><a href="sl3.html#cb36-36"></a>  <span class="co"># that were already seen by the metalearner, this is not a cross-validated </span></span>
-<span id="cb36-37"><a href="sl3.html#cb36-37"></a>  <span class="co"># measure of predictive performance for the SL. </span></span>
-<span id="cb36-38"><a href="sl3.html#cb36-38"></a>  sl_revere_v_loss &lt;-<span class="st"> </span><span class="kw">eval_function</span>(</span>
-<span id="cb36-39"><a href="sl3.html#cb36-39"></a>    <span class="dt">pred =</span> sl_revere_v_preds, <span class="dt">observed =</span> v_outcomes</span>
-<span id="cb36-40"><a href="sl3.html#cb36-40"></a>  )</span>
-<span id="cb36-41"><a href="sl3.html#cb36-41"></a>  sl_revere_v_risk &lt;-<span class="st"> </span><span class="kw">mean</span>(sl_revere_v_loss)</span>
-<span id="cb36-42"><a href="sl3.html#cb36-42"></a>  <span class="kw">return</span>(sl_revere_v_risk)</span>
-<span id="cb36-43"><a href="sl3.html#cb36-43"></a>})</span>
-<span id="cb36-44"><a href="sl3.html#cb36-44"></a><span class="co"># average the predictive performance across all folds for the SL</span></span>
-<span id="cb36-45"><a href="sl3.html#cb36-45"></a>sl_revere_risk_byhand &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">unlist</span>(sl_revere_risk_list))</span>
-<span id="cb36-46"><a href="sl3.html#cb36-46"></a>sl_revere_risk_byhand</span>
-<span id="cb36-47"><a href="sl3.html#cb36-47"></a>[<span class="dv">1</span>] <span class="fl">1.0028</span></span>
-<span id="cb36-48"><a href="sl3.html#cb36-48"></a></span>
-<span id="cb36-49"><a href="sl3.html#cb36-49"></a><span class="co"># check that our calculation by hand equals what is output in cv_risk_table_revere</span></span>
-<span id="cb36-50"><a href="sl3.html#cb36-50"></a>sl_revere_risk &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(cv_risk_table_revere[learner <span class="op">==</span><span class="st"> "SuperLearner"</span>, <span class="st">"MSE"</span>])</span>
-<span id="cb36-51"><a href="sl3.html#cb36-51"></a><span class="kw">identical</span>(sl_revere_risk_byhand, sl_revere_risk)</span>
-<span id="cb36-52"><a href="sl3.html#cb36-52"></a>[<span class="dv">1</span>] <span class="ot">FALSE</span></span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cv_risk_w_sl_revere</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="sl3.html#cb39-1"></a><span class="co">##### revere-based risk "by hand" #####</span></span>
+<span id="cb39-2"><a href="sl3.html#cb39-2"></a><span class="co"># for each fold, i, we obtain predictive performance/risk for the SL</span></span>
+<span id="cb39-3"><a href="sl3.html#cb39-3"></a>sl_revere_risk_list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">seq_along</span>(task<span class="op">$</span>folds), <span class="cf">function</span>(i){</span>
+<span id="cb39-4"><a href="sl3.html#cb39-4"></a>  <span class="co"># get validation dataset for fold i:</span></span>
+<span id="cb39-5"><a href="sl3.html#cb39-5"></a>  v_data &lt;-<span class="st"> </span>task<span class="op">$</span>data[task<span class="op">$</span>folds[[i]]<span class="op">$</span>validation_set, ]</span>
+<span id="cb39-6"><a href="sl3.html#cb39-6"></a>  </span>
+<span id="cb39-7"><a href="sl3.html#cb39-7"></a>  <span class="co"># get observed outcomes in fold i's validation dataset:</span></span>
+<span id="cb39-8"><a href="sl3.html#cb39-8"></a>  v_outcomes &lt;-<span class="st"> </span>v_data[[<span class="st">"whz"</span>]]</span>
+<span id="cb39-9"><a href="sl3.html#cb39-9"></a>  </span>
+<span id="cb39-10"><a href="sl3.html#cb39-10"></a>  <span class="co"># make task (for prediction) using fold i's validation dataset as data, </span></span>
+<span id="cb39-11"><a href="sl3.html#cb39-11"></a>  <span class="co"># and keeping all else the same:</span></span>
+<span id="cb39-12"><a href="sl3.html#cb39-12"></a>  v_task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(</span>
+<span id="cb39-13"><a href="sl3.html#cb39-13"></a>    <span class="dt">covariates =</span> task<span class="op">$</span>nodes<span class="op">$</span>covariates, <span class="dt">data =</span> v_data</span>
+<span id="cb39-14"><a href="sl3.html#cb39-14"></a>  )</span>
+<span id="cb39-15"><a href="sl3.html#cb39-15"></a>  </span>
+<span id="cb39-16"><a href="sl3.html#cb39-16"></a>  <span class="co"># get predicted outcomes for fold i's validation dataset, using candidates </span></span>
+<span id="cb39-17"><a href="sl3.html#cb39-17"></a>  <span class="co"># trained to fold i's training dataset</span></span>
+<span id="cb39-18"><a href="sl3.html#cb39-18"></a>  v_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_fit<span class="op">$</span>fit_object<span class="op">$</span>fold_fits[[i]]<span class="op">$</span><span class="kw">predict</span>(v_task)</span>
+<span id="cb39-19"><a href="sl3.html#cb39-19"></a></span>
+<span id="cb39-20"><a href="sl3.html#cb39-20"></a>  <span class="co"># make a metalevel task (for prediction with sl):</span></span>
+<span id="cb39-21"><a href="sl3.html#cb39-21"></a>  v_meta_task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(</span>
+<span id="cb39-22"><a href="sl3.html#cb39-22"></a>    <span class="dt">covariates =</span> sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_meta_task<span class="op">$</span>nodes<span class="op">$</span>covariates,</span>
+<span id="cb39-23"><a href="sl3.html#cb39-23"></a>    <span class="dt">data =</span> v_preds</span>
+<span id="cb39-24"><a href="sl3.html#cb39-24"></a>  )</span>
+<span id="cb39-25"><a href="sl3.html#cb39-25"></a>  </span>
+<span id="cb39-26"><a href="sl3.html#cb39-26"></a>  <span class="co"># get predicted outcomes for fold i's metalevel dataset, using the fitted</span></span>
+<span id="cb39-27"><a href="sl3.html#cb39-27"></a>  <span class="co"># metalearner, cv_meta_fit </span></span>
+<span id="cb39-28"><a href="sl3.html#cb39-28"></a>  sl_revere_v_preds &lt;-<span class="st"> </span>sl_fit<span class="op">$</span>fit_object<span class="op">$</span>cv_meta_fit<span class="op">$</span><span class="kw">predict</span>(<span class="dt">task=</span>v_meta_task)</span>
+<span id="cb39-29"><a href="sl3.html#cb39-29"></a>  <span class="co"># note: cv_meta_fit was trained on the metalevel dataset, which contains the</span></span>
+<span id="cb39-30"><a href="sl3.html#cb39-30"></a>  <span class="co"># candidates' cv predictions and validation dataset outcomes across ALL folds, </span></span>
+<span id="cb39-31"><a href="sl3.html#cb39-31"></a>  <span class="co"># so cv_meta_fit has already seen fold i's validation dataset outcomes.</span></span>
+<span id="cb39-32"><a href="sl3.html#cb39-32"></a>  </span>
+<span id="cb39-33"><a href="sl3.html#cb39-33"></a>  <span class="co"># calculate predictive performance for fold i for the SL</span></span>
+<span id="cb39-34"><a href="sl3.html#cb39-34"></a>  eval_function &lt;-<span class="st"> </span>loss_squared_error <span class="co"># valid for estimation of conditional mean</span></span>
+<span id="cb39-35"><a href="sl3.html#cb39-35"></a>  <span class="co"># note: by evaluating the predictive performance of the SL using outcomes </span></span>
+<span id="cb39-36"><a href="sl3.html#cb39-36"></a>  <span class="co"># that were already seen by the metalearner, this is not a cross-validated </span></span>
+<span id="cb39-37"><a href="sl3.html#cb39-37"></a>  <span class="co"># measure of predictive performance for the SL. </span></span>
+<span id="cb39-38"><a href="sl3.html#cb39-38"></a>  sl_revere_v_loss &lt;-<span class="st"> </span><span class="kw">eval_function</span>(</span>
+<span id="cb39-39"><a href="sl3.html#cb39-39"></a>    <span class="dt">pred =</span> sl_revere_v_preds, <span class="dt">observed =</span> v_outcomes</span>
+<span id="cb39-40"><a href="sl3.html#cb39-40"></a>  )</span>
+<span id="cb39-41"><a href="sl3.html#cb39-41"></a>  sl_revere_v_risk &lt;-<span class="st"> </span><span class="kw">mean</span>(sl_revere_v_loss)</span>
+<span id="cb39-42"><a href="sl3.html#cb39-42"></a>  <span class="kw">return</span>(sl_revere_v_risk)</span>
+<span id="cb39-43"><a href="sl3.html#cb39-43"></a>})</span>
+<span id="cb39-44"><a href="sl3.html#cb39-44"></a><span class="co"># average the predictive performance across all folds for the SL</span></span>
+<span id="cb39-45"><a href="sl3.html#cb39-45"></a>sl_revere_risk_byhand &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">unlist</span>(sl_revere_risk_list))</span>
+<span id="cb39-46"><a href="sl3.html#cb39-46"></a>sl_revere_risk_byhand</span>
+<span id="cb39-47"><a href="sl3.html#cb39-47"></a>[<span class="dv">1</span>] <span class="fl">1.0028</span></span>
+<span id="cb39-48"><a href="sl3.html#cb39-48"></a></span>
+<span id="cb39-49"><a href="sl3.html#cb39-49"></a><span class="co"># check that our calculation by hand equals what is output in cv_risk_table_revere</span></span>
+<span id="cb39-50"><a href="sl3.html#cb39-50"></a>sl_revere_risk &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(cv_risk_w_sl_revere[learner<span class="op">==</span><span class="st">"SuperLearner"</span>,<span class="st">"MSE"</span>])</span>
+<span id="cb39-51"><a href="sl3.html#cb39-51"></a><span class="kw">identical</span>(sl_revere_risk, sl_revere_risk_byhand)</span>
+<span id="cb39-52"><a href="sl3.html#cb39-52"></a>[<span class="dv">1</span>] <span class="ot">FALSE</span></span></code></pre></div>
 <p>The reason why this is not a true cross-validated risk is because the
 <code>cv_meta_fit</code> object, which is the trained meta-learner, was previously fit to
 the <em>entire</em> matrix of CV predictions from <em>every</em> fold, i.e., the meta-level
-dataset (see Figure 2 in <span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span> for explanation of meta-level dataset).
-This is why revere-based risks are not a true CV risk. If the meta-learner is
-not a simple regression function, and instead a more data-adaptive learner
-(e.g., random forest) is used as a meta-learner, then the revere-based risk of
-the resulting SL is likely a worse approximation of the actual CV risk. This is
-because more data-adaptive learners are more likely to overfit. When simple
-parametric regressions are used as a meta-learner, like what we considered
-(NNLS with <code>Lrnr_nnls</code>), and like all of the default meta-learners in <code>sl3</code>,
-then the revere-based risk is a quick way to examine an approximation of the CV
-risk estimate of the SL and it can thought of as an approximate lower bound on
-it.</p>
+dataset (see Figure 2 in <span class="citation">Phillips et al. (<a href="references.html#ref-rvp2022super" role="doc-biblioref">2022</a>)</span> for a visual overview of the meta-level
+dataset). This is why revere-based risks are not a true CV risk. If the
+meta-learner is not a simple regression function, and instead a more
+data-adaptive learner (e.g., random forest) is used as a meta-learner, then the
+revere-based risk of the resulting SL is likely a worse approximation of the
+actual CV risk. This is because more data-adaptive learners are more likely to
+overfit. When simple parametric regressions are used as a meta-learner, like
+what we considered (NNLS with <code>Lrnr_nnls</code>), and like all of the default
+meta-learners in <code>sl3</code>, then the revere-based risk is a quick way to examine an
+approximation of the CV risk estimate of the SL and it can thought of as an
+approximate lower bound on it. This idea holds in our example; that is, with
+the simple NNLS meta-learner the revere-based risk estimate of the SL
+(1.0028) is very close to, and slightly lower than, the CV
+risk estimate for the SL
+(0.0234).</p>
 </div>
 </div>
 <div id="discrete-sl" class="section level3">
@@ -1926,7 +2144,7 @@ the cross-validated selector. The dSL is therefore identical to the candidate
 with the best cross-validated performance; its predictions will be the same as
 this candidate’s predictions. The dSL meta-learner specification can be invoked
 in <code>sl3</code> with <code>Lrnr_cv_selector</code>.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cv_selector</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_cv_selector.html">Lrnr_cv_selector</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>eval_function <span class="op">=</span> <span class="va">loss_squared_error</span><span class="op">)</span></code></pre></div>
 <p>We can examine the CV risk for an ensemble SL (eSL), or multiple eSLs, by
 including it as a candidate in a dSL. An eSL is a SL that uses any parametric or
@@ -1936,7 +2154,7 @@ of multiple candidates’ predictions. The <code>sl</code> object defined in the
 section, <code>sl</code>, is an eSL since it used NNLS as the meta-learner. We rename <code>sl</code>
 to <code>eSL_metaNNLS</code> below to clarify that this is an eSL that uses NNLS as its
 meta-learner.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># recall we defined "sl" as</span>
 <span class="co"># sl &lt;- Lrnr_sl$new(learners = stack, metalearner = Lrnr_nnls$new())</span>
 <span class="co"># let's rename it to clarify that this is an eSL that uses NNLS as meta-learner</span>
@@ -1960,7 +2178,7 @@ any other candidate, the dSL will end up selecting it. As mentioned in
 use more flexible meta-learner methods (e.g., non-parametric machine learning
 algorithms like HAL) can be evaluated simultaneously.”</p>
 <p>Below, we show how multiple eSLs can be included as candidates in a dSL:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">eSL_metaNNLSconvex</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_sl.html">Lrnr_sl</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
   learners <span class="op">=</span> <span class="va">stack</span>, metalearner <span class="op">=</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_nnls.html">Lrnr_nnls</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>convex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="op">)</span>
@@ -2014,24 +2232,24 @@ functions are automatically identified and exported as needed, making it
 straightforward to tweak existing code to make use of futures.”</p>
 <p>To use <code>future</code> with <code>sl3</code>, you can simply choose a futures <code>plan()</code>, as shown
 below.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="sl3.html#cb40-1"></a><span class="co"># let's load the future package and set n-1 cores for parallel processing</span></span>
-<span id="cb40-2"><a href="sl3.html#cb40-2"></a><span class="kw">library</span>(future)</span>
-<span id="cb40-3"><a href="sl3.html#cb40-3"></a>ncores &lt;-<span class="st"> </span><span class="kw">availableCores</span>()<span class="op">-</span><span class="dv">1</span></span>
-<span id="cb40-4"><a href="sl3.html#cb40-4"></a>ncores</span>
-<span id="cb40-5"><a href="sl3.html#cb40-5"></a>system </span>
-<span id="cb40-6"><a href="sl3.html#cb40-6"></a>     <span class="dv">1</span> </span>
-<span id="cb40-7"><a href="sl3.html#cb40-7"></a><span class="kw">plan</span>(multicore, <span class="dt">workers =</span> ncores)</span>
-<span id="cb40-8"><a href="sl3.html#cb40-8"></a><span class="co"># now, let's re-train sl in parallel for demonstrative purposes</span></span>
-<span id="cb40-9"><a href="sl3.html#cb40-9"></a><span class="co"># we will also set a stopwatch so we can see how long this takes</span></span>
-<span id="cb40-10"><a href="sl3.html#cb40-10"></a>start_time &lt;-<span class="st"> </span><span class="kw">proc.time</span>()</span>
-<span id="cb40-11"><a href="sl3.html#cb40-11"></a></span>
-<span id="cb40-12"><a href="sl3.html#cb40-12"></a><span class="kw">set.seed</span>(<span class="dv">4197</span>)</span>
-<span id="cb40-13"><a href="sl3.html#cb40-13"></a>sl_fit_parallel &lt;-<span class="st"> </span>sl<span class="op">$</span><span class="kw">train</span>(task)</span>
-<span id="cb40-14"><a href="sl3.html#cb40-14"></a></span>
-<span id="cb40-15"><a href="sl3.html#cb40-15"></a>runtime_sl_fit_parallel &lt;-<span class="st"> </span><span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>start_time</span>
-<span id="cb40-16"><a href="sl3.html#cb40-16"></a>runtime_sl_fit_parallel</span>
-<span id="cb40-17"><a href="sl3.html#cb40-17"></a>   user  system elapsed </span>
-<span id="cb40-18"><a href="sl3.html#cb40-18"></a> <span class="fl">270.92</span>    <span class="fl">1.47</span>  <span class="fl">271.76</span> </span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="sl3.html#cb43-1"></a><span class="co"># let's load the future package and set n-1 cores for parallel processing</span></span>
+<span id="cb43-2"><a href="sl3.html#cb43-2"></a><span class="kw">library</span>(future)</span>
+<span id="cb43-3"><a href="sl3.html#cb43-3"></a>ncores &lt;-<span class="st"> </span><span class="kw">availableCores</span>()<span class="op">-</span><span class="dv">1</span></span>
+<span id="cb43-4"><a href="sl3.html#cb43-4"></a>ncores</span>
+<span id="cb43-5"><a href="sl3.html#cb43-5"></a>system </span>
+<span id="cb43-6"><a href="sl3.html#cb43-6"></a>     <span class="dv">1</span> </span>
+<span id="cb43-7"><a href="sl3.html#cb43-7"></a><span class="kw">plan</span>(multicore, <span class="dt">workers =</span> ncores)</span>
+<span id="cb43-8"><a href="sl3.html#cb43-8"></a><span class="co"># now, let's re-train sl in parallel for demonstrative purposes</span></span>
+<span id="cb43-9"><a href="sl3.html#cb43-9"></a><span class="co"># we will also set a stopwatch so we can see how long this takes</span></span>
+<span id="cb43-10"><a href="sl3.html#cb43-10"></a>start_time &lt;-<span class="st"> </span><span class="kw">proc.time</span>()</span>
+<span id="cb43-11"><a href="sl3.html#cb43-11"></a></span>
+<span id="cb43-12"><a href="sl3.html#cb43-12"></a><span class="kw">set.seed</span>(<span class="dv">4197</span>)</span>
+<span id="cb43-13"><a href="sl3.html#cb43-13"></a>sl_fit_parallel &lt;-<span class="st"> </span>sl<span class="op">$</span><span class="kw">train</span>(task)</span>
+<span id="cb43-14"><a href="sl3.html#cb43-14"></a></span>
+<span id="cb43-15"><a href="sl3.html#cb43-15"></a>runtime_sl_fit_parallel &lt;-<span class="st"> </span><span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>start_time</span>
+<span id="cb43-16"><a href="sl3.html#cb43-16"></a>runtime_sl_fit_parallel</span>
+<span id="cb43-17"><a href="sl3.html#cb43-17"></a>   user  system elapsed </span>
+<span id="cb43-18"><a href="sl3.html#cb43-18"></a><span class="fl">262.776</span>   <span class="fl">1.414</span> <span class="fl">263.700</span> </span></code></pre></div>
 </div>
 <div id="default-data-pre-processing" class="section level3">
 <h3>
@@ -2055,21 +2273,21 @@ Bangladesh data to learn a function of the covariates for predicting
 weight-for-height Z-score <code>whz</code>. For more details on <code>sl3_Task</code>, refer to the
 documentation (e.g., by inputting “?sl3_Task” in R). We will instantiate the
 task in order to examine the pre-processing of <code>washb_data</code>.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="sl3.html#cb41-1"></a><span class="co"># create the task (i.e., use washb_data to predict outcome using covariates)</span></span>
-<span id="cb41-2"><a href="sl3.html#cb41-2"></a>task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(</span>
-<span id="cb41-3"><a href="sl3.html#cb41-3"></a>  <span class="dt">data =</span> washb_data,</span>
-<span id="cb41-4"><a href="sl3.html#cb41-4"></a>  <span class="dt">outcome =</span> <span class="st">"whz"</span>,</span>
-<span id="cb41-5"><a href="sl3.html#cb41-5"></a>  <span class="dt">covariates =</span> <span class="kw">c</span>(<span class="st">"tr"</span>, <span class="st">"fracode"</span>, <span class="st">"month"</span>, <span class="st">"aged"</span>, <span class="st">"sex"</span>, <span class="st">"momage"</span>, <span class="st">"momedu"</span>, </span>
-<span id="cb41-6"><a href="sl3.html#cb41-6"></a>                 <span class="st">"momheight"</span>, <span class="st">"hfiacat"</span>, <span class="st">"Nlt18"</span>, <span class="st">"Ncomp"</span>, <span class="st">"watmin"</span>, <span class="st">"elec"</span>, </span>
-<span id="cb41-7"><a href="sl3.html#cb41-7"></a>                 <span class="st">"floor"</span>, <span class="st">"walls"</span>, <span class="st">"roof"</span>, <span class="st">"asset_wardrobe"</span>, <span class="st">"asset_table"</span>, </span>
-<span id="cb41-8"><a href="sl3.html#cb41-8"></a>                 <span class="st">"asset_chair"</span>, <span class="st">"asset_khat"</span>, <span class="st">"asset_chouki"</span>, <span class="st">"asset_tv"</span>, </span>
-<span id="cb41-9"><a href="sl3.html#cb41-9"></a>                 <span class="st">"asset_refrig"</span>, <span class="st">"asset_bike"</span>, <span class="st">"asset_moto"</span>, <span class="st">"asset_sewmach"</span>, </span>
-<span id="cb41-10"><a href="sl3.html#cb41-10"></a>                 <span class="st">"asset_mobile"</span>)</span>
-<span id="cb41-11"><a href="sl3.html#cb41-11"></a>)</span>
-<span id="cb41-12"><a href="sl3.html#cb41-12"></a>Warning <span class="cf">in</span> <span class="kw">process_data</span>(data, nodes, <span class="dt">column_names =</span> column_names, <span class="dt">flag =</span> flag, <span class="op">:</span></span>
-<span id="cb41-13"><a href="sl3.html#cb41-13"></a>Imputing missing values and adding missingness indicators <span class="cf">for</span> the following</span>
-<span id="cb41-14"><a href="sl3.html#cb41-14"></a>covariates with missing values<span class="op">:</span><span class="st"> </span>momage, momheight. See documentation of the</span>
-<span id="cb41-15"><a href="sl3.html#cb41-15"></a>process_data <span class="cf">function</span> <span class="cf">for</span> details.</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="sl3.html#cb44-1"></a><span class="co"># create the task (i.e., use washb_data to predict outcome using covariates)</span></span>
+<span id="cb44-2"><a href="sl3.html#cb44-2"></a>task &lt;-<span class="st"> </span><span class="kw">make_sl3_Task</span>(</span>
+<span id="cb44-3"><a href="sl3.html#cb44-3"></a>  <span class="dt">data =</span> washb_data,</span>
+<span id="cb44-4"><a href="sl3.html#cb44-4"></a>  <span class="dt">outcome =</span> <span class="st">"whz"</span>,</span>
+<span id="cb44-5"><a href="sl3.html#cb44-5"></a>  <span class="dt">covariates =</span> <span class="kw">c</span>(<span class="st">"tr"</span>, <span class="st">"fracode"</span>, <span class="st">"month"</span>, <span class="st">"aged"</span>, <span class="st">"sex"</span>, <span class="st">"momage"</span>, <span class="st">"momedu"</span>, </span>
+<span id="cb44-6"><a href="sl3.html#cb44-6"></a>                 <span class="st">"momheight"</span>, <span class="st">"hfiacat"</span>, <span class="st">"Nlt18"</span>, <span class="st">"Ncomp"</span>, <span class="st">"watmin"</span>, <span class="st">"elec"</span>, </span>
+<span id="cb44-7"><a href="sl3.html#cb44-7"></a>                 <span class="st">"floor"</span>, <span class="st">"walls"</span>, <span class="st">"roof"</span>, <span class="st">"asset_wardrobe"</span>, <span class="st">"asset_table"</span>, </span>
+<span id="cb44-8"><a href="sl3.html#cb44-8"></a>                 <span class="st">"asset_chair"</span>, <span class="st">"asset_khat"</span>, <span class="st">"asset_chouki"</span>, <span class="st">"asset_tv"</span>, </span>
+<span id="cb44-9"><a href="sl3.html#cb44-9"></a>                 <span class="st">"asset_refrig"</span>, <span class="st">"asset_bike"</span>, <span class="st">"asset_moto"</span>, <span class="st">"asset_sewmach"</span>, </span>
+<span id="cb44-10"><a href="sl3.html#cb44-10"></a>                 <span class="st">"asset_mobile"</span>)</span>
+<span id="cb44-11"><a href="sl3.html#cb44-11"></a>)</span>
+<span id="cb44-12"><a href="sl3.html#cb44-12"></a>Warning <span class="cf">in</span> <span class="kw">process_data</span>(data, nodes, <span class="dt">column_names =</span> column_names, <span class="dt">flag =</span> flag, <span class="op">:</span></span>
+<span id="cb44-13"><a href="sl3.html#cb44-13"></a>Imputing missing values and adding missingness indicators <span class="cf">for</span> the following</span>
+<span id="cb44-14"><a href="sl3.html#cb44-14"></a>covariates with missing values<span class="op">:</span><span class="st"> </span>momage, momheight. See documentation of the</span>
+<span id="cb44-15"><a href="sl3.html#cb44-15"></a>process_data <span class="cf">function</span> <span class="cf">for</span> details.</span></code></pre></div>
 <div id="imputation-and-missingness-indicators" class="section level4 unnumbered">
 <h4>Imputation and missingness indicators<a class="anchor" aria-label="anchor" href="#imputation-and-missingness-indicators"><i class="fas fa-link"></i></a>
 </h4>
@@ -2088,52 +2306,52 @@ missingness indicator as a covariate. Let’s examine this in greater detail for
 completeness. It’s also easier to see what’s going on here by examining it with
 an example.</p>
 <p>First, let’s examine the missingness in the data:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="sl3.html#cb42-1"></a><span class="co"># which columns have missing values, and how many observations are missing?</span></span>
-<span id="cb42-2"><a href="sl3.html#cb42-2"></a><span class="kw">colSums</span>(<span class="kw">is.na</span>(washb_data))</span>
-<span id="cb42-3"><a href="sl3.html#cb42-3"></a>           whz             tr        fracode          month           aged </span>
-<span id="cb42-4"><a href="sl3.html#cb42-4"></a>             <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span> </span>
-<span id="cb42-5"><a href="sl3.html#cb42-5"></a>           sex         momage         momedu      momheight        hfiacat </span>
-<span id="cb42-6"><a href="sl3.html#cb42-6"></a>             <span class="dv">0</span>             <span class="dv">18</span>              <span class="dv">0</span>             <span class="dv">31</span>              <span class="dv">0</span> </span>
-<span id="cb42-7"><a href="sl3.html#cb42-7"></a>         Nlt18          Ncomp         watmin           elec          floor </span>
-<span id="cb42-8"><a href="sl3.html#cb42-8"></a>             <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span> </span>
-<span id="cb42-9"><a href="sl3.html#cb42-9"></a>         walls           roof asset_wardrobe    asset_table    asset_chair </span>
-<span id="cb42-10"><a href="sl3.html#cb42-10"></a>             <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span> </span>
-<span id="cb42-11"><a href="sl3.html#cb42-11"></a>    asset_khat   asset_chouki       asset_tv   asset_refrig     asset_bike </span>
-<span id="cb42-12"><a href="sl3.html#cb42-12"></a>             <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span> </span>
-<span id="cb42-13"><a href="sl3.html#cb42-13"></a>    asset_moto  asset_sewmach   asset_mobile </span>
-<span id="cb42-14"><a href="sl3.html#cb42-14"></a>             <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span> </span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="sl3.html#cb45-1"></a><span class="co"># which columns have missing values, and how many observations are missing?</span></span>
+<span id="cb45-2"><a href="sl3.html#cb45-2"></a><span class="kw">colSums</span>(<span class="kw">is.na</span>(washb_data))</span>
+<span id="cb45-3"><a href="sl3.html#cb45-3"></a>           whz             tr        fracode          month           aged </span>
+<span id="cb45-4"><a href="sl3.html#cb45-4"></a>             <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span> </span>
+<span id="cb45-5"><a href="sl3.html#cb45-5"></a>           sex         momage         momedu      momheight        hfiacat </span>
+<span id="cb45-6"><a href="sl3.html#cb45-6"></a>             <span class="dv">0</span>             <span class="dv">18</span>              <span class="dv">0</span>             <span class="dv">31</span>              <span class="dv">0</span> </span>
+<span id="cb45-7"><a href="sl3.html#cb45-7"></a>         Nlt18          Ncomp         watmin           elec          floor </span>
+<span id="cb45-8"><a href="sl3.html#cb45-8"></a>             <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span> </span>
+<span id="cb45-9"><a href="sl3.html#cb45-9"></a>         walls           roof asset_wardrobe    asset_table    asset_chair </span>
+<span id="cb45-10"><a href="sl3.html#cb45-10"></a>             <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span> </span>
+<span id="cb45-11"><a href="sl3.html#cb45-11"></a>    asset_khat   asset_chouki       asset_tv   asset_refrig     asset_bike </span>
+<span id="cb45-12"><a href="sl3.html#cb45-12"></a>             <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span> </span>
+<span id="cb45-13"><a href="sl3.html#cb45-13"></a>    asset_moto  asset_sewmach   asset_mobile </span>
+<span id="cb45-14"><a href="sl3.html#cb45-14"></a>             <span class="dv">0</span>              <span class="dv">0</span>              <span class="dv">0</span> </span></code></pre></div>
 <p>We can see that covariates <code>momage</code> and <code>momheight</code> have missing observations.
 Let’s check out a few rows in the data with missing values:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="sl3.html#cb43-1"></a>some_rows_with_missingness &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">complete.cases</span>(washb_data))[<span class="dv">31</span><span class="op">:</span><span class="dv">33</span>]</span>
-<span id="cb43-2"><a href="sl3.html#cb43-2"></a><span class="co"># note: we chose 31:33 because missingness in momage &amp; momheight is there</span></span>
-<span id="cb43-3"><a href="sl3.html#cb43-3"></a>washb_data[some_rows_with_missingness, <span class="kw">c</span>(<span class="st">"momage"</span>, <span class="st">"momheight"</span>)]</span>
-<span id="cb43-4"><a href="sl3.html#cb43-4"></a>   momage momheight</span>
-<span id="cb43-5"><a href="sl3.html#cb43-5"></a><span class="dv">1</span><span class="op">:</span><span class="st">     </span><span class="ot">NA</span>     <span class="fl">153.2</span></span>
-<span id="cb43-6"><a href="sl3.html#cb43-6"></a><span class="dv">2</span><span class="op">:</span><span class="st">     </span><span class="dv">17</span>        <span class="ot">NA</span></span>
-<span id="cb43-7"><a href="sl3.html#cb43-7"></a><span class="dv">3</span><span class="op">:</span><span class="st">     </span><span class="dv">23</span>        <span class="ot">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="sl3.html#cb46-1"></a>some_rows_with_missingness &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">complete.cases</span>(washb_data))[<span class="dv">31</span><span class="op">:</span><span class="dv">33</span>]</span>
+<span id="cb46-2"><a href="sl3.html#cb46-2"></a><span class="co"># note: we chose 31:33 because missingness in momage &amp; momheight is there</span></span>
+<span id="cb46-3"><a href="sl3.html#cb46-3"></a>washb_data[some_rows_with_missingness, <span class="kw">c</span>(<span class="st">"momage"</span>, <span class="st">"momheight"</span>)]</span>
+<span id="cb46-4"><a href="sl3.html#cb46-4"></a>   momage momheight</span>
+<span id="cb46-5"><a href="sl3.html#cb46-5"></a><span class="dv">1</span><span class="op">:</span><span class="st">     </span><span class="ot">NA</span>     <span class="fl">153.2</span></span>
+<span id="cb46-6"><a href="sl3.html#cb46-6"></a><span class="dv">2</span><span class="op">:</span><span class="st">     </span><span class="dv">17</span>        <span class="ot">NA</span></span>
+<span id="cb46-7"><a href="sl3.html#cb46-7"></a><span class="dv">3</span><span class="op">:</span><span class="st">     </span><span class="dv">23</span>        <span class="ot">NA</span></span></code></pre></div>
 <p>When we called <code>make_sl3_Task</code> using <code>washb_data</code> with missing covariate values,
 <code>momage</code> and <code>momheight</code> were imputed with their respective medians (since they
 are continuous), and a missingness indicator (denoted by prefix “delta_”) was
 added for each of them. See below:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="sl3.html#cb44-1"></a>task<span class="op">$</span>data[some_rows_with_missingness,</span>
-<span id="cb44-2"><a href="sl3.html#cb44-2"></a>          <span class="kw">c</span>(<span class="st">"momage"</span>, <span class="st">"momheight"</span>, <span class="st">"delta_momage"</span>, <span class="st">"delta_momheight"</span>)]</span>
-<span id="cb44-3"><a href="sl3.html#cb44-3"></a>   momage momheight delta_momage delta_momheight</span>
-<span id="cb44-4"><a href="sl3.html#cb44-4"></a><span class="dv">1</span><span class="op">:</span><span class="st">     </span><span class="dv">23</span>     <span class="fl">153.2</span>            <span class="dv">0</span>               <span class="dv">1</span></span>
-<span id="cb44-5"><a href="sl3.html#cb44-5"></a><span class="dv">2</span><span class="op">:</span><span class="st">     </span><span class="dv">17</span>     <span class="fl">150.6</span>            <span class="dv">1</span>               <span class="dv">0</span></span>
-<span id="cb44-6"><a href="sl3.html#cb44-6"></a><span class="dv">3</span><span class="op">:</span><span class="st">     </span><span class="dv">23</span>     <span class="fl">150.6</span>            <span class="dv">1</span>               <span class="dv">0</span></span>
-<span id="cb44-7"><a href="sl3.html#cb44-7"></a><span class="kw">colSums</span>(<span class="kw">is.na</span>(task<span class="op">$</span>data))</span>
-<span id="cb44-8"><a href="sl3.html#cb44-8"></a>             tr         fracode           month            aged             sex </span>
-<span id="cb44-9"><a href="sl3.html#cb44-9"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span>
-<span id="cb44-10"><a href="sl3.html#cb44-10"></a>         momage          momedu       momheight         hfiacat           Nlt18 </span>
-<span id="cb44-11"><a href="sl3.html#cb44-11"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span>
-<span id="cb44-12"><a href="sl3.html#cb44-12"></a>          Ncomp          watmin            elec           floor           walls </span>
-<span id="cb44-13"><a href="sl3.html#cb44-13"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span>
-<span id="cb44-14"><a href="sl3.html#cb44-14"></a>           roof  asset_wardrobe     asset_table     asset_chair      asset_khat </span>
-<span id="cb44-15"><a href="sl3.html#cb44-15"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span>
-<span id="cb44-16"><a href="sl3.html#cb44-16"></a>   asset_chouki        asset_tv    asset_refrig      asset_bike      asset_moto </span>
-<span id="cb44-17"><a href="sl3.html#cb44-17"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span>
-<span id="cb44-18"><a href="sl3.html#cb44-18"></a>  asset_sewmach    asset_mobile    delta_momage delta_momheight             whz </span>
-<span id="cb44-19"><a href="sl3.html#cb44-19"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="sl3.html#cb47-1"></a>task<span class="op">$</span>data[some_rows_with_missingness,</span>
+<span id="cb47-2"><a href="sl3.html#cb47-2"></a>          <span class="kw">c</span>(<span class="st">"momage"</span>, <span class="st">"momheight"</span>, <span class="st">"delta_momage"</span>, <span class="st">"delta_momheight"</span>)]</span>
+<span id="cb47-3"><a href="sl3.html#cb47-3"></a>   momage momheight delta_momage delta_momheight</span>
+<span id="cb47-4"><a href="sl3.html#cb47-4"></a><span class="dv">1</span><span class="op">:</span><span class="st">     </span><span class="dv">23</span>     <span class="fl">153.2</span>            <span class="dv">0</span>               <span class="dv">1</span></span>
+<span id="cb47-5"><a href="sl3.html#cb47-5"></a><span class="dv">2</span><span class="op">:</span><span class="st">     </span><span class="dv">17</span>     <span class="fl">150.6</span>            <span class="dv">1</span>               <span class="dv">0</span></span>
+<span id="cb47-6"><a href="sl3.html#cb47-6"></a><span class="dv">3</span><span class="op">:</span><span class="st">     </span><span class="dv">23</span>     <span class="fl">150.6</span>            <span class="dv">1</span>               <span class="dv">0</span></span>
+<span id="cb47-7"><a href="sl3.html#cb47-7"></a><span class="kw">colSums</span>(<span class="kw">is.na</span>(task<span class="op">$</span>data))</span>
+<span id="cb47-8"><a href="sl3.html#cb47-8"></a>             tr         fracode           month            aged             sex </span>
+<span id="cb47-9"><a href="sl3.html#cb47-9"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span>
+<span id="cb47-10"><a href="sl3.html#cb47-10"></a>         momage          momedu       momheight         hfiacat           Nlt18 </span>
+<span id="cb47-11"><a href="sl3.html#cb47-11"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span>
+<span id="cb47-12"><a href="sl3.html#cb47-12"></a>          Ncomp          watmin            elec           floor           walls </span>
+<span id="cb47-13"><a href="sl3.html#cb47-13"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span>
+<span id="cb47-14"><a href="sl3.html#cb47-14"></a>           roof  asset_wardrobe     asset_table     asset_chair      asset_khat </span>
+<span id="cb47-15"><a href="sl3.html#cb47-15"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span>
+<span id="cb47-16"><a href="sl3.html#cb47-16"></a>   asset_chouki        asset_tv    asset_refrig      asset_bike      asset_moto </span>
+<span id="cb47-17"><a href="sl3.html#cb47-17"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span>
+<span id="cb47-18"><a href="sl3.html#cb47-18"></a>  asset_sewmach    asset_mobile    delta_momage delta_momheight             whz </span>
+<span id="cb47-19"><a href="sl3.html#cb47-19"></a>              <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span>               <span class="dv">0</span> </span></code></pre></div>
 <p>Indeed, we can see that <code>washb_task$data</code> has no missing values. The missingness
 indicators take a value of 0 when the observation <em>was not</em> in the original data
 and a value of 1 when the observation <em>was</em> in the original data.</p>
@@ -2163,18 +2381,18 @@ quantification.</p>
 covariates are one-hot encoded, i.e., the levels of a factor become a set of
 binary indicators. For example, the factor <code>cats</code> and it’s one-hot encoding are
 shown below:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="sl3.html#cb45-1"></a>cats &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"calico"</span>, <span class="st">"tabby"</span>, <span class="st">"cow"</span>, <span class="st">"ragdoll"</span>, <span class="st">"mancoon"</span>, <span class="st">"dwarf"</span>, <span class="st">"calico"</span>)</span>
-<span id="cb45-2"><a href="sl3.html#cb45-2"></a>cats &lt;-<span class="st"> </span><span class="kw">factor</span>(cats)</span>
-<span id="cb45-3"><a href="sl3.html#cb45-3"></a>cats_onehot &lt;-<span class="st"> </span><span class="kw">factor_to_indicators</span>(cats)</span>
-<span id="cb45-4"><a href="sl3.html#cb45-4"></a>cats_onehot</span>
-<span id="cb45-5"><a href="sl3.html#cb45-5"></a>     cow dwarf mancoon ragdoll tabby</span>
-<span id="cb45-6"><a href="sl3.html#cb45-6"></a>[<span class="dv">1</span>,]   <span class="dv">0</span>     <span class="dv">0</span>       <span class="dv">0</span>       <span class="dv">0</span>     <span class="dv">0</span></span>
-<span id="cb45-7"><a href="sl3.html#cb45-7"></a>[<span class="dv">2</span>,]   <span class="dv">0</span>     <span class="dv">0</span>       <span class="dv">0</span>       <span class="dv">0</span>     <span class="dv">1</span></span>
-<span id="cb45-8"><a href="sl3.html#cb45-8"></a>[<span class="dv">3</span>,]   <span class="dv">1</span>     <span class="dv">0</span>       <span class="dv">0</span>       <span class="dv">0</span>     <span class="dv">0</span></span>
-<span id="cb45-9"><a href="sl3.html#cb45-9"></a>[<span class="dv">4</span>,]   <span class="dv">0</span>     <span class="dv">0</span>       <span class="dv">0</span>       <span class="dv">1</span>     <span class="dv">0</span></span>
-<span id="cb45-10"><a href="sl3.html#cb45-10"></a>[<span class="dv">5</span>,]   <span class="dv">0</span>     <span class="dv">0</span>       <span class="dv">1</span>       <span class="dv">0</span>     <span class="dv">0</span></span>
-<span id="cb45-11"><a href="sl3.html#cb45-11"></a>[<span class="dv">6</span>,]   <span class="dv">0</span>     <span class="dv">1</span>       <span class="dv">0</span>       <span class="dv">0</span>     <span class="dv">0</span></span>
-<span id="cb45-12"><a href="sl3.html#cb45-12"></a>[<span class="dv">7</span>,]   <span class="dv">0</span>     <span class="dv">0</span>       <span class="dv">0</span>       <span class="dv">0</span>     <span class="dv">0</span></span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="sl3.html#cb48-1"></a>cats &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"calico"</span>, <span class="st">"tabby"</span>, <span class="st">"cow"</span>, <span class="st">"ragdoll"</span>, <span class="st">"mancoon"</span>, <span class="st">"dwarf"</span>, <span class="st">"calico"</span>)</span>
+<span id="cb48-2"><a href="sl3.html#cb48-2"></a>cats &lt;-<span class="st"> </span><span class="kw">factor</span>(cats)</span>
+<span id="cb48-3"><a href="sl3.html#cb48-3"></a>cats_onehot &lt;-<span class="st"> </span><span class="kw">factor_to_indicators</span>(cats)</span>
+<span id="cb48-4"><a href="sl3.html#cb48-4"></a>cats_onehot</span>
+<span id="cb48-5"><a href="sl3.html#cb48-5"></a>     cow dwarf mancoon ragdoll tabby</span>
+<span id="cb48-6"><a href="sl3.html#cb48-6"></a>[<span class="dv">1</span>,]   <span class="dv">0</span>     <span class="dv">0</span>       <span class="dv">0</span>       <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb48-7"><a href="sl3.html#cb48-7"></a>[<span class="dv">2</span>,]   <span class="dv">0</span>     <span class="dv">0</span>       <span class="dv">0</span>       <span class="dv">0</span>     <span class="dv">1</span></span>
+<span id="cb48-8"><a href="sl3.html#cb48-8"></a>[<span class="dv">3</span>,]   <span class="dv">1</span>     <span class="dv">0</span>       <span class="dv">0</span>       <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb48-9"><a href="sl3.html#cb48-9"></a>[<span class="dv">4</span>,]   <span class="dv">0</span>     <span class="dv">0</span>       <span class="dv">0</span>       <span class="dv">1</span>     <span class="dv">0</span></span>
+<span id="cb48-10"><a href="sl3.html#cb48-10"></a>[<span class="dv">5</span>,]   <span class="dv">0</span>     <span class="dv">0</span>       <span class="dv">1</span>       <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb48-11"><a href="sl3.html#cb48-11"></a>[<span class="dv">6</span>,]   <span class="dv">0</span>     <span class="dv">1</span>       <span class="dv">0</span>       <span class="dv">0</span>     <span class="dv">0</span></span>
+<span id="cb48-12"><a href="sl3.html#cb48-12"></a>[<span class="dv">7</span>,]   <span class="dv">0</span>     <span class="dv">0</span>       <span class="dv">0</span>       <span class="dv">0</span>     <span class="dv">0</span></span></code></pre></div>
 <p>The second value for <code>cats</code> was “tabby” so the second row of <code>cats_onehot</code> has
 value 1 under tabby. Every level of <code>cats</code> except for one is represented in the
 <code>cats_onehot</code> table. The first and last <code>cats</code> are “calico” so the first and
@@ -2183,7 +2401,7 @@ that does not appear explicitly in the table.</p>
 <p>The learners in <code>sl3</code> are trained to the object <code>X</code> in the task, or a sample of
 <code>X</code> for learners that use CV. Let’s check out the first six rows of our task’s
 <code>X</code> object:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">task</span><span class="op">$</span><span class="va">X</span><span class="op">)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
@@ -3398,35 +3616,35 @@ R package and its <code>xgb.train</code> function.</p>
 <span class="header-section-number">3.3.7</span> Naming learners<a class="anchor" aria-label="anchor" href="#naming-learners"><i class="fas fa-link"></i></a>
 </h3>
 <p>Recall that our <code>Stack</code> from the example above had long names.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="sl3.html#cb47-1"></a>stack</span>
-<span id="cb47-2"><a href="sl3.html#cb47-2"></a> [<span class="dv">1</span>] <span class="st">"Lrnr_glm_TRUE"</span>                          </span>
-<span id="cb47-3"><a href="sl3.html#cb47-3"></a> [<span class="dv">2</span>] <span class="st">"Lrnr_mean"</span>                              </span>
-<span id="cb47-4"><a href="sl3.html#cb47-4"></a> [<span class="dv">3</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_0_100_TRUE"</span></span>
-<span id="cb47-5"><a href="sl3.html#cb47-5"></a> [<span class="dv">4</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_1_100_TRUE"</span></span>
-<span id="cb47-6"><a href="sl3.html#cb47-6"></a> [<span class="dv">5</span>] <span class="st">"Lrnr_polspline"</span>                         </span>
-<span id="cb47-7"><a href="sl3.html#cb47-7"></a> [<span class="dv">6</span>] <span class="st">"Lrnr_earth_2_3_backward_0_1_0_0"</span>        </span>
-<span id="cb47-8"><a href="sl3.html#cb47-8"></a> [<span class="dv">7</span>] <span class="st">"Lrnr_hal9001_2_1_c(3, 2)_5"</span>             </span>
-<span id="cb47-9"><a href="sl3.html#cb47-9"></a> [<span class="dv">8</span>] <span class="st">"Lrnr_ranger_500_TRUE_none_1"</span>            </span>
-<span id="cb47-10"><a href="sl3.html#cb47-10"></a> [<span class="dv">9</span>] <span class="st">"Lrnr_xgboost_20_1"</span>                      </span>
-<span id="cb47-11"><a href="sl3.html#cb47-11"></a>[<span class="dv">10</span>] <span class="st">"Lrnr_gam_NULL_NULL_GCV.Cp"</span>              </span>
-<span id="cb47-12"><a href="sl3.html#cb47-12"></a>[<span class="dv">11</span>] <span class="st">"Lrnr_bayesglm_TRUE"</span>                     </span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="sl3.html#cb50-1"></a>stack</span>
+<span id="cb50-2"><a href="sl3.html#cb50-2"></a> [<span class="dv">1</span>] <span class="st">"Lrnr_glm_TRUE"</span>                          </span>
+<span id="cb50-3"><a href="sl3.html#cb50-3"></a> [<span class="dv">2</span>] <span class="st">"Lrnr_mean"</span>                              </span>
+<span id="cb50-4"><a href="sl3.html#cb50-4"></a> [<span class="dv">3</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_0_100_TRUE"</span></span>
+<span id="cb50-5"><a href="sl3.html#cb50-5"></a> [<span class="dv">4</span>] <span class="st">"Lrnr_glmnet_NULL_deviance_10_1_100_TRUE"</span></span>
+<span id="cb50-6"><a href="sl3.html#cb50-6"></a> [<span class="dv">5</span>] <span class="st">"Lrnr_polspline"</span>                         </span>
+<span id="cb50-7"><a href="sl3.html#cb50-7"></a> [<span class="dv">6</span>] <span class="st">"Lrnr_earth_2_3_backward_0_1_0_0"</span>        </span>
+<span id="cb50-8"><a href="sl3.html#cb50-8"></a> [<span class="dv">7</span>] <span class="st">"Lrnr_hal9001_2_1_c(3, 2)_5"</span>             </span>
+<span id="cb50-9"><a href="sl3.html#cb50-9"></a> [<span class="dv">8</span>] <span class="st">"Lrnr_ranger_500_TRUE_none_1"</span>            </span>
+<span id="cb50-10"><a href="sl3.html#cb50-10"></a> [<span class="dv">9</span>] <span class="st">"Lrnr_xgboost_20_1"</span>                      </span>
+<span id="cb50-11"><a href="sl3.html#cb50-11"></a>[<span class="dv">10</span>] <span class="st">"Lrnr_gam_NULL_NULL_GCV.Cp"</span>              </span>
+<span id="cb50-12"><a href="sl3.html#cb50-12"></a>[<span class="dv">11</span>] <span class="st">"Lrnr_bayesglm_TRUE"</span>                     </span></code></pre></div>
 <p>Here, we show a few different ways for the user to name learners. The first way
 to name a learner is upon instantiation, as shown below:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lrn_glm</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glm.html">Lrnr_glm</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"GLM"</span><span class="op">)</span></code></pre></div>
 <p>We can specify the <code>name</code> for any learner upon instantiating it. Above,
 we named the GLM learner “GLM”.</p>
 <p>Also, we can specify the names of the learners upon creation of the <code>Stack</code>:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="sl3.html#cb49-1"></a>learners_pretty_names &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
-<span id="cb49-2"><a href="sl3.html#cb49-2"></a>  <span class="st">"GLM"</span> =<span class="st"> </span>lrn_glm, <span class="st">"Mean"</span> =<span class="st"> </span>lrn_mean, <span class="st">"Ridge"</span> =<span class="st"> </span>lrn_ridge, </span>
-<span id="cb49-3"><a href="sl3.html#cb49-3"></a>  <span class="st">"Lasso"</span> =<span class="st"> </span>lrn_lasso, <span class="st">"Polspline"</span> =<span class="st"> </span>lrn_polspline, <span class="st">"Earth"</span> =<span class="st"> </span>lrn_earth, </span>
-<span id="cb49-4"><a href="sl3.html#cb49-4"></a>  <span class="st">"HAL"</span> =<span class="st"> </span>lrn_hal, <span class="st">"RF"</span> =<span class="st"> </span>lrn_ranger, <span class="st">"XGBoost"</span> =<span class="st"> </span>lrn_xgb, <span class="st">"GAM"</span> =<span class="st"> </span>lrn_gam, </span>
-<span id="cb49-5"><a href="sl3.html#cb49-5"></a>  <span class="st">"BayesGLM"</span> =<span class="st"> </span>lrn_bayesglm</span>
-<span id="cb49-6"><a href="sl3.html#cb49-6"></a>)</span>
-<span id="cb49-7"><a href="sl3.html#cb49-7"></a>stack_pretty_names &lt;-<span class="st"> </span>Stack<span class="op">$</span><span class="kw">new</span>(learners_pretty_names)</span>
-<span id="cb49-8"><a href="sl3.html#cb49-8"></a>stack_pretty_names</span>
-<span id="cb49-9"><a href="sl3.html#cb49-9"></a> [<span class="dv">1</span>] <span class="st">"GLM"</span>       <span class="st">"Mean"</span>      <span class="st">"Ridge"</span>     <span class="st">"Lasso"</span>     <span class="st">"Polspline"</span> <span class="st">"Earth"</span>    </span>
-<span id="cb49-10"><a href="sl3.html#cb49-10"></a> [<span class="dv">7</span>] <span class="st">"HAL"</span>       <span class="st">"RF"</span>        <span class="st">"XGBoost"</span>   <span class="st">"GAM"</span>       <span class="st">"BayesGLM"</span> </span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="sl3.html#cb52-1"></a>learners_pretty_names &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb52-2"><a href="sl3.html#cb52-2"></a>  <span class="st">"GLM"</span> =<span class="st"> </span>lrn_glm, <span class="st">"Mean"</span> =<span class="st"> </span>lrn_mean, <span class="st">"Ridge"</span> =<span class="st"> </span>lrn_ridge, </span>
+<span id="cb52-3"><a href="sl3.html#cb52-3"></a>  <span class="st">"Lasso"</span> =<span class="st"> </span>lrn_lasso, <span class="st">"Polspline"</span> =<span class="st"> </span>lrn_polspline, <span class="st">"Earth"</span> =<span class="st"> </span>lrn_earth, </span>
+<span id="cb52-4"><a href="sl3.html#cb52-4"></a>  <span class="st">"HAL"</span> =<span class="st"> </span>lrn_hal, <span class="st">"RF"</span> =<span class="st"> </span>lrn_ranger, <span class="st">"XGBoost"</span> =<span class="st"> </span>lrn_xgb, <span class="st">"GAM"</span> =<span class="st"> </span>lrn_gam, </span>
+<span id="cb52-5"><a href="sl3.html#cb52-5"></a>  <span class="st">"BayesGLM"</span> =<span class="st"> </span>lrn_bayesglm</span>
+<span id="cb52-6"><a href="sl3.html#cb52-6"></a>)</span>
+<span id="cb52-7"><a href="sl3.html#cb52-7"></a>stack_pretty_names &lt;-<span class="st"> </span>Stack<span class="op">$</span><span class="kw">new</span>(learners_pretty_names)</span>
+<span id="cb52-8"><a href="sl3.html#cb52-8"></a>stack_pretty_names</span>
+<span id="cb52-9"><a href="sl3.html#cb52-9"></a> [<span class="dv">1</span>] <span class="st">"GLM"</span>       <span class="st">"Mean"</span>      <span class="st">"Ridge"</span>     <span class="st">"Lasso"</span>     <span class="st">"Polspline"</span> <span class="st">"Earth"</span>    </span>
+<span id="cb52-10"><a href="sl3.html#cb52-10"></a> [<span class="dv">7</span>] <span class="st">"HAL"</span>       <span class="st">"RF"</span>        <span class="st">"XGBoost"</span>   <span class="st">"GAM"</span>       <span class="st">"BayesGLM"</span> </span></code></pre></div>
 </div>
 <div id="defining-learners-over-grid-of-tuning-parameters" class="section level3">
 <h3>
@@ -3456,47 +3674,47 @@ select an “optimal” set of tuning parameters over a grid of them.</p>
 should consult the documentation, and consider computational feasibility and
 their prediction task to specify an appropriate grid of tuning parameters for
 their task.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="sl3.html#cb50-1"></a>grid_params &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
-<span id="cb50-2"><a href="sl3.html#cb50-2"></a>  <span class="dt">max_depth =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">8</span>),</span>
-<span id="cb50-3"><a href="sl3.html#cb50-3"></a>  <span class="dt">eta =</span> <span class="kw">c</span>(<span class="fl">0.001</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>),</span>
-<span id="cb50-4"><a href="sl3.html#cb50-4"></a>  <span class="dt">nrounds =</span> <span class="dv">100</span></span>
-<span id="cb50-5"><a href="sl3.html#cb50-5"></a>)</span>
-<span id="cb50-6"><a href="sl3.html#cb50-6"></a>grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(grid_params, <span class="dt">KEEP.OUT.ATTRS =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb50-7"><a href="sl3.html#cb50-7"></a></span>
-<span id="cb50-8"><a href="sl3.html#cb50-8"></a>xgb_learners &lt;-<span class="st"> </span><span class="kw">apply</span>(grid, <span class="dt">MARGIN =</span> <span class="dv">1</span>, <span class="cf">function</span>(tuning_params) {</span>
-<span id="cb50-9"><a href="sl3.html#cb50-9"></a>  <span class="kw">do.call</span>(Lrnr_xgboost<span class="op">$</span>new, <span class="kw">as.list</span>(tuning_params))</span>
-<span id="cb50-10"><a href="sl3.html#cb50-10"></a>})</span>
-<span id="cb50-11"><a href="sl3.html#cb50-11"></a>xgb_learners</span>
-<span id="cb50-12"><a href="sl3.html#cb50-12"></a>[[<span class="dv">1</span>]]</span>
-<span id="cb50-13"><a href="sl3.html#cb50-13"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_3_0.001"</span></span>
-<span id="cb50-14"><a href="sl3.html#cb50-14"></a></span>
-<span id="cb50-15"><a href="sl3.html#cb50-15"></a>[[<span class="dv">2</span>]]</span>
-<span id="cb50-16"><a href="sl3.html#cb50-16"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_5_0.001"</span></span>
-<span id="cb50-17"><a href="sl3.html#cb50-17"></a></span>
-<span id="cb50-18"><a href="sl3.html#cb50-18"></a>[[<span class="dv">3</span>]]</span>
-<span id="cb50-19"><a href="sl3.html#cb50-19"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_8_0.001"</span></span>
-<span id="cb50-20"><a href="sl3.html#cb50-20"></a></span>
-<span id="cb50-21"><a href="sl3.html#cb50-21"></a>[[<span class="dv">4</span>]]</span>
-<span id="cb50-22"><a href="sl3.html#cb50-22"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_3_0.1"</span></span>
-<span id="cb50-23"><a href="sl3.html#cb50-23"></a></span>
-<span id="cb50-24"><a href="sl3.html#cb50-24"></a>[[<span class="dv">5</span>]]</span>
-<span id="cb50-25"><a href="sl3.html#cb50-25"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_5_0.1"</span></span>
-<span id="cb50-26"><a href="sl3.html#cb50-26"></a></span>
-<span id="cb50-27"><a href="sl3.html#cb50-27"></a>[[<span class="dv">6</span>]]</span>
-<span id="cb50-28"><a href="sl3.html#cb50-28"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_8_0.1"</span></span>
-<span id="cb50-29"><a href="sl3.html#cb50-29"></a></span>
-<span id="cb50-30"><a href="sl3.html#cb50-30"></a>[[<span class="dv">7</span>]]</span>
-<span id="cb50-31"><a href="sl3.html#cb50-31"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_3_0.3"</span></span>
-<span id="cb50-32"><a href="sl3.html#cb50-32"></a></span>
-<span id="cb50-33"><a href="sl3.html#cb50-33"></a>[[<span class="dv">8</span>]]</span>
-<span id="cb50-34"><a href="sl3.html#cb50-34"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_5_0.3"</span></span>
-<span id="cb50-35"><a href="sl3.html#cb50-35"></a></span>
-<span id="cb50-36"><a href="sl3.html#cb50-36"></a>[[<span class="dv">9</span>]]</span>
-<span id="cb50-37"><a href="sl3.html#cb50-37"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_8_0.3"</span></span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="sl3.html#cb53-1"></a>grid_params &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb53-2"><a href="sl3.html#cb53-2"></a>  <span class="dt">max_depth =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">8</span>),</span>
+<span id="cb53-3"><a href="sl3.html#cb53-3"></a>  <span class="dt">eta =</span> <span class="kw">c</span>(<span class="fl">0.001</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>),</span>
+<span id="cb53-4"><a href="sl3.html#cb53-4"></a>  <span class="dt">nrounds =</span> <span class="dv">100</span></span>
+<span id="cb53-5"><a href="sl3.html#cb53-5"></a>)</span>
+<span id="cb53-6"><a href="sl3.html#cb53-6"></a>grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(grid_params, <span class="dt">KEEP.OUT.ATTRS =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb53-7"><a href="sl3.html#cb53-7"></a></span>
+<span id="cb53-8"><a href="sl3.html#cb53-8"></a>xgb_learners &lt;-<span class="st"> </span><span class="kw">apply</span>(grid, <span class="dt">MARGIN =</span> <span class="dv">1</span>, <span class="cf">function</span>(tuning_params) {</span>
+<span id="cb53-9"><a href="sl3.html#cb53-9"></a>  <span class="kw">do.call</span>(Lrnr_xgboost<span class="op">$</span>new, <span class="kw">as.list</span>(tuning_params))</span>
+<span id="cb53-10"><a href="sl3.html#cb53-10"></a>})</span>
+<span id="cb53-11"><a href="sl3.html#cb53-11"></a>xgb_learners</span>
+<span id="cb53-12"><a href="sl3.html#cb53-12"></a>[[<span class="dv">1</span>]]</span>
+<span id="cb53-13"><a href="sl3.html#cb53-13"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_3_0.001"</span></span>
+<span id="cb53-14"><a href="sl3.html#cb53-14"></a></span>
+<span id="cb53-15"><a href="sl3.html#cb53-15"></a>[[<span class="dv">2</span>]]</span>
+<span id="cb53-16"><a href="sl3.html#cb53-16"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_5_0.001"</span></span>
+<span id="cb53-17"><a href="sl3.html#cb53-17"></a></span>
+<span id="cb53-18"><a href="sl3.html#cb53-18"></a>[[<span class="dv">3</span>]]</span>
+<span id="cb53-19"><a href="sl3.html#cb53-19"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_8_0.001"</span></span>
+<span id="cb53-20"><a href="sl3.html#cb53-20"></a></span>
+<span id="cb53-21"><a href="sl3.html#cb53-21"></a>[[<span class="dv">4</span>]]</span>
+<span id="cb53-22"><a href="sl3.html#cb53-22"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_3_0.1"</span></span>
+<span id="cb53-23"><a href="sl3.html#cb53-23"></a></span>
+<span id="cb53-24"><a href="sl3.html#cb53-24"></a>[[<span class="dv">5</span>]]</span>
+<span id="cb53-25"><a href="sl3.html#cb53-25"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_5_0.1"</span></span>
+<span id="cb53-26"><a href="sl3.html#cb53-26"></a></span>
+<span id="cb53-27"><a href="sl3.html#cb53-27"></a>[[<span class="dv">6</span>]]</span>
+<span id="cb53-28"><a href="sl3.html#cb53-28"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_8_0.1"</span></span>
+<span id="cb53-29"><a href="sl3.html#cb53-29"></a></span>
+<span id="cb53-30"><a href="sl3.html#cb53-30"></a>[[<span class="dv">7</span>]]</span>
+<span id="cb53-31"><a href="sl3.html#cb53-31"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_3_0.3"</span></span>
+<span id="cb53-32"><a href="sl3.html#cb53-32"></a></span>
+<span id="cb53-33"><a href="sl3.html#cb53-33"></a>[[<span class="dv">8</span>]]</span>
+<span id="cb53-34"><a href="sl3.html#cb53-34"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_5_0.3"</span></span>
+<span id="cb53-35"><a href="sl3.html#cb53-35"></a></span>
+<span id="cb53-36"><a href="sl3.html#cb53-36"></a>[[<span class="dv">9</span>]]</span>
+<span id="cb53-37"><a href="sl3.html#cb53-37"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_xgboost_100_1_8_0.3"</span></span></code></pre></div>
 <p>In the example above, we considered every possible combination in the grid to
 create nine XGBoost learners. If we wanted to create custom names for each of
 these learners we could do that as well:</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">xgb_learners</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
   <span class="st">"XGBoost_depth3_eta.001"</span>, <span class="st">"XGBoost_depth5_eta.001"</span>, <span class="st">"XGBoost_depth8_eta.001"</span>, 
   <span class="st">"XGBoost_depth3_eta.1"</span>, <span class="st">"XGBoost_depth5_eta.1"</span>, <span class="st">"XGBoost_depth8_eta.1"</span>, 
@@ -3511,7 +3729,7 @@ these learners we could do that as well:</p>
 function to automatically tune a predictive model”. Below, we instantiate a
 neural network that will be automatically tuned with <code>caret</code> and we name the
 learner “NNET_autotune”.</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lrnr_nnet_autotune</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_caret.html">Lrnr_caret</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"nnet"</span>, name <span class="op">=</span> <span class="st">"NNET_autotune"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
@@ -3531,7 +3749,7 @@ learner argument, it is via this inheritance. This implementation allows
 <code>formula</code> to be supplied to all learners, even those without native <code>formula</code>
 support. Below, we show how to specify a GLM learner that considers two-way
 interactions among all covariates.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lrnr_glm_interaction</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_glm.html">Lrnr_glm</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>formula <span class="op">=</span> <span class="st">"~.^2"</span><span class="op">)</span></code></pre></div>
 <p>As we can see from above, the general behavior of <code>formula</code>in R applies in
 <code>sl3</code>. See Details of <code>formula</code> in the <code>stats</code> R package for more details on
@@ -3578,9 +3796,9 @@ provided by the user via the <code>num_screen</code> argument. The user also get
 choose the importance metric considered via the <code>learner</code> argument. Any
 learner with an importance method can be used in <code>Lrnr_screener_importance</code>;
 this currently includes the following:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="sl3.html#cb54-1"></a><span class="kw">sl3_list_learners</span>(<span class="dt">properties =</span> <span class="st">"importance"</span>)</span>
-<span id="cb54-2"><a href="sl3.html#cb54-2"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_lightgbm"</span>     <span class="st">"Lrnr_randomForest"</span> <span class="st">"Lrnr_ranger"</span>      </span>
-<span id="cb54-3"><a href="sl3.html#cb54-3"></a>[<span class="dv">4</span>] <span class="st">"Lrnr_xgboost"</span>     </span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="sl3.html#cb57-1"></a><span class="kw">sl3_list_learners</span>(<span class="dt">properties =</span> <span class="st">"importance"</span>)</span>
+<span id="cb57-2"><a href="sl3.html#cb57-2"></a>[<span class="dv">1</span>] <span class="st">"Lrnr_lightgbm"</span>     <span class="st">"Lrnr_randomForest"</span> <span class="st">"Lrnr_ranger"</span>      </span>
+<span id="cb57-3"><a href="sl3.html#cb57-3"></a>[<span class="dv">4</span>] <span class="st">"Lrnr_xgboost"</span>     </span></code></pre></div>
 <p>Let’s consider screening covariates based on <code>Lrnr_ranger</code> variable importance
 ranking that selects the top ten most important covariates, according to
 <code>ranger</code>’s “impurity_corrected” importance. We will couple this screener with
@@ -3590,7 +3808,7 @@ covariates, according to <code>ranger</code>’s “impurity_corrected” import
 fits a model according to this reduced set of covariates. As mentioned above,
 this coupling establishes a new learner and requires defining a <code>Pipeline</code>.
 The <code>Pipeline</code> is <code>sl3</code>’s way of going from (1) to (2).</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ranger_with_importance</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_ranger.html">Lrnr_ranger</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>importance <span class="op">=</span> <span class="st">"impurity_corrected"</span><span class="op">)</span>
 <span class="va">RFscreen_top10</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_screener_importance.html">Lrnr_screener_importance</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
   learner <span class="op">=</span> <span class="va">ranger_with_importance</span>, num_screen <span class="op">=</span> <span class="fl">10</span>
@@ -3598,7 +3816,7 @@ The <code>Pipeline</code> is <code>sl3</code>’s way of going from (1) to (2).<
 <span class="va">RFscreen_top10_glm</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Pipeline.html">Pipeline</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">RFscreen_top10</span>, <span class="va">lrn_glm</span><span class="op">)</span></code></pre></div>
 <p>We could even define the <code>Pipeline</code> for the entire <code>Stack</code>, so that every
 learner in it is fit to the screener-selected, reduced set of ten covariates.</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">RFscreen_top10_stack</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Pipeline.html">Pipeline</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">RFscreen_top10</span>, <span class="va">stack</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="coefficient-threshold-based-screeners" class="section level4 unnumbered">
@@ -3617,12 +3835,12 @@ with non-zero lasso regression coefficients, and then (2) passes the
 screener-selected covariates to <code>Lrnr_glm</code>, so <code>Lrnr_glm</code> fits a model
 according to this reduced set of covariates. The structure is very similar to
 above.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lasso_screen</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_screener_coefs.html">Lrnr_screener_coefs</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>learner <span class="op">=</span> <span class="va">lrn_lasso</span>, threshold <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 <span class="va">lasso_screen_glm</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Pipeline.html">Pipeline</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lasso_screen</span>, <span class="va">lrn_glm</span><span class="op">)</span></code></pre></div>
 <p>We could even define the <code>Pipeline</code> for the entire <code>Stack</code>, so that every
 learner in it is fit to the lasso screener-selected, reduced set of covariates.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lasso_screen_stack</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Pipeline.html">Pipeline</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">lasso_screen</span>, <span class="va">stack</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="correlation-based-screeners" class="section level4 unnumbered">
@@ -3636,7 +3854,7 @@ some user-specified threshold.</p>
 illustrate how to set up a pipeline with a <code>Stack</code>, which looks the same as
 previous examples. The <code>Pipeline</code> with a single learner also looks the same as
 previous examples.</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># select top 10 most correlated covariates</span>
 <span class="va">corRank_screen</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_screener_correlation.html">Lrnr_screener_correlation</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
   type <span class="op">=</span> <span class="st">"rank"</span>, num_screen <span class="op">=</span> <span class="fl">10</span>
@@ -3658,7 +3876,7 @@ always be included. That is, if a screener removes a “mandatory” covariate t
 <code>Pipeline</code> are fit. An example of how to use this screener is included below.
 We assume <code>aged</code> and <code>momage</code> are covariates that must be kept in learner
 fitting.</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">keepme</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"aged"</span>, <span class="st">"momage"</span><span class="op">)</span>
 <span class="co"># using corRank_screen as an example, but any instantiated screener can be </span>
 <span class="co"># supplied as screener.</span>
@@ -3676,7 +3894,7 @@ that certain covariate sets must be included, even under screening procedures.</
 diversify the library. Here we show how we can create a new <code>Stack</code> from other
 learners stacks which includes learners with no screening, and learners coupled
 with various screeners.</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">screeners_stack</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Stack.html">Stack</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">stack</span>, <span class="va">corP_screen_stack</span>, <span class="va">corRank_screen_stack</span>, 
                              <span class="va">lasso_screen_stack</span>, <span class="va">RFscreen_top10_stack</span><span class="op">)</span></code></pre></div>
 <p>This <code>screeners_stack</code> could be inputted as <code>learners</code> in <code>Lrnr_sl</code> to
@@ -3722,7 +3940,7 @@ is so much faster.</p>
 SL we fit above to the WASH Benefits example dataset. We will define a grouping
 of covariates based on household assets, so these covariates will be considered
 together in the importance.</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">assets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"asset_wardrobe"</span>, <span class="st">"asset_table"</span>, <span class="st">"asset_chair"</span>, <span class="st">"asset_khat"</span>,
             <span class="st">"asset_chouki"</span>, <span class="st">"asset_tv"</span>, <span class="st">"asset_refrig"</span>, <span class="st">"asset_bike"</span>, 
             <span class="st">"asset_moto"</span>, <span class="st">"asset_sewmach"</span>, <span class="st">"asset_mobile"</span>, <span class="st">"Nlt18"</span>, <span class="st">"Ncomp"</span>, 
@@ -3732,7 +3950,7 @@ together in the importance.</p>
   fit <span class="op">=</span> <span class="va">sl_fit</span>, eval_fun <span class="op">=</span> <span class="va">loss_squared_error</span>, type <span class="op">=</span> <span class="st">"permute"</span>, 
   covariate_groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"assets"</span> <span class="op">=</span> <span class="va">assets</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">washb_varimp</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
@@ -3844,11 +4062,11 @@ delta_momage
 </tbody>
 </table></div>
 </div>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plot variable importance</span>
 <span class="fu"><a href="https://tlverse.org/sl3/reference/importance_plot.html">importance_plot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">washb_varimp</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure">
-<img src="04-sl3_files/figure-html/varimp-plot-1.png" width="100%" style="display: block; margin: auto;"><!-- Explain summary!!!! -->
+<img src="04-sl3_files/figure-html/varimp-plot-1.png" width="60%" style="display: block; margin: auto;"><!-- Explain summary!!!! -->
 </div>
 </div>
 <div id="conditional-density-estimation" class="section level3">
@@ -3929,21 +4147,21 @@ Both approaches have been implemented in <code>sl3</code>, in the learner
 <code>Lrnr_density_semiparametric</code>. The <code>mean_learner</code> argument specifies
 <span class="math inline">\(f_{\mu}\)</span> and the optional <code>var_learner</code> argument specifies <span class="math inline">\(f_{\sigma}\)</span>. We
 demonstrate CDE with this approach below.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="sl3.html#cb65-1"></a><span class="co"># semiparametric density estimator with homoscedastic errors (HOSE)</span></span>
-<span id="cb65-2"><a href="sl3.html#cb65-2"></a>hose_hal_lrnr &lt;-<span class="st"> </span>Lrnr_density_semiparametric<span class="op">$</span><span class="kw">new</span>(</span>
-<span id="cb65-3"><a href="sl3.html#cb65-3"></a>  <span class="dt">mean_learner =</span> Lrnr_hal9001<span class="op">$</span><span class="kw">new</span>()</span>
-<span id="cb65-4"><a href="sl3.html#cb65-4"></a>)</span>
-<span id="cb65-5"><a href="sl3.html#cb65-5"></a><span class="co"># semiparametric density estimator with heteroscedastic errors (HESE)</span></span>
-<span id="cb65-6"><a href="sl3.html#cb65-6"></a>hese_rf_glm_lrnr &lt;-<span class="st"> </span>Lrnr_density_semiparametric<span class="op">$</span><span class="kw">new</span>(</span>
-<span id="cb65-7"><a href="sl3.html#cb65-7"></a>  <span class="dt">mean_learner =</span> Lrnr_ranger<span class="op">$</span><span class="kw">new</span>()</span>
-<span id="cb65-8"><a href="sl3.html#cb65-8"></a>  <span class="dt">var_learner =</span> Lrnr_glm<span class="op">$</span><span class="kw">new</span>()</span>
-<span id="cb65-9"><a href="sl3.html#cb65-9"></a>)</span>
-<span id="cb65-10"><a href="sl3.html#cb65-10"></a></span>
-<span id="cb65-11"><a href="sl3.html#cb65-11"></a><span class="co"># SL for the conditional treatment density</span></span>
-<span id="cb65-12"><a href="sl3.html#cb65-12"></a>sl_dens_lrnr &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</span>
-<span id="cb65-13"><a href="sl3.html#cb65-13"></a>  <span class="dt">learners =</span> <span class="kw">list</span>(hose_hal_lrnr, hese_rf_glm_lrnr),</span>
-<span id="cb65-14"><a href="sl3.html#cb65-14"></a>  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</span>
-<span id="cb65-15"><a href="sl3.html#cb65-15"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="sl3.html#cb68-1"></a><span class="co"># semiparametric density estimator with homoscedastic errors (HOSE)</span></span>
+<span id="cb68-2"><a href="sl3.html#cb68-2"></a>hose_hal_lrnr &lt;-<span class="st"> </span>Lrnr_density_semiparametric<span class="op">$</span><span class="kw">new</span>(</span>
+<span id="cb68-3"><a href="sl3.html#cb68-3"></a>  <span class="dt">mean_learner =</span> Lrnr_hal9001<span class="op">$</span><span class="kw">new</span>()</span>
+<span id="cb68-4"><a href="sl3.html#cb68-4"></a>)</span>
+<span id="cb68-5"><a href="sl3.html#cb68-5"></a><span class="co"># semiparametric density estimator with heteroscedastic errors (HESE)</span></span>
+<span id="cb68-6"><a href="sl3.html#cb68-6"></a>hese_rf_glm_lrnr &lt;-<span class="st"> </span>Lrnr_density_semiparametric<span class="op">$</span><span class="kw">new</span>(</span>
+<span id="cb68-7"><a href="sl3.html#cb68-7"></a>  <span class="dt">mean_learner =</span> Lrnr_ranger<span class="op">$</span><span class="kw">new</span>()</span>
+<span id="cb68-8"><a href="sl3.html#cb68-8"></a>  <span class="dt">var_learner =</span> Lrnr_glm<span class="op">$</span><span class="kw">new</span>()</span>
+<span id="cb68-9"><a href="sl3.html#cb68-9"></a>)</span>
+<span id="cb68-10"><a href="sl3.html#cb68-10"></a></span>
+<span id="cb68-11"><a href="sl3.html#cb68-11"></a><span class="co"># SL for the conditional treatment density</span></span>
+<span id="cb68-12"><a href="sl3.html#cb68-12"></a>sl_dens_lrnr &lt;-<span class="st"> </span>Lrnr_sl<span class="op">$</span><span class="kw">new</span>(</span>
+<span id="cb68-13"><a href="sl3.html#cb68-13"></a>  <span class="dt">learners =</span> <span class="kw">list</span>(hose_hal_lrnr, hese_rf_glm_lrnr),</span>
+<span id="cb68-14"><a href="sl3.html#cb68-14"></a>  <span class="dt">metalearner =</span> Lrnr_solnp_density<span class="op">$</span><span class="kw">new</span>()</span>
+<span id="cb68-15"><a href="sl3.html#cb68-15"></a>)</span></code></pre></div>
 </div>
 <div id="pooled-hazard-regression" class="section level4 unnumbered">
 <h4>Pooled hazard regression<a class="anchor" aria-label="anchor" href="#pooled-hazard-regression"><i class="fas fa-link"></i></a>
@@ -4016,7 +4234,7 @@ highly adaptive lasso (HAL) algorithm <span class="citation">(Benkeser and van d
 <span class="citation">(Coyle, Hejazi, and van der Laan <a href="references.html#ref-coyle2020hal9001" role="doc-biblioref">2020</a>; Hejazi, Coyle, and van der Laan <a href="references.html#ref-hejazi2020hal9001" role="doc-biblioref">2020</a>)</span>). This CDE algorithm that uses
 <code>haldensify</code> is incorporated as learner <code>Lrnr_haldensify</code> in <code>sl3</code>, as we
 demonstrate below.</p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># learners used for conditional densities for (g_n)</span>
 <span class="va">haldensify_lrnr</span> <span class="op">&lt;-</span> <span class="va"><a href="https://tlverse.org/sl3/reference/Lrnr_haldensify.html">Lrnr_haldensify</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
   n_bins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>
@@ -4044,7 +4262,7 @@ demonstrate below.</p>
 <p>Follow the steps below to predict myocardial infarction (<code>mi</code>) using the
 available covariate data. We thank Prof. David Benkeser at Emory University for
 making the this Cardiovascular Health Study (CHS) data accessible.</p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># load the data set</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span>
 <span class="va">db_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span>
@@ -4663,7 +4881,7 @@ mi
 </tbody>
 </table></div>
 </div>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chspred</span><span class="op">)</span></code></pre></div>
 <ol style="list-style-type: decimal">
 <li>Create an <code>sl3</code> task, setting myocardial infarction <code>mi</code> as the outcome and
@@ -4822,7 +5040,7 @@ both referred to as TMLE.
 </h3>
 <p>Here is a potential solution to the <a href="sl3.html#sl3ex1"><code>sl3</code> Exercise 1 – Predicting Myocardial
 Infarction with <code>sl3</code></a>.</p>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">db_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span>
   <span class="st">"https://raw.githubusercontent.com/benkeser/sllecture/master/chspred.csv"</span>
 <span class="op">)</span>
@@ -4935,7 +5153,7 @@ Infarction with <code>sl3</code></a>.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>[ACIC 2022] Targeted Learning in the <code>tlverse</code></strong>: Causal Inference Meets Machine Learning" was written by Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on updated: June 05, 2022.</p>
+    <p>"<strong>[ACIC 2022] Targeted Learning in the <code>tlverse</code></strong>: Causal Inference Meets Machine Learning" was written by Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on updated: June 06, 2022.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

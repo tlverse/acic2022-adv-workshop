@@ -114,7 +114,7 @@ introduced earlier and estimating an average treatment effect. Similar specifica
 <span class="header-section-number">4.3.1</span> Load the Data<a class="anchor" aria-label="anchor" href="#load-the-data-1"><i class="fas fa-link"></i></a>
 </h3>
 <p>We’ll use the same WASH Benefits data as the earlier chapters:</p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/tmle3">tmle3</a></span><span class="op">)</span>
@@ -136,7 +136,7 @@ introduced earlier and estimating an average treatment effect. Similar specifica
 correspond to each of these roles. We use a list of character vectors to tell
 it. We call this a “Node List” as it corresponds to the nodes in a Directed
 Acyclic Graph (DAG), a way of displaying causal relationships between variables.</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">node_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
   W <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
     <span class="st">"month"</span>, <span class="st">"aged"</span>, <span class="st">"sex"</span>, <span class="st">"momage"</span>, <span class="st">"momedu"</span>,
@@ -168,7 +168,7 @@ intervention to remove missingness and is analogous to the procedure used with
 classical inverse probability weighted estimators.</li>
 </ul>
 <p>These steps are implemented in the <code>process_missing</code> function in <code>tmle3</code>:</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/process_missing.html">process_missing</a></span><span class="op">(</span><span class="va">washb_data</span>, <span class="va">node_list</span><span class="op">)</span>
 <span class="va">washb_data</span> <span class="op">&lt;-</span> <span class="va">processed</span><span class="op">$</span><span class="va">data</span>
 <span class="va">node_list</span> <span class="op">&lt;-</span> <span class="va">processed</span><span class="op">$</span><span class="va">node_list</span></code></pre></div>
@@ -184,7 +184,7 @@ manually specifying all of these components. Therefore, <code>tmle3</code> imple
 (“Spec”) that, with minimal additional detail, can be run by an end-user.</p>
 <p>We’ll start with using one of the specs, and then work our way down into the
 internals of <code>tmle3</code>.</p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ate_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://tlverse.org/tmle3/reference/tmle_ATE.html">tmle_ATE</a></span><span class="op">(</span>
   treatment_level <span class="op">=</span> <span class="st">"Nutrition + WSH"</span>,
   control_level <span class="op">=</span> <span class="st">"Control"</span>
@@ -198,7 +198,7 @@ internals of <code>tmle3</code>.</p>
 to estimate the relevant factors of the likelihood: Q and g.</p>
 <p>This takes the form of a list of <code>sl3</code> learners, one for each likelihood factor
 to be estimated with <code>sl3</code>:</p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># choose base learners</span>
 <span class="va">lrnr_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_mean</span><span class="op">)</span>
 <span class="va">lrnr_rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tlverse.org/sl3/reference/Lrnr_base.html">make_learner</a></span><span class="op">(</span><span class="va">Lrnr_ranger</span><span class="op">)</span>
@@ -226,13 +226,13 @@ we plan to include reasonable defaults learners.</p>
 <span class="header-section-number">4.3.6</span> Fit the TMLE<a class="anchor" aria-label="anchor" href="#fit-the-tmle"><i class="fas fa-link"></i></a>
 </h3>
 <p>We now have everything we need to fit the tmle using <code>tmle3</code>:</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="tmle3.html#cb75-1"></a>tmle_fit &lt;-<span class="st"> </span><span class="kw">tmle3</span>(ate_spec, washb_data, node_list, learner_list)</span>
-<span id="cb75-2"><a href="tmle3.html#cb75-2"></a><span class="kw">print</span>(tmle_fit)</span>
-<span id="cb75-3"><a href="tmle3.html#cb75-3"></a>A tmle3_Fit that took <span class="dv">1</span> <span class="kw">step</span>(s)</span>
-<span id="cb75-4"><a href="tmle3.html#cb75-4"></a>   type                                    param   init_est  tmle_est       se</span>
-<span id="cb75-5"><a href="tmle3.html#cb75-5"></a><span class="dv">1</span><span class="op">:</span><span class="st">  </span>ATE ATE[Y_{A=Nutrition <span class="op">+</span><span class="st"> </span>WSH}<span class="op">-</span>Y_{A=Control}] <span class="fl">-0.0031624</span> <span class="fl">0.0077013</span> <span class="fl">0.050351</span></span>
-<span id="cb75-6"><a href="tmle3.html#cb75-6"></a>       lower   upper psi_transformed lower_transformed upper_transformed</span>
-<span id="cb75-7"><a href="tmle3.html#cb75-7"></a><span class="dv">1</span><span class="op">:</span><span class="st"> </span><span class="fl">-0.090985</span> <span class="fl">0.10639</span>       <span class="fl">0.0077013</span>         <span class="fl">-0.090985</span>           <span class="fl">0.10639</span></span></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="tmle3.html#cb78-1"></a>tmle_fit &lt;-<span class="st"> </span><span class="kw">tmle3</span>(ate_spec, washb_data, node_list, learner_list)</span>
+<span id="cb78-2"><a href="tmle3.html#cb78-2"></a><span class="kw">print</span>(tmle_fit)</span>
+<span id="cb78-3"><a href="tmle3.html#cb78-3"></a>A tmle3_Fit that took <span class="dv">1</span> <span class="kw">step</span>(s)</span>
+<span id="cb78-4"><a href="tmle3.html#cb78-4"></a>   type                                    param   init_est  tmle_est       se</span>
+<span id="cb78-5"><a href="tmle3.html#cb78-5"></a><span class="dv">1</span><span class="op">:</span><span class="st">  </span>ATE ATE[Y_{A=Nutrition <span class="op">+</span><span class="st"> </span>WSH}<span class="op">-</span>Y_{A=Control}] <span class="fl">-0.0031624</span> <span class="fl">0.0077013</span> <span class="fl">0.050351</span></span>
+<span id="cb78-6"><a href="tmle3.html#cb78-6"></a>       lower   upper psi_transformed lower_transformed upper_transformed</span>
+<span id="cb78-7"><a href="tmle3.html#cb78-7"></a><span class="dv">1</span><span class="op">:</span><span class="st"> </span><span class="fl">-0.090985</span> <span class="fl">0.10639</span>       <span class="fl">0.0077013</span>         <span class="fl">-0.090985</span>           <span class="fl">0.10639</span></span></code></pre></div>
 </div>
 <div id="evaluate-the-estimates" class="section level3">
 <h3>
@@ -240,9 +240,9 @@ we plan to include reasonable defaults learners.</p>
 </h3>
 <p>We can see the summary results by printing the fit object. Alternatively, we
 can extra results from the summary by indexing into it:</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="tmle3.html#cb76-1"></a>estimates &lt;-<span class="st"> </span>tmle_fit<span class="op">$</span>summary<span class="op">$</span>psi_transformed</span>
-<span id="cb76-2"><a href="tmle3.html#cb76-2"></a><span class="kw">print</span>(estimates)</span>
-<span id="cb76-3"><a href="tmle3.html#cb76-3"></a>[<span class="dv">1</span>] <span class="fl">0.0077013</span></span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="tmle3.html#cb79-1"></a>estimates &lt;-<span class="st"> </span>tmle_fit<span class="op">$</span>summary<span class="op">$</span>psi_transformed</span>
+<span id="cb79-2"><a href="tmle3.html#cb79-2"></a><span class="kw">print</span>(estimates)</span>
+<span id="cb79-3"><a href="tmle3.html#cb79-3"></a>[<span class="dv">1</span>] <span class="fl">0.0077013</span></span></code></pre></div>
 </div>
 </div>
 <div id="summary-1" class="section level2">
@@ -296,7 +296,7 @@ optimal treatments and stochastic shift interventions.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>[ACIC 2022] Targeted Learning in the <code>tlverse</code></strong>: Causal Inference Meets Machine Learning" was written by Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on updated: June 05, 2022.</p>
+    <p>"<strong>[ACIC 2022] Targeted Learning in the <code>tlverse</code></strong>: Causal Inference Meets Machine Learning" was written by Mark van der Laan, Alan Hubbard, Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips. It was last built on updated: June 06, 2022.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
