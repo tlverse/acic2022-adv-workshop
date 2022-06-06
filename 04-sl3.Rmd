@@ -658,6 +658,10 @@ SL using `cv_sl`.
 taking too long).
 -->
 ```{r cvsl}
+# let's load the future package and set n-1 cores for parallel processing
+library(future)
+availableCores()
+plan(multicore, workers = availableCores())
 # we will also set a stopwatch so we can measure how long this takes
 start_time <- proc.time()
 
